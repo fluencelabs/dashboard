@@ -17,14 +17,17 @@ limitations under the License.
 -}
 
 import Browser exposing (Document)
+import Browser.Navigation as Navigation
 import Config exposing (Flags)
-import Model exposing (Model, emptyModel)
+import Dict
+import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
-import View exposing (view)
 import Url
-import Browser.Navigation as Navigation
+import Utils.TaskExtras exposing (run)
+import View exposing (view)
+
 
 main =
     Browser.application
@@ -32,15 +35,20 @@ main =
         , view = view
         , update = update
         , subscriptions = subscriptions
-        , onUrlChange = UrlChange
-        , onUrlRequest = Request
+        , onUrlChange = UrlChanged
+        , onUrlRequest = LinkClicked
         }
 
 
 init : Flags -> Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
-init flags _ _ =
+init flags url key =
     let
-        ( em, initCmd ) =
-            emptyModel flags
+        emptyModel =
+            { peerId = flags.peerId
+            , relayId = flags.relayId
+            , url = url
+            , key = key
+            , loadedPeers = Dict.empty
+            }
     in
-    ( em, initCmd )
+    ( emptyModel, run <| UrlChanged url )

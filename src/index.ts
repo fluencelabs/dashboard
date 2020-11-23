@@ -35,6 +35,10 @@ function genFlags(peerId: string): any {
     let pid = await Fluence.generatePeerId()
 
     let flags = genFlags(pid.toB58String())
+
+    // If the relay is ever changed, an event shall be sent to elm
+    let client = await Fluence.connect(relays[1].multiaddr, pid)
+
     let app = Elm.Main.init({
         node: document.getElementById('root'),
         flags: flags
@@ -48,9 +52,6 @@ function genFlags(peerId: string): any {
         return {}
     })
     registerService(eventService)
-
-    // If the relay is ever changed, an event shall be sent to elm
-    let client = await Fluence.connect(relays[1].multiaddr, pid)
 
     app.ports.sendParticle.subscribe(async(part: any) => {
         console.log("Going to build particle", part)

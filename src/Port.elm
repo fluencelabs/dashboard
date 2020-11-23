@@ -1,22 +1,31 @@
 port module Port exposing (..)
 
-import  Air exposing (Air(..))
+import Air exposing (Air(..))
 import Dict exposing (Dict)
 import Json.Encode exposing (Value)
 
-type alias SendParticle = {script: String, data: Value}
 
-type alias ReceiveEvent = {name: String, args: List Value}
+type alias SendParticle =
+    { script : String, data : Value }
 
-port sendParticle: SendParticle -> Cmd msg
 
-port eventReceiver: (ReceiveEvent -> msg) -> Sub msg
+type alias ReceiveEvent =
+    { name : String, args : List Value }
 
-port relayChanged: (String -> msg) -> Sub msg
 
-sendAir: Air -> Cmd msg
+port sendParticle : SendParticle -> Cmd msg
+
+
+port eventReceiver : (ReceiveEvent -> msg) -> Sub msg
+
+
+port relayChanged : (String -> msg) -> Sub msg
+
+
+sendAir : Air -> Cmd msg
 sendAir (Air dataDict script) =
     let
-        data = Json.Encode.object <| Dict.toList dataDict
+        data =
+            Json.Encode.object <| Dict.toList dataDict
     in
-        sendParticle {script = script, data = data}
+    sendParticle { script = script, data = data }

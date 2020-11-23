@@ -1,4 +1,4 @@
-module TaskExtras exposing (..)
+module Utils.TaskExtras exposing (..)
 
 {-| Copyright 2020 Fluence Labs Limited
 

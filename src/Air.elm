@@ -22,9 +22,14 @@ call peerPart fnPart args res =
     Air Dict.empty ("(call " ++ peerPart ++ " " ++ fnPart ++ " [" ++ String.join " " args ++ "]" ++ captureResult ++ ")\n")
 
 
+callBI : String -> ( String, String ) -> List String -> Maybe String -> Air
+callBI p ( s, f ) args cap =
+    call p ("(\"" ++ s ++ "\" \"" ++ f ++ "\")") args cap
+
+
 event : String -> List String -> Air
 event name args =
-    call "%init_peer_id%" ("(\"event\" \"" ++ name ++ "\")") args Nothing
+    callBI "%init_peer_id%" ( "event", name ) args Nothing
 
 
 combine : String -> Air -> Air -> Air
@@ -52,3 +57,20 @@ fold iter item (Air d s) =
 next : String -> Air
 next item =
     Air Dict.empty ("(next " ++ item ++ ")\n")
+
+
+set : String -> Value -> Air -> Air
+set name value (Air d s) =
+    Air (Dict.insert name value d) s
+
+
+
+-- Assumes that relay's id is set to relayId: moves execution to init peer, executes here
+
+
+relayEvent : String -> List String -> Air
+relayEvent name args =
+    seq
+        (callBI "relayId" ( "op", "identity" ) [] Nothing)
+    <|
+        event name args

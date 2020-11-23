@@ -20,8 +20,9 @@ import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Port exposing (eventReceiver)
 
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ eventReceiver Event
+        [ eventReceiver AquamarineEvent
         ]

@@ -1,12 +1,14 @@
 module Msg exposing (..)
 
-import Url
 import Browser exposing (UrlRequest)
 import Port
+import Url
 
-type Msg = NoOp
-    | UrlChange Url.Url
-    | Request UrlRequest
-    | Event Port.ReceiveEvent
+
+type Msg
+    = NoOp
+    | UrlChanged Url.Url
+    | LinkClicked UrlRequest
+    | AquamarineEvent Port.ReceiveEvent
     | RelayChanged String
     | Click

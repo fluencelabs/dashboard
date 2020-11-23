@@ -16,20 +16,19 @@ limitations under the License.
 
 -}
 
-import Config exposing (Config)
-import Msg exposing (Msg(..))
+import Browser.Navigation as Nav
+import Dict exposing (Dict)
+import Url
+
+
+type alias PeerData =
+    { interfaces : List String }
 
 
 type alias Model =
     { peerId : String
     , relayId : String
+    , key : Nav.Key
+    , url : Url.Url
+    , loadedPeers : Dict String PeerData
     }
-
-
-emptyModel : Config -> ( Model, Cmd Msg )
-emptyModel config =
-    ( { peerId = config.peerId
-      , relayId = config.relayId
-      }
-    , Cmd.none
-    )

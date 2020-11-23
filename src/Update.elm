@@ -17,9 +17,14 @@ limitations under the License.
 -}
 
 import Air
+import Browser
+import Browser.Navigation as Nav
 import Model exposing (Model)
 import Msg exposing (..)
 import Port exposing (sendAir)
+import Route
+import Url
+import Url.Parser
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -28,13 +33,25 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        UrlChange u ->
-            ( model, Cmd.none )
+        UrlChanged url ->
+            let
+                route =
+                    Maybe.withDefault (Route.Page "") <| Url.Parser.parse Route.routeParser url
 
-        Request u ->
-            ( model, Cmd.none )
+                cmd =
+                    Route.routeCommand model route
+            in
+            ( { model | url = url }, cmd )
 
-        Event { name, args } ->
+        LinkClicked urlRequest ->
+            case urlRequest of
+                Browser.Internal url ->
+                    ( model, Nav.pushUrl model.key (Url.toString url) )
+
+                Browser.External href ->
+                    ( model, Nav.load href )
+
+        AquamarineEvent { name, args } ->
             let
                 a =
                     Debug.log "event in ELM" name
