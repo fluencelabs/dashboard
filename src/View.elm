@@ -19,6 +19,7 @@ limitations under the License.
 import Browser exposing (Document)
 import Html exposing (Html, div, header, text)
 import Html.Attributes exposing (class, classList)
+import Html.Events exposing (onClick)
 import Model exposing (Model)
 import Msg exposing (..)
 import Palette exposing (classes)
@@ -44,6 +45,6 @@ layout : List (Html Msg) -> Html Msg
 layout elms =
     div [classes "mw9 center"]
         [div [classes "fl w-100 pa2"] ([
-        header [classes "w-100 bt bb b--black-10"] [text "Fluence Network Dashboard"]
+        header [classes "w-100 bt bb b--black-10", onClick Click] [text "Fluence Network Dashboard"]
         ] ++elms)]
 

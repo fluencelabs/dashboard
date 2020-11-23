@@ -25,7 +25,8 @@ import {Service, ServiceMultiple, ServiceOne} from "fluence/dist/service";
 
 function genFlags(peerId: string): any {
     return {
-        peerId: peerId
+        peerId: peerId,
+        relayId: relays[0].peerId
     }
 }
 
@@ -39,28 +40,30 @@ function genFlags(peerId: string): any {
         flags: flags
     });
 
-    let service = new ServiceMultiple("custom")
-    service.registerFunction("func", (args: any[]) => {
-        console.log("call")
+    let eventService = new ServiceOne("event", (fnName, args: any[]) => {
+        console.log("event service called: " + fnName)
+
+        app.ports.eventReceiver.send({name: fnName, args})
+
         return {}
     })
-    registerService(service)
+    registerService(eventService)
 
-    let serviceOne = new ServiceOne("customOne", (fnName, args: any[]) => {
-        console.log("call " + fnName)
-        return {}
-    })
-    registerService(serviceOne)
-
+    // If the relay is ever changed, an event shall be sent to elm
     let client = await Fluence.connect(relays[1].multiaddr, pid)
 
-    let script = `(call self_peer ("customOne" "some_func") [])`
+    app.ports.sendParticle.subscribe(async(part: any) => {
+        console.log("Going to build particle", part)
+        let jsonData = part.data;
 
-    let data = new Map()
-    data.set("self_peer", client.selfPeerIdStr)
+        let map = new Map<string, string>()
+        for (let v in jsonData) if(jsonData.hasOwnProperty(v)) {
+            map.set(v,jsonData[v])
+        }
 
-    let particle = await build(client.selfPeerId, script, data)
-    await client.sendParticle(particle)
+        let particle = await build(client.selfPeerId, part.script, map)
+        await client.sendParticle(particle)
+    })
 
 })();
 

@@ -2,6 +2,7 @@ module Config exposing (..)
 
 type alias Config =
     { peerId: String
+    , relayId: String
     }
 
 

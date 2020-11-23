@@ -22,13 +22,14 @@ import Msg exposing (Msg(..))
 
 type alias Model =
     { peerId : String
+    , relayId : String
     }
 
 
 emptyModel : Config -> ( Model, Cmd Msg )
 emptyModel config =
-
     ( { peerId = config.peerId
+      , relayId = config.relayId
       }
     , Cmd.none
     )

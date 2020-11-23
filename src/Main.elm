@@ -19,23 +19,26 @@ limitations under the License.
 import Browser exposing (Document)
 import Config exposing (Flags)
 import Model exposing (Model, emptyModel)
-import Msg exposing (Msg)
+import Msg exposing (Msg(..))
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
 import View exposing (view)
-
+import Url
+import Browser.Navigation as Navigation
 
 main =
-    Browser.document
+    Browser.application
         { init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
+        , onUrlChange = UrlChange
+        , onUrlRequest = Request
         }
 
 
-init : Flags -> ( Model, Cmd Msg )
-init flags =
+init : Flags -> Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
+init flags _ _ =
     let
         ( em, initCmd ) =
             emptyModel flags

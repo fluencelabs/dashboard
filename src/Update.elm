@@ -16,8 +16,10 @@ limitations under the License.
 
 -}
 
+import Air
 import Model exposing (Model)
 import Msg exposing (..)
+import Port exposing (sendAir)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -26,5 +28,23 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
+        UrlChange u ->
+            ( model, Cmd.none )
 
+        Request u ->
+            ( model, Cmd.none )
 
+        Event { name, args } ->
+            let
+                a =
+                    Debug.log "event in ELM" name
+            in
+            ( model, Cmd.none )
+
+        Click ->
+            ( model
+            , sendAir <| Air.event "hello" []
+            )
+
+        RelayChanged relayId ->
+            ( { model | relayId = relayId }, Cmd.none )
