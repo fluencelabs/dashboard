@@ -22,9 +22,11 @@ import Config exposing (Flags)
 import Dict
 import Model exposing (Model)
 import Msg exposing (Msg(..))
+import Route
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
 import Url
+import Url.Parser
 import Utils.TaskExtras exposing (run)
 import View exposing (view)
 
@@ -43,12 +45,16 @@ main =
 init : Flags -> Url.Url -> Navigation.Key -> ( Model, Cmd Msg )
 init flags url key =
     let
+        r =
+            Route.parse url
+
         emptyModel =
             { peerId = flags.peerId
             , relayId = flags.relayId
             , url = url
             , key = key
+            , page = r
             , loadedPeers = Dict.empty
             }
     in
-    ( emptyModel, run <| UrlChanged url )
+    ( emptyModel, Route.routeCommand emptyModel r )

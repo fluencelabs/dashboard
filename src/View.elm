@@ -24,6 +24,7 @@ import Model exposing (Model)
 import Msg exposing (..)
 import Palette exposing (classes)
 
+
 view : Model -> Document Msg
 view model =
     { title = title model, body = [ body model ] }
@@ -36,15 +37,18 @@ title _ =
 
 body : Model -> Html Msg
 body model =
-    layout  <|
+    layout <|
         List.concat
-            [
+            [-- TODO render the view according to model.page
             ]
+
 
 layout : List (Html Msg) -> Html Msg
 layout elms =
-    div [classes "mw9 center"]
-        [div [classes "fl w-100 pa2"] ([
-        header [classes "w-100 bt bb b--black-10", onClick Click] [text "Fluence Network Dashboard"]
-        ] ++elms)]
-
+    div [ classes "mw9 center" ]
+        [ div [ classes "fl w-100 pa2" ]
+            ([ header [ classes "w-100 bt bb b--black-10", onClick Click ] [ text "Fluence Network Dashboard" ]
+             ]
+                ++ elms
+            )
+        ]

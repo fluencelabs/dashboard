@@ -21,6 +21,11 @@ import Dict exposing (Dict)
 import Url
 
 
+type Route
+    = Page String
+    | Peer String
+
+
 type alias PeerData =
     { interfaces : List String }
 
@@ -30,5 +35,6 @@ type alias Model =
     , relayId : String
     , key : Nav.Key
     , url : Url.Url
+    , page : Route
     , loadedPeers : Dict String PeerData
     }

@@ -2,14 +2,9 @@ module Route exposing (..)
 
 import Air exposing (call, callBI, fold, next, par, relayEvent, seq, set)
 import Json.Encode as Encode
-import Model exposing (Model)
+import Model exposing (Model, Route(..))
 import Port exposing (sendAir)
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
-
-
-type Route
-    = Page String
-    | Peer String
 
 
 routeParser : Parser (Route -> a) a
@@ -18,6 +13,10 @@ routeParser =
         [ map Peer (s "peer" </> string)
         , map Page string
         ]
+
+
+parse url =
+    Maybe.withDefault (Page "") <| Url.Parser.parse routeParser url
 
 
 routeCommand : Model -> Route -> Cmd msg

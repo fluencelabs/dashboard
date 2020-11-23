@@ -24,7 +24,6 @@ import Msg exposing (..)
 import Port exposing (sendAir)
 import Route
 import Url
-import Url.Parser
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -36,7 +35,7 @@ update msg model =
         UrlChanged url ->
             let
                 route =
-                    Maybe.withDefault (Route.Page "") <| Url.Parser.parse Route.routeParser url
+                    Route.parse url
 
                 cmd =
                     Route.routeCommand model route
