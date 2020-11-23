@@ -26,7 +26,5 @@ update msg model =
         NoOp ->
             ( model, Cmd.none )
 
-        ScreenMsg m ->
-            ( model, Cmd.none )
 
 

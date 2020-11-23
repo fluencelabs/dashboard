@@ -17,29 +17,18 @@ limitations under the License.
 -}
 
 import Config exposing (Config)
-import Element
 import Msg exposing (Msg(..))
-import Screen.Model as Screen
 
 
 type alias Model =
     { peerId : String
-    , screen : Screen.Model
     }
 
 
 emptyModel : Config -> ( Model, Cmd Msg )
 emptyModel config =
-    let
-        device =
-            Element.classifyDevice config.windowSize
 
-        emptyScreen =
-            { device = device, screenSize = config.windowSize }
-
-    in
     ( { peerId = config.peerId
-      , screen = emptyScreen
       }
     , Cmd.none
     )

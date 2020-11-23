@@ -18,11 +18,10 @@ limitations under the License.
 
 import Model exposing (Model)
 import Msg exposing (Msg(..))
-import Screen.Subscriptions
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ Screen.Subscriptions.subscriptions |> Sub.map ScreenMsg
+        [
         ]

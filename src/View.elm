@@ -17,17 +17,11 @@ limitations under the License.
 -}
 
 import Browser exposing (Document)
-import Element exposing (Element, centerX, column, el, height, inFront, padding, paragraph, row, spacing, text)
-import Element.Font as Font
-import Html exposing (Html)
-import Ions.Background as BG
-import Ions.Font as F
-import Ions.Size as S
+import Html exposing (Html, div, header, text)
+import Html.Attributes exposing (class, classList)
 import Model exposing (Model)
 import Msg exposing (..)
-import Palette exposing (fillWidth, layoutBlock, limitLayoutWidth, pSpacing)
-import Screen.Model as Screen
-
+import Palette exposing (classes)
 
 view : Model -> Document Msg
 view model =
@@ -35,47 +29,21 @@ view model =
 
 
 title : Model -> String
-title m =
-    "Admin"
+title _ =
+    "Fluence Network Dashboard"
 
 
 body : Model -> Html Msg
 body model =
-    layout model.screen <|
+    layout  <|
         List.concat
             [
             ]
 
+layout : List (Html Msg) -> Html Msg
+layout elms =
+    div [classes "mw9 center"]
+        [div [classes "fl w-100 pa2"] ([
+        header [classes "w-100 bt bb b--black-10"] [text "Fluence Network Dashboard"]
+        ] ++elms)]
 
-header : Screen.Model -> List (Element Msg)
-header screenI =
-    [ column (layoutBlock screenI ++ [ spacing (S.baseRem 1.125) ])
-        [ row
-            [ fillWidth ]
-            [ paragraph [ Font.italic, F.gray, pSpacing ] <|
-                [ text "Fluence Admin" ]
-            ]
-        , el [ height <| Element.px <| S.baseRem 0.5 ] Element.none
-        ]
-    ]
-
-
-layout : Screen.Model -> List (Element Msg) -> Html Msg
-layout screen elms =
-    Element.layout
-        [ F.size6
-        , F.sansSerif
-        , Element.padding (S.baseRem 1)
-        , Element.centerX
-        , BG.lightGray
-        , inFront <| column [ fillWidth, centerX, BG.white, limitLayoutWidth ] (header screen)
-        ]
-    <|
-        Element.column
-            [ Element.centerX
-            , fillWidth
-            , limitLayoutWidth
-            , BG.white
-            , padding 20
-            ]
-            elms

@@ -16,95 +16,14 @@ limitations under the License.
 
 -}
 
-import Element exposing (Element, el, inFront, padding, paddingXY, text)
-import Element.Font as Font
-import Element.Region as Region
 import Html exposing (Html)
-import Ions.Background as BG
-import Ions.Border as B
-import Ions.Color as C
-import Ions.Font as F
-import Ions.Size as S
-import Screen.Model exposing (isNarrow)
+import Html.Attributes exposing (classList)
 
-
-accentFontColor =
-    F.darkRed
-
-
-letterSpacing =
-    Font.letterSpacing 1.7
-
-
-accentButton =
-    [ F.white, BG.darkRed ]
-
-
-blockBackground =
-    BG.nearWhite
-
-
-blockTitle inside =
-    el [ fillWidth, accentFontColor, letterSpacing, Font.bold, Element.paddingXY 0 <| S.baseRem 1 ] <| inside
-
-
-link : String -> String -> Element msg
-link url label =
-    Element.link
-        linkStyle
-        { url = url, label = Element.text label }
-
-
-newTabLink : String -> String -> Element msg
-newTabLink url label =
-    Element.newTabLink
-        linkStyle
-        { url = url, label = Element.text label }
-
-
-linkStyle =
-    [ accentFontColor, C.easeIn, Font.underline ]
-
-
-h1 txt =
-    el
-        [ Region.heading 1
-        , F.size2
-        , Font.semiBold
-        , Element.paddingXY 0 (S.baseRem 0.67)
-        , F.code
-        , accentFontColor
-        ]
-    <|
-        Element.text txt
-
-fillWidth =
-    Element.width Element.fill
-
-
-limitLayoutWidth =
-    Element.width (Element.fill |> Element.maximum (S.baseRem 48))
-
-
-layoutBlock screen =
-    [ Element.centerX
-    , limitLayoutWidth
-    , Element.paddingXY
-        (S.baseRem
-            (if isNarrow screen then
-                2
-
-             else
-                4
-            )
-        )
-        (S.baseRem 1)
-    ]
-
-
-pSpacing =
-    Element.spacing <| S.baseRem 0.5
-
+classes: String -> Html.Attribute msg
+classes cls =
+    classList <|
+    List.map (\s -> (s, True)) <|
+        String.split " " cls
 
 shortHashRaw size hash =
     String.concat
@@ -112,33 +31,3 @@ shortHashRaw size hash =
         , "..."
         , String.right (size - 1) hash
         ]
-
-
-shortHashEl size hash =
-    let
-        sh =
-            shortHashRaw size hash
-    in
-    Element.el
-        [ B.nearBlack
-        , F.code
-        ]
-    <|
-        Element.text sh
-
-
-shortHash hash =
-    shortHashEl 6 hash
-
-
-mediumHash hash =
-    shortHashEl 12 hash
-
-
-showHash hash =
-    Element.el
-        [ B.nearBlack
-        , F.code
-        ]
-    <|
-        Element.text hash

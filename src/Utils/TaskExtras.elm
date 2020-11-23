@@ -1,4 +1,4 @@
-module Utils exposing (..)
+module TaskExtras exposing (..)
 
 {-| Copyright 2020 Fluence Labs Limited
 

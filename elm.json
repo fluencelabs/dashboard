@@ -7,7 +7,6 @@
     "dependencies": {
         "direct": {
             "Chadtech/unique-list": "2.1.4",
-            "avh4/elm-color": "1.0.0",
             "ccapndave/elm-flat-map": "1.2.0",
             "elm/browser": "1.0.2",
             "elm/bytes": "1.0.8",
@@ -23,9 +22,7 @@
             "elm-community/graph": "6.0.0",
             "elm-community/intdict": "3.0.0",
             "ivadzy/bbase64": "1.1.1",
-            "mdgriffith/elm-ui": "1.1.8",
             "mpizenberg/elm-pointer-events": "4.0.2",
-            "noahzgordon/elm-color-extra": "1.0.2",
             "rtfeldman/elm-iso8601-date-strings": "1.1.3"
         },
         "indirect": {
@@ -33,8 +30,7 @@
             "elm/parser": "1.1.0",
             "elm/regex": "1.0.0",
             "elm/virtual-dom": "1.0.2",
-            "elm-explorations/test": "1.2.2",
-            "fredcy/elm-parseint": "2.0.1"
+            "elm-explorations/test": "1.2.2"
         }
     },
     "test-dependencies": {

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import 'tachyons/css/tachyons.min.css';
 import {Elm} from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import {peerIdToSeed, seedToPeerId} from "fluence/dist/seed";
@@ -24,11 +25,7 @@ import {Service} from "fluence/dist/service";
 
 function genFlags(peerId: string): any {
     return {
-        peerId: peerId,
-        windowSize: {
-            width: window.innerWidth,
-            height: window.innerHeight,
-        }
+        peerId: peerId
     }
 }
 
