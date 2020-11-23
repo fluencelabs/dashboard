@@ -21,7 +21,7 @@ import {peerIdToSeed, seedToPeerId} from "fluence/dist/seed";
 import Fluence from "fluence";
 import {build} from "fluence/dist/particle";
 import {registerService} from "fluence/dist/globalState";
-import {Service} from "fluence/dist/service";
+import {Service, ServiceMultiple, ServiceOne} from "fluence/dist/service";
 
 function genFlags(peerId: string): any {
     return {
@@ -39,16 +39,22 @@ function genFlags(peerId: string): any {
         flags: flags
     });
 
-    let service = new Service("custom")
+    let service = new ServiceMultiple("custom")
     service.registerFunction("func", (args: any[]) => {
         console.log("call")
         return {}
     })
     registerService(service)
 
+    let serviceOne = new ServiceOne("customOne", (fnName, args: any[]) => {
+        console.log("call " + fnName)
+        return {}
+    })
+    registerService(serviceOne)
+
     let client = await Fluence.connect(relays[1].multiaddr, pid)
 
-    let script = `(call self_peer ("custom" "func") [])`
+    let script = `(call self_peer ("customOne" "some_func") [])`
 
     let data = new Map()
     data.set("self_peer", client.selfPeerIdStr)
