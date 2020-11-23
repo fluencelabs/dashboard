@@ -54,7 +54,7 @@ init flags url key =
             , url = url
             , key = key
             , page = r
-            , loadedPeers = Dict.empty
+            , discoveredPeers = Dict.empty
             }
     in
     ( emptyModel, Route.routeCommand emptyModel r )

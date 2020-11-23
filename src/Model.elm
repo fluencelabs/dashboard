@@ -36,5 +36,5 @@ type alias Model =
     , key : Nav.Key
     , url : Url.Url
     , page : Route
-    , loadedPeers : Dict String PeerData
+    , discoveredPeers : Dict String PeerData
     }

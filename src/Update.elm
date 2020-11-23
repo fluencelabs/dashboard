@@ -19,6 +19,7 @@ limitations under the License.
 import Air
 import Browser
 import Browser.Navigation as Nav
+import Dict
 import Model exposing (Model)
 import Msg exposing (..)
 import Port exposing (sendAir)
@@ -51,11 +52,29 @@ update msg model =
                     ( model, Nav.load href )
 
         AquamarineEvent { name, args } ->
-            let
-                a =
-                    Debug.log "event in ELM" name
-            in
-            ( model, Cmd.none )
+            case name of
+                "peers_discovered" ->
+                    let
+                        b =
+                            Debug.log "args" args
+
+                        up p =
+                            case p of
+                                Nothing ->
+                                    Just { interfaces = [] }
+
+                                Just x ->
+                                    Just x
+                    in
+                    -- TODO get data from args, propagate
+                    ( { model | discoveredPeers = Dict.update "abc" up model.discoveredPeers }, Cmd.none )
+
+                _ ->
+                    let
+                        a =
+                            Debug.log "event in ELM" name
+                    in
+                    ( model, Cmd.none )
 
         Click ->
             ( model

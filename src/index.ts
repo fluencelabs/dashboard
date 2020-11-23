@@ -40,14 +40,15 @@ function genFlags(peerId: string): any {
 
     // If the relay is ever changed, an event shall be sent to elm
     let client = await Fluence.connect(relays[relayIdx].multiaddr, pid)
-    Fluence.setLogLevel("debug")
+
     let app = Elm.Main.init({
         node: document.getElementById('root'),
         flags: flags
     });
 
     let eventService = new ServiceOne("event", (fnName, args: any[]) => {
-        console.log("event service called: " + fnName)
+        console.log("event service called: ", fnName)
+        console.log("event service args: ", args)
 
         app.ports.eventReceiver.send({name: fnName, args})
 
