@@ -33,13 +33,16 @@ routeCommand m r =
                 air =
                     seq
                         (callBI "relayId" ( "dht", "neighborhood" ) [ "clientId" ] (Just "peers"))
-                        (fold "peers" "p" <|
-                            par
-                                (seq
-                                    (callBI "p" ( "dht", "neighborhood" ) [ "clientId" ] (Just "morePeers"))
-                                    (relayEvent "peersDiscovered" [ "p", "morePeers" ])
-                                )
-                                (next "p")
+                        (par
+                            (relayEvent "peers_discovered" [ "relayId", "peers" ])
+                            (fold "peers" "p" <|
+                                par
+                                    (seq
+                                        (callBI "p" ( "dht", "neighborhood" ) [ "clientId" ] (Just "morePeers[]"))
+                                        (relayEvent "peers_discovered" [ "p", "morePeers" ])
+                                    )
+                                    (next "p")
+                            )
                         )
             in
             sendAir (relayId <| clientId <| air)

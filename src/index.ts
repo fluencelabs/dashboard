@@ -23,10 +23,12 @@ import {build} from "fluence/dist/particle";
 import {registerService} from "fluence/dist/globalState";
 import {Service, ServiceMultiple, ServiceOne} from "fluence/dist/service";
 
+let relayIdx = 1
+
 function genFlags(peerId: string): any {
     return {
         peerId: peerId,
-        relayId: relays[0].peerId
+        relayId: relays[relayIdx].peerId
     }
 }
 
@@ -37,8 +39,8 @@ function genFlags(peerId: string): any {
     let flags = genFlags(pid.toB58String())
 
     // If the relay is ever changed, an event shall be sent to elm
-    let client = await Fluence.connect(relays[1].multiaddr, pid)
-
+    let client = await Fluence.connect(relays[relayIdx].multiaddr, pid)
+    Fluence.setLogLevel("debug")
     let app = Elm.Main.init({
         node: document.getElementById('root'),
         flags: flags
