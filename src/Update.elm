@@ -54,6 +54,7 @@ update msg model =
         AquamarineEvent { name, args } ->
             case name of
                 "peers_discovered" ->
+                    -- TODO call different function to parse args and change model
                     let
                         b =
                             Debug.log "args" args
