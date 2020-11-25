@@ -47,7 +47,7 @@ body model =
             List.concat
                 [
                     [ header [ classes "w-100 bt bb b--black-10" ] [ routeView (Page "hub") ] ] ++
-                    [ header [ classes "w-100 bt bb b--black-10", onClick Click ] [ text "Fluence Network Dashboard" ] ]
+                    [ header [ classes "w-100 bt bb b--black-10", onClick Click ] [ text "GET SERVICES" ] ]
                 ]
 
 
