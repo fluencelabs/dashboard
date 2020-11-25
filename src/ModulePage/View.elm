@@ -4,7 +4,7 @@ import Html exposing (Html)
 import Json.Encode as Encode
 import ModulePage.Model exposing (ModuleInfo)
 import Palette exposing (classes)
-import Services.Model exposing (Record)
+import Services.Model exposing (Record, Signature)
 import String.Interpolate exposing(interpolate)
 
 view : ModuleInfo -> Html msg
@@ -23,22 +23,40 @@ viewInfo moduleInfo =
     , Html.div [classes "fl w-30 gray mv1"] [Html.text "DESCRIPTION"]
     , Html.div [classes "fl w-70 mv1"] [ Html.span [classes "fl w-100 black"] [Html.text moduleInfo.description]]
     , Html.div [classes "fl w-30 gray mv1"] [Html.text "INTERFACE"]
-    , Html.div [classes "fl w-70 mv1"] [ Html.span [classes "fl w-100 black"] (recordsToString moduleInfo.service.interface.record_types)]
+    , Html.div [classes "fl w-70 mv1"] [ Html.span [classes "fl w-100 black"] ((recordsView moduleInfo.service.interface.record_types) ++ (signaturesView moduleInfo.service.interface.function_signatures))]
     ]
 
-recordsToString : List Record -> List (Html msg)
-recordsToString record =
-    (List.map recordToString record)
+recordsView : List Record -> List (Html msg)
+recordsView record =
+    (List.map recordView record)
 
-recordToString : Record -> Html msg
-recordToString record =
+recordView : Record -> Html msg
+recordView record =
     Html.div [classes "i"]
     ([Html.span [classes "fl w-100 mt2"] [Html.text (record.name ++ " {")]] ++
-    fieldsToString record.fields ++
+    fieldsView record.fields ++
     [Html.span [classes "fl w-100 mb2"] [Html.text ("}")]])
 
 
-fieldsToString : List (List String) -> List (Html msg)
-fieldsToString fields =
+fieldsView : List (List String) -> List (Html msg)
+fieldsView fields =
     (fields |> List.map (\f -> Html.span [classes "fl w-100 ml2"] [Html.text (String.join ": " f)] ))
+
+signaturesView : List Signature -> List (Html msg)
+signaturesView signatures =
+    (List.map signatureView signatures)
+
+signatureView : Signature -> Html msg
+signatureView signature =
+    Html.div [classes "i fl w-100 mv2"]
+    [Html.text (interpolate "fn {0}({1}) -> {2}" [signature.name, (argumentsToString signature.arguments), (outputToString signature.output_types)])]
+
+
+argumentsToString : List (List String) -> String
+argumentsToString arguments =
+    String.join ", " (arguments |> List.map (String.join ": ") )
+
+outputToString : List String -> String
+outputToString output =
+    output |> List.head |> Maybe.withDefault "void"
 
