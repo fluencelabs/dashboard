@@ -130,8 +130,6 @@ update msg model =
                         updatedDict =
                             Dict.update peer up model.discoveredPeers
 
-                        _ =
-                            Debug.log "discovered" updatedDict
                     in
                     ( { model | discoveredPeers = updatedDict }, Cmd.none )
 
@@ -149,8 +147,6 @@ update msg model =
                         updatedDict =
                             Dict.update peer up model.discoveredPeers
 
-                        _ =
-                            Debug.log "discovered" updatedDict
                     in
                     ( { model | discoveredPeers = updatedDict }, Cmd.none )
 

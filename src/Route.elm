@@ -1,10 +1,12 @@
 module Route exposing (..)
 
 import Air exposing (callBI, fold, next, par, relayEvent, seq, set)
+import Dict
 import Html exposing (Html)
 import HubPage.View as HubPage
 import Json.Encode as Encode
 import Model exposing (Model, Route(..))
+import ModulePage.View as ModulePage
 import Port exposing (sendAir)
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
 
@@ -21,13 +23,40 @@ parse url =
     Maybe.withDefault (Page "") <| Url.Parser.parse routeParser url
 
 
-routeView : Route -> Html msg
-routeView route =
+routeView : Model -> Route -> Html msg
+routeView model route =
     case route of
         Page page ->
             case page of
                 "hub" ->
                     HubPage.view {}
+
+                "module" ->
+                    let
+                        up = (\(pid, p) -> Maybe.map (\a -> Tuple.pair pid a) (List.head (List.drop 0 p.services)))
+                        el = (List.head (List.drop 3 (Dict.toList model.discoveredPeers)))
+                        _ = Debug.log "el" el
+                    in
+                    case Maybe.andThen up el of
+                        Just (peerId, service) ->
+                            let
+                                example =
+                                    { name = "Chat"
+                                    , id = service.service_id
+                                    , author = "Fluence Labs"
+                                    , authorPeerId = peerId
+                                    , description = "Cool service"
+                                    , website = "https://github.com/fluencelabs/chat"
+                                    , service = service
+                                    }
+                            in
+                                ModulePage.view example
+
+                        Nothing ->
+                            Html.text "alala"
+
+
+
 
                 _ ->
                     Html.text ("undefined page: " ++ page)

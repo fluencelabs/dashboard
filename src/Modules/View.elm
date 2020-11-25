@@ -1,7 +1,7 @@
 module Modules.View exposing (..)
 
 import Html exposing (Html)
-import Modules.Model exposing (Model, ModuleInfo)
+import Modules.Model exposing (Model, ModuleShortInfo)
 import Palette exposing (classes)
 import Utils.Utils exposing (instancesText)
 
@@ -15,7 +15,7 @@ view model =
     Html.div [ classes "cf ph2-ns" ] modulesView
 
 
-viewService : ModuleInfo -> Html msg
+viewService : ModuleShortInfo -> Html msg
 viewService service =
     Html.div [ classes "fl w-third-ns pa2" ]
         [ Html.div [ classes "fl w-100 br2 ba solid pa2 mh2" ]

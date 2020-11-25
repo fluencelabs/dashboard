@@ -50,7 +50,8 @@ body model =
     in
     layout <|
         List.concat
-            [ [ header [ classes "w-100 bt bb b--black-10" ] [ routeView (Page "hub") ] ]
+            [ [ header [ classes "w-100 bt bb b--black-10" ] [ routeView model (Page "hub") ] ]
+              ++ [ header [ classes "w-100 bt bb b--black-10" ] [ routeView model (Page "module") ] ]
                 ++ [ header [ classes "w-100 bt bb b--black-10", onClick Click ] [ text "GET SERVICES" ] ]
             ]
 
