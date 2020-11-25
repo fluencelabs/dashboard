@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/fluencelabs/fluence-admin#readme",
   "dependencies": {
-    "fluence": "0.7.83",
+    "fluence": "0.7.85",
     "tachyons": "^4.12.0"
   },
   "devDependencies": {

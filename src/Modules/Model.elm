@@ -1,10 +1,10 @@
 module Modules.Model exposing (..)
 
-type alias Module =
+type alias ModuleInfo =
     { name: String
     , instanceNumber: Int
     }
 
 type alias Model =
-    { modules : List Module
+    { modules : List ModuleInfo
     }

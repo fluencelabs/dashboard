@@ -48,6 +48,7 @@ function genFlags(peerId: string): any {
 
     let eventService = new ServiceOne("event", (fnName, args: any[]) => {
         console.log("event service called: ", fnName)
+        console.log("from: ", args[0])
         console.log("event service args: ", args)
 
         app.ports.eventReceiver.send({name: fnName, args})

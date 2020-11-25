@@ -3,12 +3,12 @@ module HubPage.View exposing (..)
 import Html exposing (Html)
 import HubPage.Model exposing (Model)
 import HubPage.Msg exposing (Msg)
-import Modules.Model exposing (Module)
+import Modules.Model exposing (ModuleInfo)
 import Modules.View
-import Services.Model exposing (Service)
+import Services.Model exposing (ServiceInfo)
 import Services.View
 
-servicesExample : List Service
+servicesExample : List ServiceInfo
 servicesExample =
     [ { name = "SQLite", author = "Company Inc", instanceNumber = 2 }
     , { name = "Redis", author = "Roga Kopita", instanceNumber = 3 }
@@ -16,7 +16,7 @@ servicesExample =
     , { name = "Imagemagick", author = "Magic Corp", instanceNumber = 0 }
     ]
 
-modulesExample : List Module
+modulesExample : List ModuleInfo
 modulesExample =
     [ { name = "sqlite3", instanceNumber = 2 }
     , { name = "ipfs_adapter", instanceNumber = 3 }
