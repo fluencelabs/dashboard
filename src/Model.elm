@@ -18,6 +18,7 @@ limitations under the License.
 
 import Browser.Navigation as Nav
 import Dict exposing (Dict)
+import Services.Model exposing (Service)
 import Url
 
 
@@ -27,7 +28,12 @@ type Route
 
 
 type alias PeerData =
-    { interfaces : List String }
+    { services : List Service
+    , modules: List String }
+
+emptyPeerData : PeerData
+emptyPeerData =
+    { services = [], modules = [] }
 
 
 type alias Model =

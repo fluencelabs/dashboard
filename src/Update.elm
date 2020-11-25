@@ -16,13 +16,13 @@ limitations under the License.
 
 -}
 
-import Air
 import Browser
 import Browser.Navigation as Nav
 import Dict
 import Json.Decode exposing (decodeValue, list, string)
 import Json.Encode exposing (Value)
-import Model exposing (Model)
+import Maybe exposing (withDefault)
+import Model exposing (Model, emptyPeerData)
 import Msg exposing (..)
 import Port exposing (sendAir)
 import Route
@@ -92,30 +92,40 @@ update msg model =
                 Browser.External href ->
                     ( model, Nav.load href )
 
-        AquamarineEvent { name, args } ->
+        AquamarineEvent { name, peer, peers, services, modules } ->
             case name of
                 "peers_discovered" ->
                     -- TODO call different function to parse args and change model
                     let
-                        peer =
-                            maybeValueToString (List.head args)
-
-                        peers = maybeValueToListString (List.head (List.drop 1 args))
-
-                        b = Debug.log "peer" peer
-                        c = Debug.log "peers" peers
-
-                        peersMap = List.map (\p -> Tuple.pair p { interfaces = [] }) peers
+                        peersMap = List.map (\p -> Tuple.pair p emptyPeerData) (withDefault [] peers)
                         newDict = Dict.fromList (peersMap)
                         updatedDict = Dict.union model.discoveredPeers newDict
                     in
                     -- TODO get data from args, propagate
                     ( { model | discoveredPeers = updatedDict }, Cmd.none )
 
+                "services_discovered" ->
+                    let
+                        newServices = Maybe.withDefault [] services
+                        empty = emptyPeerData
+                        up = (\old -> Just (Maybe.withDefault {empty | services = newServices} (Maybe.map (\o -> {o | services = newServices}) old)))
+                        updatedDict = Dict.update peer up model.discoveredPeers
+                        _ = Debug.log "discovered" updatedDict
+                    in
+                        ( { model | discoveredPeers = updatedDict }, Cmd.none )
+                "modules_discovered" ->
+                    let
+                        newModules = Maybe.withDefault [] modules
+                        empty = emptyPeerData
+                        up = (\old -> Just (Maybe.withDefault {empty | modules = newModules} (Maybe.map (\o -> {o | modules = newModules}) old)))
+                        updatedDict = Dict.update peer up model.discoveredPeers
+                        _ = Debug.log "discovered" updatedDict
+                    in
+                        ( { model | discoveredPeers = updatedDict }, Cmd.none )
+
                 _ ->
                     let
-                        a =
-                            Debug.log "event in ELM" name
+                        _ = Debug.log "event in ELM" name
                     in
                     ( model, Cmd.none )
 

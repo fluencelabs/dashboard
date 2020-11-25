@@ -32,6 +32,22 @@ function genFlags(peerId: string): any {
     }
 }
 
+function event(name: string, peer: string, peers?: string[], services?: any[], modules?: string[]) {
+    if (!peers) {
+        peers = null
+    }
+
+    if (!services) {
+        services = null
+    }
+
+    if (!modules) {
+        modules = null
+    }
+
+    return {name, peer, peers, services, modules}
+}
+
 (async () => {
 
     let pid = await Fluence.generatePeerId()
@@ -51,7 +67,23 @@ function genFlags(peerId: string): any {
         console.log("from: ", args[0])
         console.log("event service args: ", args)
 
-        app.ports.eventReceiver.send({name: fnName, args})
+        try {
+            if (fnName === "peers_discovered") {
+                app.ports.eventReceiver.send(event(fnName, args[0], args[1]))
+            } else if (fnName === "services_discovered") {
+                app.ports.eventReceiver.send(event(fnName, args[0], undefined, args[1]))
+            } else if (fnName === "modules_discovered") {
+                app.ports.eventReceiver.send(event(fnName, args[0], undefined, undefined, args[1]))
+            } else {
+                console.error("UNHANDLED")
+            }
+        } catch (err) {
+            console.error(err)
+        }
+
+
+
+
 
         return {}
     })

@@ -1,30 +1,26 @@
 module Services.Model exposing (..)
 
-type alias Argument =
-    { name: String
-    , argType: String }
-
 type alias Signature =
-    { arguments: List Argument
+    { arguments: List (List String)
     , name: String
-    , outputTypes: String
+    , output_types: List String
     }
 
-type alias Module =
-    { functionSignatures: List Signature
-
+type alias Record =
+    { fields: List (List String)
+    , id: Int
+    , name: String
     }
 
 type alias Interface =
-    { modules: List Module
-
+    { function_signatures: List Signature
+    , record_types: List Record
     }
 
 type alias Service =
-    { serviceId: String
-    , blueprintId: String
+    { service_id: String
+    , blueprint_id: String
     , interface: Interface
-
     }
 
 type alias ServiceInfo =

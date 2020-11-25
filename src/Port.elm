@@ -3,6 +3,7 @@ port module Port exposing (..)
 import Air exposing (Air(..))
 import Dict exposing (Dict)
 import Json.Encode exposing (Value)
+import Services.Model exposing (Service)
 
 
 type alias SendParticle =
@@ -10,7 +11,7 @@ type alias SendParticle =
 
 
 type alias ReceiveEvent =
-    { name : String, args : List Value }
+    { name : String, peer : String, peers : Maybe (List String), services : Maybe (List Service), modules : Maybe (List String) }
 
 
 port sendParticle : SendParticle -> Cmd msg

@@ -22,7 +22,7 @@ air peerId relayId peers =
                     par
                         (seq
                             (callBI "p" ( "srv", "get_interfaces" ) [ ] (Just "interfaces"))
-                            (relayEvent "interfaces_discovered" [ "p", "interfaces" ])
+                            (relayEvent "services_discovered" [ "p", "interfaces" ])
                         )
                         (next "p")
                 )

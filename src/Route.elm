@@ -1,6 +1,6 @@
 module Route exposing (..)
 
-import Air exposing (call, callBI, fold, next, par, relayEvent, seq, set)
+import Air exposing (callBI, fold, next, par, relayEvent, seq, set)
 import Html exposing (Html)
 import HubPage.View as HubPage
 import Json.Encode as Encode
@@ -54,7 +54,7 @@ routeCommand m r =
                             (fold "peers" "p" <|
                                 par
                                     (seq
-                                        (callBI "p" ( "dht", "neighborhood" ) [ "clientId" ] (Just "morePeers[]"))
+                                        (callBI "p" ( "dht", "neighborhood" ) [ "clientId" ] (Just "morePeers"))
                                         (relayEvent "peers_discovered" [ "p", "morePeers" ])
                                     )
                                     (next "p")
