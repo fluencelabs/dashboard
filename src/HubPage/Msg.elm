@@ -1,3 +1,5 @@
 module HubPage.Msg exposing (..)
 
-type Msg = NoOp
+
+type Msg
+    = NoOp

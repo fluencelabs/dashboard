@@ -3,6 +3,7 @@ module Modules.Air exposing (..)
 import Air exposing (Air, callBI, fold, next, par, relayEvent, seq, set)
 import Json.Encode exposing (list, string)
 
+
 air : String -> String -> List String -> Air
 air peerId relayId peers =
     let
@@ -17,15 +18,14 @@ air peerId relayId peers =
 
         airScript =
             seq
-                (callBI "relayId" ( "op", "identity" ) [ ] Nothing)
+                (callBI "relayId" ( "op", "identity" ) [] Nothing)
                 (fold "peers" "p" <|
                     par
                         (seq
-                            (callBI "p" ( "dist", "get_modules" ) [ ] (Just "modules"))
+                            (callBI "p" ( "dist", "get_modules" ) [] (Just "modules"))
                             (relayEvent "modules_discovered" [ "p", "modules" ])
                         )
                         (next "p")
                 )
     in
-        clientIdSet <| relayIdSet <| peersSet <| airScript
-
+    clientIdSet <| relayIdSet <| peersSet <| airScript

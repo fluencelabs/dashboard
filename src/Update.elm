@@ -29,11 +29,12 @@ import Route
 import Services.Air
 import Url
 
+
 maybeValueToString : Maybe Value -> String
 maybeValueToString mv =
     case mv of
         Just v ->
-            case (decodeValue string v) of
+            case decodeValue string v of
                 Ok value ->
                     value
 
@@ -43,30 +44,38 @@ maybeValueToString mv =
         Nothing ->
             ""
 
+
+
 -- list of lists of strings in json to list of strings from first element if it is an array
+
+
 maybeValueToListString : Maybe Value -> List String
 maybeValueToListString mv =
     case mv of
         Just v ->
-            case (decodeValue (list (list string)) v) of
+            case decodeValue (list (list string)) v of
                 Ok value ->
                     Maybe.withDefault [] (List.head value)
 
                 Err error ->
                     let
-                        _ = Debug.log "error" error
+                        _ =
+                            Debug.log "error" error
                     in
-                        case (decodeValue (list string) v) of
-                            Ok value ->
-                                value
-                            Err err ->
-                                let
-                                    _ = Debug.log "err" err
-                                in
-                                    ["error"]
+                    case decodeValue (list string) v of
+                        Ok value ->
+                            value
+
+                        Err err ->
+                            let
+                                _ =
+                                    Debug.log "err" err
+                            in
+                            [ "error" ]
 
         Nothing ->
             []
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -95,37 +104,60 @@ update msg model =
         AquamarineEvent { name, peer, peers, services, modules } ->
             case name of
                 "peers_discovered" ->
-                    -- TODO call different function to parse args and change model
                     let
-                        peersMap = List.map (\p -> Tuple.pair p emptyPeerData) (withDefault [] peers)
-                        newDict = Dict.fromList (peersMap)
-                        updatedDict = Dict.union model.discoveredPeers newDict
+                        peersMap =
+                            List.map (\p -> Tuple.pair p emptyPeerData) (withDefault [] peers)
+
+                        newDict =
+                            Dict.fromList peersMap
+
+                        updatedDict =
+                            Dict.union model.discoveredPeers newDict
                     in
-                    -- TODO get data from args, propagate
                     ( { model | discoveredPeers = updatedDict }, Cmd.none )
 
                 "services_discovered" ->
                     let
-                        newServices = Maybe.withDefault [] services
-                        empty = emptyPeerData
-                        up = (\old -> Just (Maybe.withDefault {empty | services = newServices} (Maybe.map (\o -> {o | services = newServices}) old)))
-                        updatedDict = Dict.update peer up model.discoveredPeers
-                        _ = Debug.log "discovered" updatedDict
+                        newServices =
+                            Maybe.withDefault [] services
+
+                        empty =
+                            emptyPeerData
+
+                        up =
+                            \old -> Just (Maybe.withDefault { empty | services = newServices } (Maybe.map (\o -> { o | services = newServices }) old))
+
+                        updatedDict =
+                            Dict.update peer up model.discoveredPeers
+
+                        _ =
+                            Debug.log "discovered" updatedDict
                     in
-                        ( { model | discoveredPeers = updatedDict }, Cmd.none )
+                    ( { model | discoveredPeers = updatedDict }, Cmd.none )
+
                 "modules_discovered" ->
                     let
-                        newModules = Maybe.withDefault [] modules
-                        empty = emptyPeerData
-                        up = (\old -> Just (Maybe.withDefault {empty | modules = newModules} (Maybe.map (\o -> {o | modules = newModules}) old)))
-                        updatedDict = Dict.update peer up model.discoveredPeers
-                        _ = Debug.log "discovered" updatedDict
+                        newModules =
+                            Maybe.withDefault [] modules
+
+                        empty =
+                            emptyPeerData
+
+                        up =
+                            \old -> Just (Maybe.withDefault { empty | modules = newModules } (Maybe.map (\o -> { o | modules = newModules }) old))
+
+                        updatedDict =
+                            Dict.update peer up model.discoveredPeers
+
+                        _ =
+                            Debug.log "discovered" updatedDict
                     in
-                        ( { model | discoveredPeers = updatedDict }, Cmd.none )
+                    ( { model | discoveredPeers = updatedDict }, Cmd.none )
 
                 _ ->
                     let
-                        _ = Debug.log "event in ELM" name
+                        _ =
+                            Debug.log "event in ELM" name
                     in
                     ( model, Cmd.none )
 

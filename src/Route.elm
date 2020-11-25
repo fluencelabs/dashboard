@@ -20,6 +20,7 @@ routeParser =
 parse url =
     Maybe.withDefault (Page "") <| Url.Parser.parse routeParser url
 
+
 routeView : Route -> Html msg
 routeView route =
     case route of
@@ -27,19 +28,22 @@ routeView route =
             case page of
                 "hub" ->
                     HubPage.view {}
+
                 _ ->
                     Html.text ("undefined page: " ++ page)
 
-
         Peer peer ->
             Html.text peer
+
 
 routeCommand : Model -> Route -> Cmd msg
 routeCommand m r =
     case r of
         Page s ->
             let
-                _ = Debug.log "page" s
+                _ =
+                    Debug.log "page" s
+
                 clientId =
                     set "clientId" <| Encode.string m.peerId
 

@@ -19,11 +19,13 @@ limitations under the License.
 import Html exposing (Html)
 import Html.Attributes exposing (classList)
 
-classes: String -> Html.Attribute msg
+
+classes : String -> Html.Attribute msg
 classes cls =
     classList <|
-    List.map (\s -> (s, True)) <|
-        String.split " " cls
+        List.map (\s -> ( s, True )) <|
+            String.split " " cls
+
 
 shortHashRaw size hash =
     String.concat

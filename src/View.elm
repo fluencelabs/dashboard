@@ -39,24 +39,27 @@ title _ =
 body : Model -> Html Msg
 body model =
     let
-        a = 1
-        url = model.url
-        newUrl = { url | path = "/hub"}
+        a =
+            1
+
+        url =
+            model.url
+
+        newUrl =
+            { url | path = "/hub" }
     in
-        layout <|
-            List.concat
-                [
-                    [ header [ classes "w-100 bt bb b--black-10" ] [ routeView (Page "hub") ] ] ++
-                    [ header [ classes "w-100 bt bb b--black-10", onClick Click ] [ text "GET SERVICES" ] ]
-                ]
+    layout <|
+        List.concat
+            [ [ header [ classes "w-100 bt bb b--black-10" ] [ routeView (Page "hub") ] ]
+                ++ [ header [ classes "w-100 bt bb b--black-10", onClick Click ] [ text "GET SERVICES" ] ]
+            ]
 
 
 layout : List (Html Msg) -> Html Msg
 layout elms =
     div [ classes "mw9 center w-70" ]
         [ div [ classes "fl w-100 pa2" ]
-            ([
-             ]
+            ([]
                 ++ elms
             )
         ]

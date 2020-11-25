@@ -29,7 +29,9 @@ type Route
 
 type alias PeerData =
     { services : List Service
-    , modules: List String }
+    , modules : List String
+    }
+
 
 emptyPeerData : PeerData
 emptyPeerData =

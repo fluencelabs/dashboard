@@ -8,6 +8,7 @@ import Modules.View
 import Services.Model exposing (ServiceInfo)
 import Services.View
 
+
 servicesExample : List ServiceInfo
 servicesExample =
     [ { name = "SQLite", author = "Company Inc", instanceNumber = 2 }
@@ -15,6 +16,7 @@ servicesExample =
     , { name = "Chat", author = "Fluence Labs", instanceNumber = 5 }
     , { name = "Imagemagick", author = "Magic Corp", instanceNumber = 0 }
     ]
+
 
 modulesExample : List ModuleInfo
 modulesExample =
@@ -26,8 +28,10 @@ modulesExample =
     , { name = "basic_auth", instanceNumber = 0 }
     ]
 
+
 view : Model -> Html msg
-view model = Html.div []
-    [ Services.View.view {services = servicesExample}
-    , Modules.View.view {modules = modulesExample }
-    ]
+view model =
+    Html.div []
+        [ Services.View.view { services = servicesExample }
+        , Modules.View.view { modules = modulesExample }
+        ]

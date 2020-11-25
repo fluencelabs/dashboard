@@ -1,8 +1,9 @@
 module Config exposing (..)
 
+
 type alias Config =
-    { peerId: String
-    , relayId: String
+    { peerId : String
+    , relayId : String
     }
 
 
