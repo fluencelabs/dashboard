@@ -21,7 +21,7 @@ air peerId relayId peers =
                 (fold "peers" "p" <|
                     par
                         (seq
-                            (callBI "p" ( "srv", "get_interfaces" ) [ ] (Just "interfaces[]"))
+                            (callBI "p" ( "srv", "get_interfaces" ) [ ] (Just "interfaces"))
                             (relayEvent "interfaces_discovered" [ "p", "interfaces" ])
                         )
                         (next "p")
