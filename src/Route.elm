@@ -1,6 +1,8 @@
 module Route exposing (..)
 
 import Air exposing (call, callBI, fold, next, par, relayEvent, seq, set)
+import Html exposing (Html)
+import HubPage.View as HubPage
 import Json.Encode as Encode
 import Model exposing (Model, Route(..))
 import Port exposing (sendAir)
@@ -18,12 +20,26 @@ routeParser =
 parse url =
     Maybe.withDefault (Page "") <| Url.Parser.parse routeParser url
 
+routeView : Route -> Html msg
+routeView route =
+    case route of
+        Page page ->
+            case page of
+                "hub" ->
+                    HubPage.view {}
+                _ ->
+                    Html.text ("undefined page: " ++ page)
+
+
+        Peer peer ->
+            Html.text peer
 
 routeCommand : Model -> Route -> Cmd msg
 routeCommand m r =
     case r of
-        Page _ ->
+        Page s ->
             let
+                _ = Debug.log "page" s
                 clientId =
                     set "clientId" <| Encode.string m.peerId
 

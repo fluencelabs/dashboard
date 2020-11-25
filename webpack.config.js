@@ -12,6 +12,9 @@ module.exports = {
         contentBase: './bundle',
         hot: false,
         inline: false,
+        historyApiFallback:{
+            index:'index.html'
+        },
     },
     devtool: "eval-source-map",
     module: {

@@ -20,12 +20,53 @@ import Air
 import Browser
 import Browser.Navigation as Nav
 import Dict
+import Json.Decode exposing (decodeValue, list, string)
+import Json.Encode exposing (Value)
 import Model exposing (Model)
 import Msg exposing (..)
 import Port exposing (sendAir)
 import Route
+import Services.Air
 import Url
 
+maybeValueToString : Maybe Value -> String
+maybeValueToString mv =
+    case mv of
+        Just v ->
+            case (decodeValue string v) of
+                Ok value ->
+                    value
+
+                Err error ->
+                    "error"
+
+        Nothing ->
+            ""
+
+-- list of lists of strings in json to list of strings from first element if it is an array
+maybeValueToListString : Maybe Value -> List String
+maybeValueToListString mv =
+    case mv of
+        Just v ->
+            case (decodeValue (list (list string)) v) of
+                Ok value ->
+                    Maybe.withDefault [] (List.head value)
+
+                Err error ->
+                    let
+                        _ = Debug.log "error" error
+                    in
+                        case (decodeValue (list string) v) of
+                            Ok value ->
+                                value
+                            Err err ->
+                                let
+                                    _ = Debug.log "err" err
+                                in
+                                    ["error"]
+
+        Nothing ->
+            []
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -56,19 +97,20 @@ update msg model =
                 "peers_discovered" ->
                     -- TODO call different function to parse args and change model
                     let
-                        b =
-                            Debug.log "args" args
+                        peer =
+                            maybeValueToString (List.head args)
 
-                        up p =
-                            case p of
-                                Nothing ->
-                                    Just { interfaces = [] }
+                        peers = maybeValueToListString (List.head (List.drop 1 args))
 
-                                Just x ->
-                                    Just x
+                        b = Debug.log "peer" peer
+                        c = Debug.log "peers" peers
+
+                        peersMap = List.map (\p -> Tuple.pair p { interfaces = [] }) peers
+                        newDict = Dict.fromList (peersMap)
+                        updatedDict = Dict.union model.discoveredPeers newDict
                     in
                     -- TODO get data from args, propagate
-                    ( { model | discoveredPeers = Dict.update "abc" up model.discoveredPeers }, Cmd.none )
+                    ( { model | discoveredPeers = updatedDict }, Cmd.none )
 
                 _ ->
                     let
@@ -79,7 +121,7 @@ update msg model =
 
         Click ->
             ( model
-            , sendAir <| Air.event "hello" []
+            , sendAir (Services.Air.air model.peerId model.relayId (Dict.keys model.discoveredPeers))
             )
 
         RelayChanged relayId ->

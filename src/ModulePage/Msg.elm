@@ -1,0 +1,1 @@
+module ModulePage.Msg exposing (..)

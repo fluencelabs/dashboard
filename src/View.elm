@@ -16,13 +16,14 @@ limitations under the License.
 
 -}
 
-import Browser exposing (Document)
+import Browser exposing (Document, UrlRequest(..))
 import Html exposing (Html, div, header, text)
 import Html.Attributes exposing (class, classList)
 import Html.Events exposing (onClick)
-import Model exposing (Model)
+import Model exposing (Model, Route(..))
 import Msg exposing (..)
 import Palette exposing (classes)
+import Route exposing (routeView)
 
 
 view : Model -> Document Msg
@@ -37,17 +38,24 @@ title _ =
 
 body : Model -> Html Msg
 body model =
-    layout <|
-        List.concat
-            [-- TODO render the view according to model.page
-            ]
+    let
+        a = 1
+        url = model.url
+        newUrl = { url | path = "/hub"}
+    in
+        layout <|
+            List.concat
+                [
+                    [ header [ classes "w-100 bt bb b--black-10" ] [ routeView (Page "hub") ] ] ++
+                    [ header [ classes "w-100 bt bb b--black-10", onClick Click ] [ text "Fluence Network Dashboard" ] ]
+                ]
 
 
 layout : List (Html Msg) -> Html Msg
 layout elms =
-    div [ classes "mw9 center" ]
+    div [ classes "mw9 center w-70" ]
         [ div [ classes "fl w-100 pa2" ]
-            ([ header [ classes "w-100 bt bb b--black-10", onClick Click ] [ text "Fluence Network Dashboard" ]
+            ([
              ]
                 ++ elms
             )

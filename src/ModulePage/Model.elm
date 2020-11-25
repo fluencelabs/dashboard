@@ -1,0 +1,1 @@
+module ModulePage.Model exposing (..)

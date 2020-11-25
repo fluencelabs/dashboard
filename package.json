@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-serve --open",
-    "pack": "webpack"
+    "pack": "webpack",
+    "dev": "parcel index.html"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,7 @@
   },
   "homepage": "https://github.com/fluencelabs/fluence-admin#readme",
   "dependencies": {
-    "fluence": "0.7.80",
+    "fluence": "0.7.81",
     "tachyons": "^4.12.0"
   },
   "devDependencies": {
@@ -31,6 +32,7 @@
     "elm-webpack-loader": "6.0.1",
     "html-webpack-plugin": "^4.4.1",
     "http-server": "^0.12.3",
+    "parcel-bundler": "^1.12.4",
     "replace-in-file": "^6.0.0",
     "source-map-loader": "1.1.2",
     "style-loader": "^0.23.1",

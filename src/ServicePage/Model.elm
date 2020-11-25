@@ -1,0 +1,1 @@
+module ServicePage.Model exposing (..)
