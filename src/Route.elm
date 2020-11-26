@@ -33,12 +33,17 @@ routeView model route =
 
                 "module" ->
                     let
-                        up = (\(pid, p) -> Maybe.map (\a -> Tuple.pair pid a) (List.head (List.drop 0 p.services)))
-                        el = (List.head (List.drop 3 (Dict.toList model.discoveredPeers)))
-                        _ = Debug.log "el" el
+                        up =
+                            \( pid, p ) -> Maybe.map (\a -> Tuple.pair pid a) (List.head (List.drop 0 p.services))
+
+                        el =
+                            List.head (List.drop 3 (Dict.toList model.discoveredPeers))
+
+                        _ =
+                            Debug.log "el" el
                     in
                     case Maybe.andThen up el of
-                        Just (peerId, service) ->
+                        Just ( peerId, service ) ->
                             let
                                 example =
                                     { name = "Chat"
@@ -50,13 +55,10 @@ routeView model route =
                                     , service = service
                                     }
                             in
-                                ModulePage.view example
+                            ModulePage.view example
 
                         Nothing ->
                             Html.text "alala"
-
-
-
 
                 _ ->
                     Html.text ("undefined page: " ++ page)
