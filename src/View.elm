@@ -52,7 +52,9 @@ body model =
         List.concat
             [ [ header [ classes "w-100 bt bb b--black-10" ] [ routeView model (Page "hub") ] ]
                 ++ [ header [ classes "w-100 bt bb b--black-10" ] [ routeView model (Page "module") ] ]
-                ++ [ header [ classes "w-100 bt bb b--black-10", onClick Click ] [ text "GET SERVICES" ] ]
+                ++ [ header [ classes "w-100 bt bb b--black-10", onClick (Click "get_services") ] [ text "GET SERVICES" ] ]
+                ++ [ header [ classes "w-100 bt bb b--black-10", onClick (Click "get_modules") ] [ text "GET MODULES" ] ]
+                ++ [ header [ classes "w-100 bt bb b--black-10", onClick (Click "get_identify") ] [ text "GET IDENTIFY" ] ]
             ]
 
 

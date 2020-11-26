@@ -23,7 +23,9 @@ import Json.Decode exposing (decodeValue, list, string)
 import Json.Encode exposing (Value)
 import Maybe exposing (withDefault)
 import Model exposing (Model, emptyPeerData)
+import Modules.Air
 import Msg exposing (..)
+import Nodes.Air
 import Port exposing (sendAir)
 import Route
 import Services.Air
@@ -155,10 +157,23 @@ update msg model =
                     in
                     ( model, Cmd.none )
 
-        Click ->
-            ( model
-            , sendAir (Services.Air.air model.peerId model.relayId (Dict.keys model.discoveredPeers))
-            )
+        Click command ->
+            case command of
+                "get_services" ->
+                    ( model
+                    , sendAir (Services.Air.air model.peerId model.relayId (Dict.keys model.discoveredPeers))
+                    )
+                "get_modules" ->
+                    ( model
+                    , sendAir (Modules.Air.air model.peerId model.relayId (Dict.keys model.discoveredPeers))
+                    )
+                "get_identify" ->
+                    ( model
+                    , sendAir (Nodes.Air.air model.peerId model.relayId (Dict.keys model.discoveredPeers))
+                    )
+                _ ->
+                    (model, Cmd.none)
+
 
         RelayChanged relayId ->
             ( { model | relayId = relayId }, Cmd.none )

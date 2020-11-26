@@ -1,5 +1,7 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const webpack = require('webpack');
+const { WebpackPluginServe: Serve } = require('webpack-plugin-serve');
 
 module.exports = {
     entry: {
@@ -12,53 +14,66 @@ module.exports = {
         contentBase: './bundle',
         hot: false,
         inline: false,
-        historyApiFallback:{
-            index:'index.html'
-        },
+        historyApiFallback: {
+            rewrites: [
+                {from: /^\/$/, to: '/index.html'},
+                {from: /./, to: '/index.html'}
+            ]
+        }
     },
     devtool: "eval-source-map",
     module: {
         rules: [
             {
                 test: /\.html$/,
-                exclude: /node_modules/,
-                loader: "file-loader?name=[name].[ext]"
+                use: [{loader: "file-loader?name=[name].[ext]"}]
+
             },
             {
                 test: [/\.elm$/],
                 exclude: [/elm-stuff/, /node_modules/],
                 use: [
-                    { loader: "elm-hot-webpack-loader" },
+                    {loader: "elm-hot-webpack-loader"},
                     {
                         loader: "elm-webpack-loader",
                         options:
-                            { debug: false, forceWatch: true }
+                            {debug: false, forceWatch: false}
                     }
                 ]
             },
-            { test: /\.ts$/, loader: "ts-loader" },
+            {test: /\.ts$/, loader: "ts-loader"},
             {
                 test: /\.(png)$/,
                 loader: 'file-loader',
             },
-          {
-            test: /\.css$/i,
-            use: ['style-loader', 'css-loader'],
-          },
+            {
+                test: /\.css$/i,
+                use: ['style-loader', 'css-loader'],
+            },
         ]
     },
     mode: "development",
+    watch: true,
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'bundle')
+        path: path.resolve(__dirname, 'bundle'),
+        publicPath: "/"
     },
     plugins: [
-        new CopyWebpackPlugin([{
-            from: './*.html'
-        }]),
-        new CopyWebpackPlugin([{
-            from: './images/*.png'
-        }])
+        new CopyWebpackPlugin({
+            patterns: [
+                {from: './*.html'},
+                // {from: './images/*.png'},
+            ]
+        }),
+        new webpack.ProvidePlugin({
+            process: 'process/browser.js',
+            Buffer: ['buffer', 'Buffer'],
+        }),
+        new Serve({
+            historyFallback: true,
+            port: 55553
+        })
     ]
 };
 

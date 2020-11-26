@@ -38,9 +38,6 @@ routeView model route =
 
                         el =
                             List.head (List.drop 3 (Dict.toList model.discoveredPeers))
-
-                        _ =
-                            Debug.log "el" el
                     in
                     case Maybe.andThen up el of
                         Just ( peerId, service ) ->

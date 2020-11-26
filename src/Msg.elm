@@ -11,4 +11,4 @@ type Msg
     | LinkClicked UrlRequest
     | AquamarineEvent Port.ReceiveEvent
     | RelayChanged String
-    | Click
+    | Click String
