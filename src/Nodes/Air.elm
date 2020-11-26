@@ -1,4 +1,4 @@
-module Modules.Air exposing (..)
+module Nodes.Air exposing (..)
 
 import Air exposing (Air)
 import AirScripts.CallPeers
@@ -6,4 +6,4 @@ import AirScripts.CallPeers
 
 air : String -> String -> List String -> Air
 air peerId relayId peers =
-    AirScripts.CallPeers.air peerId relayId ("modules_discovered", "dist", "get_modules") peers
+    AirScripts.CallPeers.air peerId relayId ("peer_identity", "op", "identify") peers
