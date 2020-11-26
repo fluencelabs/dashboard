@@ -23,6 +23,7 @@ import Browser.Navigation as Nav
 import Dict
 import Json.Decode exposing (decodeValue, list, string)
 import Json.Encode exposing (Value)
+import List.Unique exposing (filterDuplicates)
 import Maybe exposing (withDefault)
 import Model exposing (Model, emptyPeerData)
 import Modules.Air
@@ -173,3 +174,12 @@ updateModel model peer identify services modules blueprints =
     in
         { model | discoveredPeers = updated }
 
+getAllModules : Model -> List String
+getAllModules model =
+    let
+        peerDatas = Dict.values model.discoveredPeers
+        allModules = peerDatas |> List.map (\pd -> pd.modules)
+        flatten = List.foldr (++) [] (allModules)
+        modulesUnique = filterDuplicates (flatten)
+    in
+        modulesUnique
