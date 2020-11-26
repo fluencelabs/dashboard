@@ -18,7 +18,6 @@ limitations under the License.
 
 import Browser exposing (Document, UrlRequest(..))
 import Html exposing (Html, div, header, text)
-import Html.Attributes exposing (class, classList)
 import Html.Events exposing (onClick)
 import Model exposing (Model, Route(..))
 import Msg exposing (..)
@@ -38,21 +37,10 @@ title _ =
 
 body : Model -> Html Msg
 body model =
-    let
-        a =
-            1
-
-        url =
-            model.url
-
-        newUrl =
-            { url | path = "/hub" }
-    in
     layout <|
         List.concat
-            [ [ header [ classes "w-100 bt bb b--black-10" ] [ routeView model (Page "hub") ] ]
-                ++ [ header [ classes "w-100 bt bb b--black-10" ] [ routeView model (Page "module") ] ]
-                ++ [ header [ classes "w-100 bt bb b--black-10", onClick (Click "get_services") ] [ text "GET SERVICES" ] ]
+            [ [ header [ classes "w-100 bt bb b--black-10" ] [ routeView model model.page ] ]
+                ++ [ header [ classes "w-100 bt bb b--black-10", onClick (Click "get_all") ] [ text "GET SERVICES" ] ]
                 ++ [ header [ classes "w-100 bt bb b--black-10", onClick (Click "get_modules") ] [ text "GET MODULES" ] ]
                 ++ [ header [ classes "w-100 bt bb b--black-10", onClick (Click "get_identify") ] [ text "GET IDENTIFY" ] ]
             ]

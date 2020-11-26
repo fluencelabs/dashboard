@@ -16,6 +16,8 @@ limitations under the License.
 
 -}
 
+import AirScripts.GetAll
+import Blueprints.Model exposing (Blueprint)
 import Browser
 import Browser.Navigation as Nav
 import Dict
@@ -26,9 +28,11 @@ import Model exposing (Model, emptyPeerData)
 import Modules.Air
 import Msg exposing (..)
 import Nodes.Air
+import Nodes.Model exposing (Identify)
 import Port exposing (sendAir)
 import Route
 import Services.Air
+import Services.Model exposing (Service)
 import Url
 
 
@@ -103,7 +107,7 @@ update msg model =
                 Browser.External href ->
                     ( model, Nav.load href )
 
-        AquamarineEvent { name, peer, peers, services, modules } ->
+        AquamarineEvent { name, peer, peers, identify, services, modules, blueprints } ->
             case name of
                 "peers_discovered" ->
                     let
@@ -118,21 +122,11 @@ update msg model =
                     in
                     ( { model | discoveredPeers = updatedDict }, Cmd.none )
 
-                "services_discovered" ->
+                "all_info" ->
                     let
-                        newServices =
-                            Maybe.withDefault [] services
-
-                        empty =
-                            emptyPeerData
-
-                        up =
-                            \old -> Just (Maybe.withDefault { empty | services = newServices } (Maybe.map (\o -> { o | services = newServices }) old))
-
-                        updatedDict =
-                            Dict.update peer up model.discoveredPeers
+                        updated = Maybe.map4 (updateModel model peer) identify services modules blueprints
                     in
-                    ( { model | discoveredPeers = updatedDict }, Cmd.none )
+                    ( withDefault model updated, Cmd.none )
 
                 "modules_discovered" ->
                     let
@@ -159,17 +153,9 @@ update msg model =
 
         Click command ->
             case command of
-                "get_services" ->
+                "get_all" ->
                     ( model
-                    , sendAir (Services.Air.air model.peerId model.relayId (Dict.keys model.discoveredPeers))
-                    )
-                "get_modules" ->
-                    ( model
-                    , sendAir (Modules.Air.air model.peerId model.relayId (Dict.keys model.discoveredPeers))
-                    )
-                "get_identify" ->
-                    ( model
-                    , sendAir (Nodes.Air.air model.peerId model.relayId (Dict.keys model.discoveredPeers))
+                    , sendAir (AirScripts.GetAll.air model.peerId model.relayId (Dict.keys model.discoveredPeers))
                     )
                 _ ->
                     (model, Cmd.none)
@@ -177,3 +163,13 @@ update msg model =
 
         RelayChanged relayId ->
             ( { model | relayId = relayId }, Cmd.none )
+
+updateModel : Model -> String -> Identify -> List Service -> List String -> List Blueprint -> Model
+updateModel model peer identify services modules blueprints =
+    let
+        data = Maybe.withDefault emptyPeerData (Dict.get peer model.discoveredPeers)
+        newData = { data | identify = identify, services = services, modules = modules, blueprints = blueprints }
+        updated = Dict.insert peer newData model.discoveredPeers
+    in
+        { model | discoveredPeers = updated }
+

@@ -13,13 +13,7 @@ module.exports = {
     devServer: {
         contentBase: './bundle',
         hot: false,
-        inline: false,
-        historyApiFallback: {
-            rewrites: [
-                {from: /^\/$/, to: '/index.html'},
-                {from: /./, to: '/index.html'}
-            ]
-        }
+        inline: false
     },
     devtool: "eval-source-map",
     module: {
@@ -72,7 +66,8 @@ module.exports = {
         }),
         new Serve({
             historyFallback: true,
-            port: 55553
+            port: 55553,
+            host: 'localhost',
         })
     ]
 };

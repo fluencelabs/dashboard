@@ -28,6 +28,8 @@ routeView model route =
     case route of
         Page page ->
             case page of
+                "" ->
+                    HubPage.view {}
                 "hub" ->
                     HubPage.view {}
 

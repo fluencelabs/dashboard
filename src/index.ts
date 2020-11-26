@@ -32,20 +32,14 @@ function genFlags(peerId: string): any {
     }
 }
 
-function event(name: string, peer: string, peers?: string[], services?: any[], modules?: string[]) {
-    if (!peers) {
-        peers = null
-    }
+function event(name: string, peer: string, peers?: string[], identify?: string[], services?: any[], blueprints?: string[], modules?: string[]) {
+    if (!peers) { peers = null }
+    if (!services) { services = null }
+    if (!modules) { modules = null }
+    if (!identify) { identify = null }
+    if (!blueprints) { blueprints = null }
 
-    if (!services) {
-        services = null
-    }
-
-    if (!modules) {
-        modules = null
-    }
-
-    return {name, peer, peers, services, modules}
+    return {name, peer, peers, identify, services, modules, blueprints}
 }
 
 (async () => {
@@ -70,10 +64,8 @@ function event(name: string, peer: string, peers?: string[], services?: any[], m
         try {
             if (fnName === "peers_discovered") {
                 app.ports.eventReceiver.send(event(fnName, args[0], args[1]))
-            } else if (fnName === "services_discovered") {
-                app.ports.eventReceiver.send(event(fnName, args[0], undefined, args[1]))
-            } else if (fnName === "modules_discovered") {
-                app.ports.eventReceiver.send(event(fnName, args[0], undefined, undefined, args[1]))
+            } else if (fnName === "all_info") {
+                app.ports.eventReceiver.send(event(fnName, args[0], undefined, args[1], args[2], args[3], args[4]))
             } else {
                 console.error("UNHANDLED")
             }

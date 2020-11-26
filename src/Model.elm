@@ -16,8 +16,10 @@ limitations under the License.
 
 -}
 
+import Blueprints.Model exposing (Blueprint)
 import Browser.Navigation as Nav
 import Dict exposing (Dict)
+import Nodes.Model exposing (Identify, emptyIdentify)
 import Services.Model exposing (Service)
 import Url
 
@@ -28,14 +30,16 @@ type Route
 
 
 type alias PeerData =
-    { services : List Service
+    { identify : Identify
+    , services : List Service
     , modules : List String
+    , blueprints : List Blueprint
     }
 
 
 emptyPeerData : PeerData
 emptyPeerData =
-    { services = [], modules = [] }
+    { identify = emptyIdentify, services = [], modules = [], blueprints = [] }
 
 
 type alias Model =

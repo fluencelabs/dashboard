@@ -1,8 +1,10 @@
 port module Port exposing (..)
 
 import Air exposing (Air(..))
+import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
 import Json.Encode exposing (Value)
+import Nodes.Model exposing (Identify)
 import Services.Model exposing (Service)
 
 
@@ -11,7 +13,7 @@ type alias SendParticle =
 
 
 type alias ReceiveEvent =
-    { name : String, peer : String, peers : Maybe (List String), services : Maybe (List Service), modules : Maybe (List String) }
+    { name : String, peer : String, peers : Maybe (List String), identify : Maybe Identify, services : Maybe (List Service), modules : Maybe (List String), blueprints : Maybe (List Blueprint)}
 
 
 port sendParticle : SendParticle -> Cmd msg
