@@ -25,14 +25,11 @@ import Json.Decode exposing (decodeValue, list, string)
 import Json.Encode exposing (Value)
 import List.Unique exposing (filterDuplicates)
 import Maybe exposing (withDefault)
-import Model exposing (Model, emptyPeerData)
-import Modules.Air
+import Model exposing (Model, PeerData, emptyPeerData)
 import Msg exposing (..)
-import Nodes.Air
 import Nodes.Model exposing (Identify)
 import Port exposing (sendAir)
 import Route
-import Services.Air
 import Services.Model exposing (Service)
 import Url
 
@@ -183,3 +180,16 @@ getAllModules model =
         modulesUnique = filterDuplicates (flatten)
     in
         modulesUnique
+
+peersByBlueprintId : Model -> String -> List String
+peersByBlueprintId model blueprintId =
+    let
+        list = Dict.toList model.discoveredPeers
+        found = list |> List.filter (\(peer, pd) -> existsByBlueprintId blueprintId pd.blueprints) |> List.map (\(peer, _) -> peer)
+    in
+        found
+
+existsByBlueprintId : String -> List Blueprint -> Bool
+existsByBlueprintId id bps =
+    bps |> List.any (\b -> b.id == id)
+
