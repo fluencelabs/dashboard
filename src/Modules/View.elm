@@ -1,16 +1,35 @@
 module Modules.View exposing (..)
 
+import Dict exposing (Dict)
 import Html exposing (Html)
+import Model exposing (Model, PeerData)
 import Modules.Model exposing (ModuleShortInfo)
 import Palette exposing (classes)
 import Utils.Utils exposing (instancesText)
 
+getModuleShortInfo : Model -> List ModuleShortInfo
+getModuleShortInfo model =
+    getAllModules model.discoveredPeers |> Dict.toList |> List.map (\(moduleName, peers) -> {name = moduleName, instanceNumber = List.length peers})
 
-view : List ModuleShortInfo -> Html msg
+getAllModules : Dict String PeerData -> Dict String (List String)
+getAllModules peerData =
+    let
+        peerDatas = Dict.toList peerData
+        allModules = peerDatas |> List.map (\(peer, pd) -> pd.modules |> List.map (\ms -> (peer, ms))) |> List.concat
+        peersByModuleName = allModules |> List.foldr updateDict Dict.empty
+    in
+        peersByModuleName
+
+updateDict : (String, String) -> Dict String (List String) -> Dict String (List String)
+updateDict (peer, moduleName) dict =
+    dict |> Dict.update moduleName (\oldM -> oldM |> Maybe.map (List.append [peer]) |> Maybe.withDefault [peer] |> Just)
+
+
+view : Model -> Html msg
 view modules =
     let
         modulesView =
-            List.map viewService modules
+            List.map viewService (getModuleShortInfo modules)
     in
     Html.div [ classes "cf ph2-ns" ] modulesView
 

@@ -23,7 +23,6 @@ import Browser.Navigation as Nav
 import Dict exposing (Dict)
 import Json.Decode exposing (decodeValue, list, string)
 import Json.Encode exposing (Value)
-import List.Unique exposing (filterDuplicates)
 import Maybe exposing (withDefault)
 import Model exposing (Model, PeerData, emptyPeerData)
 import Msg exposing (..)
@@ -174,19 +173,6 @@ updateModel model peer identify services modules blueprints =
         updated = Dict.insert peer newData model.discoveredPeers
     in
         { model | discoveredPeers = updated }
-
-getServicesByBlueprintId : Dict String PeerData -> String -> List (String, Service)
-getServicesByBlueprintId peerData bpId =
-    let
-            list = Dict.toList peerData
-            found = list |> List.map (\(peer, pd) -> (peer, (filterServicesByBlueprintId bpId pd)))
-            filtered = found |> List.filter (\(peer, services) -> not (List.isEmpty services)) |> List.map (\(peer, services) -> services |> List.map (\s -> (peer, s)))
-        in
-            List.concat filtered
-
-filterServicesByBlueprintId : String -> PeerData -> List Service
-filterServicesByBlueprintId blueprintId peerData =
-    peerData.services |> List.filter (\s -> s.blueprint_id == blueprintId)
 
 peersByModule : Dict String PeerData -> String -> List String
 peersByModule peerData moduleId =

@@ -34,7 +34,3 @@ type alias ServiceInfo =
     , instanceNumber : Int
     }
 
-
-type alias Model =
-    { services : List ServiceInfo
-    }
