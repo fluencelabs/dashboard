@@ -26,6 +26,8 @@ import Url
 
 type Route
     = Page String
+    | Service String
+    | Module String
     | Peer String
 
 

@@ -40,9 +40,7 @@ body model =
     layout <|
         List.concat
             [ [ header [ classes "w-100 bt bb b--black-10" ] [ routeView model model.page ] ]
-                ++ [ header [ classes "w-100 bt bb b--black-10", onClick (Click "get_all") ] [ text "GET SERVICES" ] ]
-                ++ [ header [ classes "w-100 bt bb b--black-10", onClick (Click "get_modules") ] [ text "GET MODULES" ] ]
-                ++ [ header [ classes "w-100 bt bb b--black-10", onClick (Click "get_identify") ] [ text "GET IDENTIFY" ] ]
+                ++ [ header [ classes "w-100 bt bb b--black-10", onClick (Click "get_all") ] [ text "GET ALL" ] ]
             ]
 
 

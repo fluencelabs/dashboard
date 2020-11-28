@@ -15,6 +15,8 @@ routeParser : Parser (Route -> a) a
 routeParser =
     oneOf
         [ map Peer (s "peer" </> string)
+        , map Module (s "module" </> string)
+        , map Service (s "service" </> string)
         , map Page string
         ]
 
@@ -33,31 +35,6 @@ routeView model route =
                 "hub" ->
                     HubPage.view model
 
-                "module" ->
-                    let
-                        up =
-                            \( pid, p ) -> Maybe.map (\a -> Tuple.pair pid a) (List.head (List.drop 0 p.services))
-
-                        el =
-                            List.head (List.drop 3 (Dict.toList model.discoveredPeers))
-                    in
-                    case Maybe.andThen up el of
-                        Just ( peerId, service ) ->
-                            let
-                                example =
-                                    { name = "Chat"
-                                    , id = service.service_id
-                                    , author = "Fluence Labs"
-                                    , authorPeerId = peerId
-                                    , description = "Cool service"
-                                    , website = "https://github.com/fluencelabs/chat"
-                                    , service = service
-                                    }
-                            in
-                            ModulePage.view example
-
-                        Nothing ->
-                            Html.text "alala"
 
                 _ ->
                     Html.text ("undefined page: " ++ page)
@@ -65,37 +42,74 @@ routeView model route =
         Peer peer ->
             Html.text peer
 
+        Service serviceId ->
+            Html.text serviceId
+
+        Module moduleName ->
+            let
+                up =
+                    \( pid, p ) -> Maybe.map (\a -> Tuple.pair pid a) (List.head (List.drop 0 p.services))
+
+                el =
+                    List.head (List.drop 2 (Dict.toList model.discoveredPeers))
+            in
+            case Maybe.andThen up el of
+                Just ( peerId, service ) ->
+                    let
+                        example =
+                            { name = moduleName
+                            , id = service.service_id
+                            , author = "Fluence Labs"
+                            , authorPeerId = peerId
+                            , description = "Cool service"
+                            , website = "https://github.com/fluencelabs/chat"
+                            , service = service
+                            }
+                    in
+                    ModulePage.view example
+
+                Nothing ->
+                    Html.text moduleName
+
+getPeers : Model -> Cmd msg
+getPeers m =
+    let
+        clientId =
+            set "clientId" <| Encode.string m.peerId
+
+        relayId =
+            set "relayId" <| Encode.string m.relayId
+
+        air =
+            seq
+                (callBI "relayId" ( "dht", "neighborhood" ) [ "clientId" ] (Just "peers"))
+                (par
+                    (relayEvent "peers_discovered" [ "relayId", "peers" ])
+                    (fold "peers" "p" <|
+                        par
+                            (seq
+                                (callBI "p" ( "dht", "neighborhood" ) [ "clientId" ] (Just "morePeers"))
+                                (relayEvent "peers_discovered" [ "p", "morePeers" ])
+                            )
+                            (next "p")
+                    )
+                )
+    in
+    sendAir (relayId <| clientId <| air)
 
 routeCommand : Model -> Route -> Cmd msg
 routeCommand m r =
     case r of
         Page s ->
-            let
-                _ =
-                    Debug.log "page" s
-
-                clientId =
-                    set "clientId" <| Encode.string m.peerId
-
-                relayId =
-                    set "relayId" <| Encode.string m.relayId
-
-                air =
-                    seq
-                        (callBI "relayId" ( "dht", "neighborhood" ) [ "clientId" ] (Just "peers"))
-                        (par
-                            (relayEvent "peers_discovered" [ "relayId", "peers" ])
-                            (fold "peers" "p" <|
-                                par
-                                    (seq
-                                        (callBI "p" ( "dht", "neighborhood" ) [ "clientId" ] (Just "morePeers"))
-                                        (relayEvent "peers_discovered" [ "p", "morePeers" ])
-                                    )
-                                    (next "p")
-                            )
-                        )
-            in
-            sendAir (relayId <| clientId <| air)
+            getPeers m
 
         Peer _ ->
-            Cmd.none
+            getPeers m
+
+        Service string ->
+            getPeers m
+
+
+        Module string ->
+            getPeers m
+
