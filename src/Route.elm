@@ -29,9 +29,9 @@ routeView model route =
         Page page ->
             case page of
                 "" ->
-                    HubPage.view {}
+                    HubPage.view model
                 "hub" ->
-                    HubPage.view {}
+                    HubPage.view model
 
                 "module" ->
                     let

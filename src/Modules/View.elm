@@ -1,16 +1,16 @@
 module Modules.View exposing (..)
 
 import Html exposing (Html)
-import Modules.Model exposing (Model, ModuleShortInfo)
+import Modules.Model exposing (ModuleShortInfo)
 import Palette exposing (classes)
 import Utils.Utils exposing (instancesText)
 
 
-view : Model -> Html msg
-view model =
+view : List ModuleShortInfo -> Html msg
+view modules =
     let
         modulesView =
-            List.map viewService model.modules
+            List.map viewService modules
     in
     Html.div [ classes "cf ph2-ns" ] modulesView
 

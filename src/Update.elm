@@ -20,7 +20,7 @@ import AirScripts.GetAll
 import Blueprints.Model exposing (Blueprint)
 import Browser
 import Browser.Navigation as Nav
-import Dict
+import Dict exposing (Dict)
 import Json.Decode exposing (decodeValue, list, string)
 import Json.Encode exposing (Value)
 import List.Unique exposing (filterDuplicates)
@@ -123,8 +123,12 @@ update msg model =
                 "all_info" ->
                     let
                         updated = Maybe.map4 (updateModel model peer) identify services modules blueprints
+                        updatedModel = withDefault model updated
+
+                        byBp = peersByBlueprintId model.discoveredPeers "623c6d14-2204-43c4-84d5-a237bcd19874"
+                        _ = Debug.log "by blueprint id" byBp
                     in
-                    ( withDefault model updated, Cmd.none )
+                    ( updatedModel, Cmd.none )
 
                 "modules_discovered" ->
                     let
@@ -171,21 +175,36 @@ updateModel model peer identify services modules blueprints =
     in
         { model | discoveredPeers = updated }
 
-getAllModules : Model -> List String
-getAllModules model =
+getServicesByBlueprintId : Dict String PeerData -> String -> List (String, Service)
+getServicesByBlueprintId peerData bpId =
     let
-        peerDatas = Dict.values model.discoveredPeers
-        allModules = peerDatas |> List.map (\pd -> pd.modules)
-        flatten = List.foldr (++) [] (allModules)
-        modulesUnique = filterDuplicates (flatten)
-    in
-        modulesUnique
+            list = Dict.toList peerData
+            found = list |> List.map (\(peer, pd) -> (peer, (filterServicesByBlueprintId bpId pd)))
+            filtered = found |> List.filter (\(peer, services) -> not (List.isEmpty services)) |> List.map (\(peer, services) -> services |> List.map (\s -> (peer, s)))
+        in
+            List.concat filtered
 
-peersByBlueprintId : Model -> String -> List String
-peersByBlueprintId model blueprintId =
+filterServicesByBlueprintId : String -> PeerData -> List Service
+filterServicesByBlueprintId blueprintId peerData =
+    peerData.services |> List.filter (\s -> s.blueprint_id == blueprintId)
+
+peersByModule : Dict String PeerData -> String -> List String
+peersByModule peerData moduleId =
     let
-        list = Dict.toList model.discoveredPeers
-        found = list |> List.filter (\(peer, pd) -> existsByBlueprintId blueprintId pd.blueprints) |> List.map (\(peer, _) -> peer)
+        list = Dict.toList peerData
+        found = list |> List.filter (\(_, pd) -> existsByModule moduleId pd.modules) |> List.map (\(peer, _) -> peer)
+    in
+        found
+
+existsByModule : String -> List String -> Bool
+existsByModule moduleId modules =
+    modules |> List.any (\m -> m == moduleId)
+
+peersByBlueprintId : Dict String PeerData -> String -> List String
+peersByBlueprintId peerData blueprintId =
+    let
+        list = Dict.toList peerData
+        found = list |> List.filter (\(_, pd) -> existsByBlueprintId blueprintId pd.blueprints) |> List.map (\(peer, _) -> peer)
     in
         found
 
