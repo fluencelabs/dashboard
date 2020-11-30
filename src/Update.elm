@@ -21,8 +21,6 @@ import Blueprints.Model exposing (Blueprint)
 import Browser
 import Browser.Navigation as Nav
 import Dict exposing (Dict)
-import Json.Decode exposing (decodeValue, list, string)
-import Json.Encode exposing (Value)
 import Maybe exposing (withDefault)
 import Model exposing (Model, PeerData, emptyPeerData)
 import Msg exposing (..)
@@ -41,14 +39,13 @@ update msg model =
 
         UrlChanged url ->
             let
-                _ = Debug.log "url changed" url
                 route =
                     Route.parse url
 
                 cmd =
                     Route.routeCommand model route
             in
-            ( { model | url = url }, cmd )
+            ( { model | url = url, page = route }, cmd )
 
         LinkClicked urlRequest ->
             case urlRequest of

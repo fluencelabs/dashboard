@@ -57,10 +57,10 @@ routeCommand m r =
             sendAir (DiscoverPeers.air m.peerId m.relayId)
 
         Peer _ ->
-            sendAir (DiscoverPeers.air m.peerId m.relayId)
+            Cmd.none
 
         Service string ->
-            sendAir (DiscoverPeers.air m.peerId m.relayId)
+            Cmd.none
 
         Module string ->
-            sendAir (DiscoverPeers.air m.peerId m.relayId)
+            Cmd.none
