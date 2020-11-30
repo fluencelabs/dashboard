@@ -2,12 +2,12 @@ module Route exposing (..)
 
 import Air exposing (callBI, fold, next, par, relayEvent, seq, set)
 import Dict
-import Html exposing (Html)
+import Html exposing (Html, text)
 import HubPage.View as HubPage
 import Json.Encode as Encode
 import Model exposing (Model, Route(..))
-import ModulePage.View as ModulePage
 import Port exposing (sendAir)
+import ServicePage.View as ServicePage
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
 
 
@@ -37,39 +37,16 @@ routeView model route =
                     HubPage.view model
 
                 _ ->
-                    Html.text ("undefined page: " ++ page)
+                    text ("undefined page: " ++ page)
 
         Peer peer ->
-            Html.text peer
+            text peer
 
         Service serviceId ->
-            Html.text serviceId
+            ServicePage.view model serviceId
 
         Module moduleName ->
-            let
-                up =
-                    \( pid, p ) -> Maybe.map (\a -> Tuple.pair pid a) (List.head (List.drop 0 p.services))
-
-                el =
-                    List.head (List.drop 2 (Dict.toList model.discoveredPeers))
-            in
-            case Maybe.andThen up el of
-                Just ( peerId, service ) ->
-                    let
-                        example =
-                            { name = moduleName
-                            , id = service.service_id
-                            , author = "Fluence Labs"
-                            , authorPeerId = peerId
-                            , description = "Cool service"
-                            , website = "https://github.com/fluencelabs/chat"
-                            , service = service
-                            }
-                    in
-                    ModulePage.view example
-
-                Nothing ->
-                    Html.text moduleName
+            text moduleName
 
 
 getPeers : Model -> Cmd msg

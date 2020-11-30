@@ -15,6 +15,7 @@ toInstance peerId identify blueprints service =
     let
         name =
             blueprints |> Dict.get service.blueprint_id |> Maybe.withDefault "unknown"
+
         ip =
             List.head identify.external_addresses |> Maybe.withDefault "unknown"
     in
@@ -32,9 +33,12 @@ view model =
 
         instances =
             Dict.toList model.discoveredPeers
-                |> List.map (\( peer, data ) -> data.services
-                    |> List.map (toInstance peer data.identify bpsDict))
-                        |> List.concat
+                |> List.map
+                    (\( peer, data ) ->
+                        data.services
+                            |> List.map (toInstance peer data.identify bpsDict)
+                    )
+                |> List.concat
     in
     viewTable instances
 
@@ -42,7 +46,7 @@ view model =
 viewTable : List Instance -> Html msg
 viewTable instances =
     div [ classes "pa4" ]
-        [ div [ classes "overflow-auto" ]
+        [ div [ classes "" ]
             [ table [ classes "f6 w-100 mw8 center", attribute "cellspacing" "0" ]
                 [ thead []
                     [ tr [ classes "stripe-dark" ]
