@@ -41,6 +41,7 @@ update msg model =
 
         UrlChanged url ->
             let
+                _ = Debug.log "url changed" url
                 route =
                     Route.parse url
 

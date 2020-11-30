@@ -31,7 +31,7 @@ module.exports = {
                     {
                         loader: "elm-webpack-loader",
                         options:
-                            {debug: false, forceWatch: false}
+                            {debug: true, forceWatch: false}
                     }
                 ]
             },

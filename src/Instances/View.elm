@@ -1,7 +1,7 @@
 module Instances.View exposing (..)
 
 import Dict exposing (Dict)
-import Html exposing (Html, div, table, tbody, td, text, th, thead, tr)
+import Html exposing (Html, a, div, table, tbody, td, text, th, thead, tr)
 import Html.Attributes exposing (attribute)
 import Instances.Model exposing (Instance)
 import Model exposing (Model)
@@ -66,7 +66,7 @@ viewInstance : Instance -> Html msg
 viewInstance instance =
     tr [ classes "stripe-dark" ]
         [ td [ classes "pa3" ] [ text instance.name ]
-        , td [ classes "pa3" ] [ text instance.instance ]
+        , td [ ] [ a [attribute "href" ("/service/" ++ instance.instance), classes "pa3 link dim hide-child"] [text instance.instance] ]
         , td [ classes "pa3" ] [ text instance.peerId ]
         , td [ classes "pa3" ] [ text instance.ip ]
         ]

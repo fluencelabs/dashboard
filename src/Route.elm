@@ -1,10 +1,8 @@
 module Route exposing (..)
 
-import Air exposing (callBI, fold, next, par, relayEvent, seq, set)
-import Dict
+import AirScripts.DiscoverPeers as DiscoverPeers
 import Html exposing (Html, text)
 import HubPage.View as HubPage
-import Json.Encode as Encode
 import Model exposing (Model, Route(..))
 import Port exposing (sendAir)
 import ServicePage.View as ServicePage
@@ -27,6 +25,9 @@ parse url =
 
 routeView : Model -> Route -> Html msg
 routeView model route =
+    let
+        _ = Debug.log "page" route
+    in
     case route of
         Page page ->
             case page of
@@ -49,44 +50,17 @@ routeView model route =
             text moduleName
 
 
-getPeers : Model -> Cmd msg
-getPeers m =
-    let
-        clientId =
-            set "clientId" <| Encode.string m.peerId
-
-        relayId =
-            set "relayId" <| Encode.string m.relayId
-
-        air =
-            seq
-                (callBI "relayId" ( "dht", "neighborhood" ) [ "clientId" ] (Just "peers"))
-                (par
-                    (relayEvent "peers_discovered" [ "relayId", "peers" ])
-                    (fold "peers" "p" <|
-                        par
-                            (seq
-                                (callBI "p" ( "dht", "neighborhood" ) [ "clientId" ] (Just "morePeers"))
-                                (relayEvent "peers_discovered" [ "p", "morePeers" ])
-                            )
-                            (next "p")
-                    )
-                )
-    in
-    sendAir (relayId <| clientId <| air)
-
-
 routeCommand : Model -> Route -> Cmd msg
 routeCommand m r =
     case r of
         Page s ->
-            getPeers m
+            sendAir (DiscoverPeers.air m.peerId m.relayId)
 
         Peer _ ->
-            getPeers m
+            sendAir (DiscoverPeers.air m.peerId m.relayId)
 
         Service string ->
-            getPeers m
+            sendAir (DiscoverPeers.air m.peerId m.relayId)
 
         Module string ->
-            getPeers m
+            sendAir (DiscoverPeers.air m.peerId m.relayId)
