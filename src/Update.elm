@@ -33,53 +33,6 @@ import Services.Model exposing (Service)
 import Url
 
 
-maybeValueToString : Maybe Value -> String
-maybeValueToString mv =
-    case mv of
-        Just v ->
-            case decodeValue string v of
-                Ok value ->
-                    value
-
-                Err error ->
-                    "error"
-
-        Nothing ->
-            ""
-
-
-
--- list of lists of strings in json to list of strings from first element if it is an array
-
-
-maybeValueToListString : Maybe Value -> List String
-maybeValueToListString mv =
-    case mv of
-        Just v ->
-            case decodeValue (list (list string)) v of
-                Ok value ->
-                    Maybe.withDefault [] (List.head value)
-
-                Err error ->
-                    let
-                        _ =
-                            Debug.log "error" error
-                    in
-                    case decodeValue (list string) v of
-                        Ok value ->
-                            value
-
-                        Err err ->
-                            let
-                                _ =
-                                    Debug.log "err" err
-                            in
-                            [ "error" ]
-
-        Nothing ->
-            []
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -121,11 +74,17 @@ update msg model =
 
                 "all_info" ->
                     let
-                        updated = Maybe.map4 (updateModel model peer) identify services modules blueprints
-                        updatedModel = withDefault model updated
+                        updated =
+                            Maybe.map4 (updateModel model peer) identify services modules blueprints
 
-                        byBp = peersByBlueprintId model.discoveredPeers "623c6d14-2204-43c4-84d5-a237bcd19874"
-                        _ = Debug.log "by blueprint id" byBp
+                        updatedModel =
+                            withDefault model updated
+
+                        byBp =
+                            peersByBlueprintId model.discoveredPeers "623c6d14-2204-43c4-84d5-a237bcd19874"
+
+                        _ =
+                            Debug.log "by blueprint id" byBp
                     in
                     ( updatedModel, Cmd.none )
 
@@ -158,43 +117,58 @@ update msg model =
                     ( model
                     , sendAir (AirScripts.GetAll.air model.peerId model.relayId (Dict.keys model.discoveredPeers))
                     )
-                _ ->
-                    (model, Cmd.none)
 
+                _ ->
+                    ( model, Cmd.none )
 
         RelayChanged relayId ->
             ( { model | relayId = relayId }, Cmd.none )
 
+
 updateModel : Model -> String -> Identify -> List Service -> List String -> List Blueprint -> Model
 updateModel model peer identify services modules blueprints =
     let
-        data = Maybe.withDefault emptyPeerData (Dict.get peer model.discoveredPeers)
-        newData = { data | identify = identify, services = services, modules = modules, blueprints = blueprints }
-        updated = Dict.insert peer newData model.discoveredPeers
+        data =
+            Maybe.withDefault emptyPeerData (Dict.get peer model.discoveredPeers)
+
+        newData =
+            { data | identify = identify, services = services, modules = modules, blueprints = blueprints }
+
+        updated =
+            Dict.insert peer newData model.discoveredPeers
     in
-        { model | discoveredPeers = updated }
+    { model | discoveredPeers = updated }
+
 
 peersByModule : Dict String PeerData -> String -> List String
 peersByModule peerData moduleId =
     let
-        list = Dict.toList peerData
-        found = list |> List.filter (\(_, pd) -> existsByModule moduleId pd.modules) |> List.map (\(peer, _) -> peer)
+        list =
+            Dict.toList peerData
+
+        found =
+            list |> List.filter (\( _, pd ) -> existsByModule moduleId pd.modules) |> List.map (\( peer, _ ) -> peer)
     in
-        found
+    found
+
 
 existsByModule : String -> List String -> Bool
 existsByModule moduleId modules =
     modules |> List.any (\m -> m == moduleId)
 
+
 peersByBlueprintId : Dict String PeerData -> String -> List String
 peersByBlueprintId peerData blueprintId =
     let
-        list = Dict.toList peerData
-        found = list |> List.filter (\(_, pd) -> existsByBlueprintId blueprintId pd.blueprints) |> List.map (\(peer, _) -> peer)
+        list =
+            Dict.toList peerData
+
+        found =
+            list |> List.filter (\( _, pd ) -> existsByBlueprintId blueprintId pd.blueprints) |> List.map (\( peer, _ ) -> peer)
     in
-        found
+    found
+
 
 existsByBlueprintId : String -> List Blueprint -> Bool
 existsByBlueprintId id bps =
     bps |> List.any (\b -> b.id == id)
-

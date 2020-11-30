@@ -18,9 +18,11 @@ limitations under the License.
 
 import Maybe exposing (map2)
 
+
 combine : List (Maybe a) -> Maybe (List a)
 combine =
     List.foldr (map2 (::)) (Just [])
+
 
 isEmpty : Maybe a -> Bool
 isEmpty maybe =

@@ -1,7 +1,10 @@
 module Nodes.Model exposing (..)
 
+
 type alias Identify =
-    { external_addresses: List String }
+    { external_addresses : List String }
+
 
 emptyIdentify : Identify
-emptyIdentify = { external_addresses = [] }
+emptyIdentify =
+    { external_addresses = [] }

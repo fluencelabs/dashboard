@@ -33,4 +33,3 @@ type alias ServiceInfo =
     , author : String
     , instanceNumber : Int
     }
-

@@ -32,9 +32,9 @@ routeView model route =
             case page of
                 "" ->
                     HubPage.view model
+
                 "hub" ->
                     HubPage.view model
-
 
                 _ ->
                     Html.text ("undefined page: " ++ page)
@@ -71,6 +71,7 @@ routeView model route =
                 Nothing ->
                     Html.text moduleName
 
+
 getPeers : Model -> Cmd msg
 getPeers m =
     let
@@ -97,6 +98,7 @@ getPeers m =
     in
     sendAir (relayId <| clientId <| air)
 
+
 routeCommand : Model -> Route -> Cmd msg
 routeCommand m r =
     case r of
@@ -109,7 +111,5 @@ routeCommand m r =
         Service string ->
             getPeers m
 
-
         Module string ->
             getPeers m
-

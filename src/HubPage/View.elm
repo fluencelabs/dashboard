@@ -6,6 +6,7 @@ import Model exposing (Model)
 import Modules.View
 import Services.View
 
+
 view : Model -> Html msg
 view model =
     Html.div []
