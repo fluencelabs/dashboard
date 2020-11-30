@@ -2,8 +2,7 @@ module Instances.Model exposing (..)
 
 
 type alias Instance =
-    {}
-
-
-type alias Model =
-    {}
+    { name: String
+    , instance: String
+    , peerId: String
+    , ip: String}
