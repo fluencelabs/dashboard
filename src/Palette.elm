@@ -17,7 +17,7 @@ limitations under the License.
 -}
 
 import Html exposing (Html)
-import Html.Attributes exposing (classList)
+import Html.Attributes exposing (classList, style)
 
 
 classes : String -> Html.Attribute msg
@@ -33,3 +33,11 @@ shortHashRaw size hash =
         , "..."
         , String.right (size - 1) hash
         ]
+
+
+redFont =
+    style "color" "#E11E5A"
+
+
+darkRed =
+    style "color" "#802843"

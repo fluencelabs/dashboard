@@ -3,6 +3,7 @@ module Services.View exposing (..)
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
 import Html exposing (Html, div, text)
+import Html.Attributes exposing (attribute)
 import Model exposing (Model, PeerData)
 import Palette exposing (classes)
 import Services.Model exposing (Service, ServiceInfo)
@@ -21,13 +22,13 @@ view model =
         servicesView =
             List.map viewService info
     in
-    div [ classes "cf ph2-ns" ] servicesView
+    div [ classes "cf ph1-ns" ] servicesView
 
 
 viewService : ServiceInfo -> Html msg
 viewService service =
     div [ classes "fl w-third-ns pa2" ]
-        [ div [ classes "fl w-100 br2 ba solid ma2 pa3" ]
+        [ div [ attribute "href" "#", classes "fl w-100 link dim black mw5 dt hide-child ba b-black pa4 br2 solid" ]
             [ div [ classes "w-100 mb2 b" ] [ text service.name ]
             , div [ classes "w-100 mb4" ] [ text ("By " ++ service.author) ]
             , div [ classes "w-100" ] [ instancesText service.instanceNumber ]
