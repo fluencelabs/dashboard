@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack-serve --open",
     "pack": "webpack",
-    "dev": "parcel index.html"
+    "dev": "parcel index.html",
+    "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
   },
   "repository": {
     "type": "git",
@@ -33,9 +34,12 @@
     "elm-hot-webpack-loader": "1.1.7",
     "elm-webpack-loader": "7.0.1",
     "eslint": "^7.14.0",
-    "eslint-config-standard": "^16.0.2",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-promise": "^4.2.1",
     "html-webpack-plugin": "4.5.0",
     "http-server": "0.12.3",
