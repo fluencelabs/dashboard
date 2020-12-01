@@ -66,7 +66,7 @@ viewInstance : Instance -> Html msg
 viewInstance instance =
     tr [ classes "stripe-dark" ]
         [ td [ classes "pa3" ] [ text instance.name ]
-        , td [ ] [ a [attribute "href" ("/service/" ++ instance.instance), classes "pa3 link dim hide-child"] [text instance.instance] ]
+        , td [] [ a [ attribute "href" ("/service/" ++ instance.instance), classes "pa3 link dim hide-child" ] [ text instance.instance ] ]
         , td [ classes "pa3" ] [ text instance.peerId ]
         , td [ classes "pa3" ] [ text instance.ip ]
         ]

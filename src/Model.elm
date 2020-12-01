@@ -19,6 +19,7 @@ limitations under the License.
 import Blueprints.Model exposing (Blueprint)
 import Browser.Navigation as Nav
 import Dict exposing (Dict)
+import Modules.Model exposing (Module)
 import Nodes.Model exposing (Identify, emptyIdentify)
 import Services.Model exposing (Service)
 import Url
@@ -34,7 +35,7 @@ type Route
 type alias PeerData =
     { identify : Identify
     , services : List Service
-    , modules : List String
+    , modules : List Module
     , blueprints : List Blueprint
     }
 

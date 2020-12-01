@@ -26,7 +26,8 @@ parse url =
 routeView : Model -> Route -> Html msg
 routeView model route =
     let
-        _ = Debug.log "page" route
+        _ =
+            Debug.log "page" route
     in
     case route of
         Page page ->
@@ -57,10 +58,10 @@ routeCommand m r =
             sendAir (DiscoverPeers.air m.peerId m.relayId)
 
         Peer _ ->
-            Cmd.none
+            sendAir (DiscoverPeers.air m.peerId m.relayId)
 
         Service string ->
-            Cmd.none
+            sendAir (DiscoverPeers.air m.peerId m.relayId)
 
         Module string ->
-            Cmd.none
+            sendAir (DiscoverPeers.air m.peerId m.relayId)

@@ -23,6 +23,7 @@ import Browser.Navigation as Nav
 import Dict exposing (Dict)
 import Maybe exposing (withDefault)
 import Model exposing (Model, PeerData, emptyPeerData)
+import Modules.Model exposing (Module)
 import Msg exposing (..)
 import Nodes.Model exposing (Identify)
 import Port exposing (sendAir)
@@ -67,8 +68,16 @@ update msg model =
 
                         updatedDict =
                             Dict.union model.discoveredPeers newDict
+
+                        emptyPeers =
+                            Dict.toList updatedDict
+                                |> List.filter (\( p, data ) -> List.isEmpty data.identify.external_addresses)
+                                |> List.map Tuple.first
+
+                        _ =
+                            Debug.log "empty peers" (List.length emptyPeers)
                     in
-                    ( { model | discoveredPeers = updatedDict }, Cmd.none )
+                    ( { model | discoveredPeers = updatedDict }, sendAir (AirScripts.GetAll.air model.peerId model.relayId emptyPeers) )
 
                 "all_info" ->
                     let
@@ -77,12 +86,6 @@ update msg model =
 
                         updatedModel =
                             withDefault model updated
-
-                        byBp =
-                            peersByBlueprintId model.discoveredPeers "623c6d14-2204-43c4-84d5-a237bcd19874"
-
-                        _ =
-                            Debug.log "by blueprint id" byBp
                     in
                     ( updatedModel, Cmd.none )
 
@@ -123,7 +126,7 @@ update msg model =
             ( { model | relayId = relayId }, Cmd.none )
 
 
-updateModel : Model -> String -> Identify -> List Service -> List String -> List Blueprint -> Model
+updateModel : Model -> String -> Identify -> List Service -> List Module -> List Blueprint -> Model
 updateModel model peer identify services modules blueprints =
     let
         data =
@@ -150,9 +153,9 @@ peersByModule peerData moduleId =
     found
 
 
-existsByModule : String -> List String -> Bool
+existsByModule : String -> List Module -> Bool
 existsByModule moduleId modules =
-    modules |> List.any (\m -> m == moduleId)
+    modules |> List.any (\m -> m.name == moduleId)
 
 
 peersByBlueprintId : Dict String PeerData -> String -> List String

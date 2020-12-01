@@ -3,6 +3,7 @@ module AirScripts.DiscoverPeers exposing (..)
 import Air exposing (Air, callBI, fold, next, par, relayEvent, seq, set)
 import Json.Encode as Encode
 
+
 air : String -> String -> Air
 air peerId relayId =
     let
@@ -27,4 +28,4 @@ air peerId relayId =
                     )
                 )
     in
-        (relayIdSet <| clientIdSet <| airScript)
+    relayIdSet <| clientIdSet <| airScript

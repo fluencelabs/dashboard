@@ -4,17 +4,17 @@ import Dict exposing (Dict)
 import Html exposing (Html, div, p, span, text)
 import Html.Attributes exposing (attribute)
 import Model exposing (Model, PeerData)
-import Modules.Model exposing (ModuleShortInfo)
+import Modules.Model exposing (Module, ModuleShortInfo)
 import Palette exposing (classes)
 import Utils.Utils exposing (instancesText)
 
 
 getModuleShortInfo : Model -> List ModuleShortInfo
 getModuleShortInfo model =
-    getAllModules model.discoveredPeers |> Dict.toList |> List.map (\( moduleName, peers ) -> { name = moduleName, instanceNumber = List.length peers })
+    getAllModules model.discoveredPeers |> Dict.toList |> List.map (\( moduleName, ( moduleInfo, peers ) ) -> { moduleInfo = moduleInfo, instanceNumber = List.length peers })
 
 
-getAllModules : Dict String PeerData -> Dict String (List String)
+getAllModules : Dict String PeerData -> Dict String ( Module, List String )
 getAllModules peerData =
     let
         peerDatas =
@@ -29,9 +29,20 @@ getAllModules peerData =
     peersByModuleName
 
 
-updateDict : ( String, String ) -> Dict String (List String) -> Dict String (List String)
-updateDict ( peer, moduleName ) dict =
-    dict |> Dict.update moduleName (\oldM -> oldM |> Maybe.map (List.append [ peer ]) |> Maybe.withDefault [ peer ] |> Just)
+
+-- group by module name and append peers
+
+
+updateDict : ( String, Module ) -> Dict String ( Module, List String ) -> Dict String ( Module, List String )
+updateDict ( peer, moduleInfo ) dict =
+    dict
+        |> Dict.update moduleInfo.name
+            (\oldM ->
+                oldM
+                    |> Maybe.map (\( info, peers ) -> ( info, List.append [ peer ] peers ))
+                    |> Maybe.withDefault ( moduleInfo, [ peer ] )
+                    |> Just
+            )
 
 
 view : Model -> Html msg
@@ -44,9 +55,9 @@ view modules =
 
 
 viewService : ModuleShortInfo -> Html msg
-viewService service =
+viewService moduleInfo =
     div [ classes "fl w-third-ns pa2" ]
         [ div [ attribute "href" "#", classes "fl w-100 link dim black mw5 dt hide-child ba b-black pa4 br2 solid" ]
-            [ p [ classes "tl di" ] [ span [ classes "b pl2" ] [ text service.name ], span [ classes "di fr pr2" ] [ instancesText service.instanceNumber ] ]
+            [ p [ classes "tl di" ] [ span [ classes "b pl2" ] [ text moduleInfo.moduleInfo.name ], span [ classes "di fr pr2" ] [ instancesText moduleInfo.instanceNumber ] ]
             ]
         ]
