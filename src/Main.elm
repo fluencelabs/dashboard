@@ -55,6 +55,8 @@ init flags url key =
             , key = key
             , page = r
             , discoveredPeers = Dict.empty
+            , modules = Dict.empty
+            , blueprints = Dict.empty
             }
     in
     ( emptyModel, Route.routeCommand emptyModel r )

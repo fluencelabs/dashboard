@@ -35,8 +35,8 @@ type Route
 type alias PeerData =
     { identify : Identify
     , services : List Service
-    , modules : List Module
-    , blueprints : List Blueprint
+    , modules : List String
+    , blueprints : List String
     }
 
 
@@ -52,4 +52,6 @@ type alias Model =
     , url : Url.Url
     , page : Route
     , discoveredPeers : Dict String PeerData
+    , modules : Dict String Module
+    , blueprints : Dict String Blueprint
     }

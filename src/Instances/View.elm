@@ -1,5 +1,6 @@
 module Instances.View exposing (..)
 
+import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
 import Html exposing (Html, a, div, table, tbody, td, text, th, thead, tr)
 import Html.Attributes exposing (attribute)
@@ -10,11 +11,11 @@ import Palette exposing (classes)
 import Services.Model exposing (Service)
 
 
-toInstance : String -> Identify -> Dict String String -> Service -> Instance
+toInstance : String -> Identify -> Dict String Blueprint -> Service -> Instance
 toInstance peerId identify blueprints service =
     let
         name =
-            blueprints |> Dict.get service.blueprint_id |> Maybe.withDefault "unknown"
+            blueprints |> Dict.get service.blueprint_id |> Maybe.map .name |> Maybe.withDefault "unknown"
 
         ip =
             List.head identify.external_addresses |> Maybe.map (String.split "/") |> Maybe.map (List.drop 2) |> Maybe.andThen List.head |> Maybe.withDefault "unknown"
@@ -25,18 +26,12 @@ toInstance peerId identify blueprints service =
 view : Model -> Html msg
 view model =
     let
-        bps =
-            Dict.values model.discoveredPeers |> List.map (\data -> data.blueprints |> List.map (\b -> ( b.id, b.name )))
-
-        bpsDict =
-            List.concat bps |> Dict.fromList
-
         instances =
             Dict.toList model.discoveredPeers
                 |> List.map
                     (\( peer, data ) ->
                         data.services
-                            |> List.map (toInstance peer data.identify bpsDict)
+                            |> List.map (toInstance peer data.identify model.blueprints)
                     )
                 |> List.concat
     in

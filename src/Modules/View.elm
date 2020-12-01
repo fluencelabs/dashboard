@@ -3,6 +3,7 @@ module Modules.View exposing (..)
 import Dict exposing (Dict)
 import Html exposing (Html, div, p, span, text)
 import Html.Attributes exposing (attribute)
+import Maybe.Extra
 import Model exposing (Model, PeerData)
 import Modules.Model exposing (Module, ModuleShortInfo)
 import Palette exposing (classes)
@@ -11,20 +12,20 @@ import Utils.Utils exposing (instancesText)
 
 getModuleShortInfo : Model -> List ModuleShortInfo
 getModuleShortInfo model =
-    getAllModules model.discoveredPeers |> Dict.toList |> List.map (\( moduleName, ( moduleInfo, peers ) ) -> { moduleInfo = moduleInfo, instanceNumber = List.length peers })
+    getAllModules model.modules model.discoveredPeers |> Dict.toList |> List.map (\( moduleName, ( moduleInfo, peers ) ) -> { moduleInfo = moduleInfo, instanceNumber = List.length peers })
 
 
-getAllModules : Dict String PeerData -> Dict String ( Module, List String )
-getAllModules peerData =
+getAllModules : Dict String Module -> Dict String PeerData -> Dict String ( Module, List String )
+getAllModules modules peerData =
     let
         peerDatas =
             Dict.toList peerData
 
-        allModules =
+        allModulesByPeers =
             peerDatas |> List.map (\( peer, pd ) -> pd.modules |> List.map (\ms -> ( peer, ms ))) |> List.concat
 
         peersByModuleName =
-            allModules |> List.foldr updateDict Dict.empty
+            allModulesByPeers |> List.foldr (updateDict modules) Dict.empty
     in
     peersByModuleName
 
@@ -33,23 +34,25 @@ getAllModules peerData =
 -- group by module name and append peers
 
 
-updateDict : ( String, Module ) -> Dict String ( Module, List String ) -> Dict String ( Module, List String )
-updateDict ( peer, moduleInfo ) dict =
+updateDict : Dict String Module -> ( String, String ) -> Dict String ( Module, List String ) -> Dict String ( Module, List String )
+updateDict modules ( peer, moduleName ) dict =
     dict
-        |> Dict.update moduleInfo.name
+        |> Dict.update moduleName
             (\oldM ->
-                oldM
-                    |> Maybe.map (\( info, peers ) -> ( info, List.append [ peer ] peers ))
-                    |> Maybe.withDefault ( moduleInfo, [ peer ] )
-                    |> Just
+                Maybe.Extra.or
+                    (oldM |> Maybe.map (\( info, peers ) -> ( info, List.append [ peer ] peers )))
+                    (Dict.get moduleName modules |> Maybe.map (\m -> ( m, [ peer ] )))
             )
 
 
 view : Model -> Html msg
 view modules =
     let
+        info =
+            getModuleShortInfo modules
+
         modulesView =
-            List.map viewService (getModuleShortInfo modules)
+            List.map viewService info
     in
     div [ classes "cf ph2-ns" ] modulesView
 

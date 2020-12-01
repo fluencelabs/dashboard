@@ -14,7 +14,7 @@ view : Model -> Html msg
 view model =
     let
         allBps =
-            getBlueprintsToServices model.discoveredPeers
+            getBlueprintsToServices model.blueprints model.discoveredPeers
 
         info =
             Dict.values allBps |> List.map (\( bp, servicesByPeers ) -> { name = bp.name, author = "Fluence Labs", instanceNumber = List.length (servicesByPeers |> List.map (\( _, s ) -> s) |> List.concat) })
@@ -40,14 +40,11 @@ viewService service =
 --                                       bpId           peerId
 
 
-getBlueprintsToServices : Dict String PeerData -> Dict String ( Blueprint, List ( String, List Service ) )
-getBlueprintsToServices peerData =
+getBlueprintsToServices : Dict String Blueprint -> Dict String PeerData -> Dict String ( Blueprint, List ( String, List Service ) )
+getBlueprintsToServices blueprints peerData =
     let
-        peerDatas =
-            Dict.toList peerData
-
         allBlueprints =
-            peerDatas |> List.map (\( _, pd ) -> pd.blueprints |> List.map (\bp -> bp)) |> List.concat
+            Dict.values blueprints
 
         bpsToServices =
             allBlueprints |> List.map (\bp -> ( bp.id, ( bp, getServicesByBlueprintId peerData bp.id ) )) |> Dict.fromList

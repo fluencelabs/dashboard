@@ -89,22 +89,6 @@ update msg model =
                     in
                     ( updatedModel, Cmd.none )
 
-                "modules_discovered" ->
-                    let
-                        newModules =
-                            Maybe.withDefault [] modules
-
-                        empty =
-                            emptyPeerData
-
-                        up =
-                            \old -> Just (Maybe.withDefault { empty | modules = newModules } (Maybe.map (\o -> { o | modules = newModules }) old))
-
-                        updatedDict =
-                            Dict.update peer up model.discoveredPeers
-                    in
-                    ( { model | discoveredPeers = updatedDict }, Cmd.none )
-
                 _ ->
                     let
                         _ =
@@ -132,44 +116,22 @@ updateModel model peer identify services modules blueprints =
         data =
             Maybe.withDefault emptyPeerData (Dict.get peer model.discoveredPeers)
 
+        moduleDict =
+            modules |> List.map (\m -> ( m.name, m )) |> Dict.fromList
+
+        blueprintDict =
+            blueprints |> List.map (\b -> ( b.name, b )) |> Dict.fromList
+
+        updatedModules =
+            Dict.union moduleDict model.modules
+
+        updatedBlueprints =
+            Dict.union blueprintDict model.blueprints
+
         newData =
-            { data | identify = identify, services = services, modules = modules, blueprints = blueprints }
+            { data | identify = identify, services = services, modules = Dict.keys moduleDict, blueprints = Dict.keys blueprintDict }
 
         updated =
             Dict.insert peer newData model.discoveredPeers
     in
-    { model | discoveredPeers = updated }
-
-
-peersByModule : Dict String PeerData -> String -> List String
-peersByModule peerData moduleId =
-    let
-        list =
-            Dict.toList peerData
-
-        found =
-            list |> List.filter (\( _, pd ) -> existsByModule moduleId pd.modules) |> List.map (\( peer, _ ) -> peer)
-    in
-    found
-
-
-existsByModule : String -> List Module -> Bool
-existsByModule moduleId modules =
-    modules |> List.any (\m -> m.name == moduleId)
-
-
-peersByBlueprintId : Dict String PeerData -> String -> List String
-peersByBlueprintId peerData blueprintId =
-    let
-        list =
-            Dict.toList peerData
-
-        found =
-            list |> List.filter (\( _, pd ) -> existsByBlueprintId blueprintId pd.blueprints) |> List.map (\( peer, _ ) -> peer)
-    in
-    found
-
-
-existsByBlueprintId : String -> List Blueprint -> Bool
-existsByBlueprintId id bps =
-    bps |> List.any (\b -> b.id == id)
+    { model | discoveredPeers = updated, modules = updatedModules, blueprints = updatedBlueprints }

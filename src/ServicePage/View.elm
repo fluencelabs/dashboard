@@ -39,14 +39,11 @@ modelToServiceInfo model id =
         services =
             datas |> List.map (\( peer, data ) -> data.services |> List.map (\s -> ( peer, s ))) |> List.concat
 
-        blueprints =
-            datas |> List.map (\( _, data ) -> data.blueprints) |> List.concat |> List.map (\bp -> ( bp.id, bp.name )) |> Dict.fromList
-
         service =
             services |> List.Extra.find (\( _, s ) -> s.service_id == id)
 
         name =
-            service |> Maybe.andThen (\( _, s ) -> blueprints |> Dict.get s.blueprint_id) |> Maybe.withDefault "unknown"
+            service |> Maybe.andThen (\( _, s ) -> model.blueprints |> Dict.get s.blueprint_id |> Maybe.map .name) |> Maybe.withDefault "unknown"
 
         info =
             service
@@ -66,14 +63,14 @@ modelToServiceInfo model id =
 
 
 viewInfo : ServiceInfo -> Html msg
-viewInfo moduleInfo =
+viewInfo serviceInfo =
     article [ classes "cf" ]
         [ div [ classes "fl w-30 gray mv1" ] [ text "AUTHOR" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black b" ] [ text moduleInfo.author ], span [ classes "fl w-100 black" ] [ text moduleInfo.authorPeerId ] ]
+        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black b" ] [ text serviceInfo.author ], span [ classes "fl w-100 black" ] [ text serviceInfo.authorPeerId ] ]
         , div [ classes "fl w-30 gray mv1" ] [ text "DESCRIPTION" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] [ text moduleInfo.description ] ]
+        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] [ text serviceInfo.description ] ]
         , div [ classes "fl w-30 gray mv1" ] [ text "INTERFACE" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] (recordsView moduleInfo.service.interface.record_types ++ signaturesView moduleInfo.service.interface.function_signatures) ]
+        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] (recordsView serviceInfo.service.interface.record_types ++ signaturesView serviceInfo.service.interface.function_signatures) ]
         ]
 
 
