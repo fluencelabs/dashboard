@@ -71,7 +71,7 @@ update msg model =
 
                         emptyPeers =
                             Dict.toList updatedDict
-                                |> List.filter (\( p, data ) -> List.isEmpty data.identify.external_addresses)
+                                |> List.filter (\( _, data ) -> List.isEmpty data.identify.external_addresses)
                                 |> List.map Tuple.first
                     in
                     ( { model | discoveredPeers = updatedDict }, sendAir (AirScripts.GetAll.air model.peerId model.relayId emptyPeers) )
@@ -94,7 +94,12 @@ update msg model =
                     ( model, Cmd.none )
 
         ToggleInterface id ->
-            ( { model | toggledInterface = Just id }, Cmd.none )
+            case model.toggledInterface of
+                Just ti ->
+                    ( { model | toggledInterface = if (id == ti) then Nothing else Just id }, Cmd.none )
+                Nothing ->
+                    ( { model | toggledInterface = Just id }, Cmd.none )
+
 
         RelayChanged relayId ->
             ( { model | relayId = relayId }, Cmd.none )

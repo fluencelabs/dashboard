@@ -4,14 +4,16 @@ import BlueprintPage.Model exposing (BlueprintViewInfo)
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
 import Html exposing (Html, article, div, span, text)
+import Html.Events exposing (onClick)
 import Interface.View exposing (instanceView)
 import Model exposing (Model)
 import Modules.Model exposing (Module)
+import Msg exposing (Msg(..))
 import Palette exposing (classes)
 import Service.Model exposing (Interface)
 
 
-view : Model -> String -> Html msg
+view : Model -> String -> Html Msg
 view model id =
     let
         blueprintInfo =
@@ -46,6 +48,7 @@ blueprintToInfo model id =
                     , website = "https://github.com/fluencelabs/"
                     , blueprint = bp
                     , modules = modules
+                    , openedModule = model.toggledInterface
                     }
 
             Nothing ->
@@ -53,21 +56,32 @@ blueprintToInfo model id =
 
 
 
-viewInfo : BlueprintViewInfo -> Html msg
+viewInfo : BlueprintViewInfo -> Html Msg
 viewInfo blueprintInfo =
-    article [ classes "cf" ]
-        [ div [ classes "fl w-30 gray mv1" ] [ text "AUTHOR" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black b" ] [ text blueprintInfo.author ], span [ classes "fl w-100 black" ] [ text blueprintInfo.authorPeerId ] ]
-        , div [ classes "fl w-30 gray mv1" ] [ text "DESCRIPTION" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] [ text blueprintInfo.description ] ]
-        , div [ classes "fl w-30 gray mv1" ] [ text "INTERFACE" ]
-        , div [ classes "fl w-70 mv1" ] (blueprintInfo.modules |> List.map (\m -> viewToggledInterface True m.name m.interface))
-        ]
+    let
+        checkToggle = (\id -> blueprintInfo.openedModule |> Maybe.map (\om -> om == id) |> Maybe.withDefault False)
+    in
+        article [ classes "cf" ]
+            [ div [ classes "fl w-30 gray mv1" ] [ text "AUTHOR" ]
+            , div [ classes "fl w-70 mv1" ]
+                [ span [ classes "fl w-100 black b" ] [ text blueprintInfo.author ]
+                , span [ classes "fl w-100 black" ] [ text blueprintInfo.authorPeerId ] ]
+            , div [ classes "fl w-30 gray mv1" ] [ text "DESCRIPTION" ]
+            , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] [ text blueprintInfo.description ] ]
+            , div [ classes "fl w-30 gray mv1" ] [ text "INTERFACE" ]
+            , div [ classes "fl w-70 mv1" ]
+                (blueprintInfo.modules |>
+                    List.map (\m -> viewToggledInterface (checkToggle m.name) m.name m.interface))
+            ]
 
-viewToggledInterface : Bool -> String -> Interface -> Html msg
+
+viewToggledInterface : Bool  -> String -> Interface -> Html Msg
 viewToggledInterface isOpen name interface =
-    div []
-    ([ text name
-        ] ++
-        instanceView interface)
+    let
+        interfaceView = if (isOpen) then [(div [classes "fl w-100 ph4"] (instanceView interface))] else []
+    in
+        div []
+        ([ div [classes "fl w-100 bg-near-white pa2", onClick (ToggleInterface name)] [text name] ]
+        ++ interfaceView)
+
 

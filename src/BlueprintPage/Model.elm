@@ -13,4 +13,5 @@ type alias BlueprintViewInfo =
     , website : String
     , blueprint : Blueprint
     , modules : List Module
+    , openedModule : Maybe String
     }

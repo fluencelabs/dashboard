@@ -6,6 +6,7 @@ import Html exposing (Html, text)
 import HubPage.View as HubPage
 import Model exposing (Model, Route(..))
 import ModulePage.View as ModulePage
+import Msg exposing (Msg)
 import Port exposing (sendAir)
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
 
@@ -24,7 +25,7 @@ parse url =
     Maybe.withDefault (Page "") <| Url.Parser.parse routeParser url
 
 
-routeView : Model -> Route -> Html msg
+routeView : Model -> Route -> Html Msg
 routeView model route =
     let
         _ =
@@ -55,14 +56,14 @@ routeView model route =
 routeCommand : Model -> Route -> Cmd msg
 routeCommand m r =
     case r of
-        Page s ->
+        Page _ ->
             sendAir (DiscoverPeers.air m.peerId m.relayId)
 
         Peer _ ->
             sendAir (DiscoverPeers.air m.peerId m.relayId)
 
-        Blueprint string ->
+        Blueprint _ ->
             sendAir (DiscoverPeers.air m.peerId m.relayId)
 
-        Module string ->
+        Module _ ->
             sendAir (DiscoverPeers.air m.peerId m.relayId)
