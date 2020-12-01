@@ -4,8 +4,8 @@ import AirScripts.DiscoverPeers as DiscoverPeers
 import Html exposing (Html, text)
 import HubPage.View as HubPage
 import Model exposing (Model, Route(..))
+import ModulePage.View as ModulePage
 import Port exposing (sendAir)
-import ServicePage.View as ServicePage
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
 
 
@@ -45,10 +45,11 @@ routeView model route =
             text peer
 
         Service serviceId ->
-            ServicePage.view model serviceId
+            text serviceId
 
         Module moduleName ->
-            text moduleName
+            ModulePage.view model moduleName
+
 
 
 routeCommand : Model -> Route -> Cmd msg

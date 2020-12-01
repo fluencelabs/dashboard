@@ -73,9 +73,6 @@ update msg model =
                             Dict.toList updatedDict
                                 |> List.filter (\( p, data ) -> List.isEmpty data.identify.external_addresses)
                                 |> List.map Tuple.first
-
-                        _ =
-                            Debug.log "empty peers" (List.length emptyPeers)
                     in
                     ( { model | discoveredPeers = updatedDict }, sendAir (AirScripts.GetAll.air model.peerId model.relayId emptyPeers) )
 
@@ -120,7 +117,7 @@ updateModel model peer identify services modules blueprints =
             modules |> List.map (\m -> ( m.name, m )) |> Dict.fromList
 
         blueprintDict =
-            blueprints |> List.map (\b -> ( b.name, b )) |> Dict.fromList
+            blueprints |> List.map (\b -> ( b.id, b )) |> Dict.fromList
 
         updatedModules =
             Dict.union moduleDict model.modules

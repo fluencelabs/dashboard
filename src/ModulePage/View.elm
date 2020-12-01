@@ -1,11 +1,11 @@
-module ServicePage.View exposing (..)
+module ModulePage.View exposing (..)
 
-import Dict
+import Dict exposing (Dict)
 import Html exposing (Html, article, div, span, text)
-import List.Extra
 import Model exposing (Model)
+import ModulePage.Model exposing (ModuleViewInfo)
+import Modules.Model exposing (Module)
 import Palette exposing (classes)
-import ServicePage.Model exposing (ServiceInfo)
 import Services.Model exposing (Record, Signature)
 import String.Interpolate exposing (interpolate)
 
@@ -14,7 +14,7 @@ view : Model -> String -> Html msg
 view model id =
     let
         moduleInfo =
-            modelToServiceInfo model id
+            modelToServiceInfo model.modules id
     in
     case moduleInfo of
         Just mi ->
@@ -30,53 +30,47 @@ view model id =
                 ]
 
 
-modelToServiceInfo : Model -> String -> Maybe ServiceInfo
-modelToServiceInfo model id =
+modelToServiceInfo : Dict String Module -> String -> Maybe ModuleViewInfo
+modelToServiceInfo modules id =
     let
-        datas =
-            Dict.toList model.discoveredPeers
-
-        services =
-            datas |> List.map (\( peer, data ) -> data.services |> List.map (\s -> ( peer, s ))) |> List.concat
-
-        service =
-            services |> List.Extra.find (\( _, s ) -> s.service_id == id)
+        moduleInfo =
+            Dict.get id modules
 
         name =
-            service |> Maybe.andThen (\( _, s ) -> model.blueprints |> Dict.get s.blueprint_id |> Maybe.map .name) |> Maybe.withDefault "unknown"
+            moduleInfo |> Maybe.map .name |> Maybe.withDefault "unknown"
 
         info =
-            service
+            moduleInfo
                 |> Maybe.map
-                    (\( p, s ) ->
+                    (\m ->
                         { name = name
                         , id = id
                         , author = "Fluence Labs"
-                        , authorPeerId = p
-                        , description = "Cool service"
-                        , website = "https://github.com/fluencelabs/chat"
-                        , service = s
+                        , authorPeerId = "fluence_labs_peer_id"
+                        , description = "Excelent module"
+                        , website = "https://github.com/fluencelabs/"
+                        , moduleInfo = m
                         }
                     )
     in
     info
 
 
-viewInfo : ServiceInfo -> Html msg
-viewInfo serviceInfo =
+viewInfo : ModuleViewInfo -> Html msg
+viewInfo moduleInfo =
     article [ classes "cf" ]
         [ div [ classes "fl w-30 gray mv1" ] [ text "AUTHOR" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black b" ] [ text serviceInfo.author ], span [ classes "fl w-100 black" ] [ text serviceInfo.authorPeerId ] ]
+        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black b" ] [ text moduleInfo.author ], span [ classes "fl w-100 black" ] [ text moduleInfo.authorPeerId ] ]
         , div [ classes "fl w-30 gray mv1" ] [ text "DESCRIPTION" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] [ text serviceInfo.description ] ]
+        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] [ text moduleInfo.description ] ]
         , div [ classes "fl w-30 gray mv1" ] [ text "INTERFACE" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] (recordsView serviceInfo.service.interface.record_types ++ signaturesView serviceInfo.service.interface.function_signatures) ]
+        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] (recordsView moduleInfo.moduleInfo.interface.record_types ++ signaturesView moduleInfo.moduleInfo.interface.function_signatures) ]
         ]
 
 
 recordsView : List Record -> List (Html msg)
 recordsView record =
-    List.map recordView record
+    record |> List.sortBy .name |> List.map recordView
 
 
 recordView : Record -> Html msg
@@ -95,7 +89,7 @@ fieldsView fields =
 
 signaturesView : List Signature -> List (Html msg)
 signaturesView signatures =
-    List.map signatureView signatures
+    signatures |> List.sortBy .name |> List.map signatureView
 
 
 signatureView : Signature -> Html msg

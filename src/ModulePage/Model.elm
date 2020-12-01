@@ -1,14 +1,14 @@
-module ServicePage.Model exposing (..)
+module ModulePage.Model exposing (..)
 
-import Services.Model exposing (Service)
+import Modules.Model exposing (Module)
 
 
-type alias ServiceInfo =
+type alias ModuleViewInfo =
     { name : String
     , id : String
     , author : String
     , authorPeerId : String
     , description : String
     , website : String
-    , service : Service
+    , moduleInfo : Module
     }
