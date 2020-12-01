@@ -10,6 +10,9 @@
 }
 
 body {
-  font-family: 'Roboto', sans-serif;
-  font-size: 48px;
+  font-family: 'Roboto Mono', monospace;
+}
+
+h1 {
+  font-family: 'Roboto Mono', monospace;
 }

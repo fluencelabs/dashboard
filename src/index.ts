@@ -15,6 +15,7 @@
  */
 
 import 'tachyons/css/tachyons.min.css';
+import './main.css';
 import {Elm} from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import {peerIdToSeed, seedToPeerId} from "fluence/dist/seed";
