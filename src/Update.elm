@@ -28,7 +28,7 @@ import Msg exposing (..)
 import Nodes.Model exposing (Identify)
 import Port exposing (sendAir)
 import Route
-import Services.Model exposing (Service)
+import Service.Model exposing (Service)
 import Url
 
 
@@ -46,7 +46,7 @@ update msg model =
                 cmd =
                     Route.routeCommand model route
             in
-            ( { model | url = url, page = route }, cmd )
+            ( { model | url = url, page = route, toggledInterface = Nothing }, cmd )
 
         LinkClicked urlRequest ->
             case urlRequest of
@@ -93,15 +93,8 @@ update msg model =
                     in
                     ( model, Cmd.none )
 
-        Click command ->
-            case command of
-                "get_all" ->
-                    ( model
-                    , sendAir (AirScripts.GetAll.air model.peerId model.relayId (Dict.keys model.discoveredPeers))
-                    )
-
-                _ ->
-                    ( model, Cmd.none )
+        ToggleInterface id ->
+            ( { model | toggledInterface = Just id }, Cmd.none )
 
         RelayChanged relayId ->
             ( { model | relayId = relayId }, Cmd.none )

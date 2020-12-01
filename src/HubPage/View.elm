@@ -1,12 +1,12 @@
 module HubPage.View exposing (..)
 
+import Blueprints.View
 import Html exposing (Html, a, div, h1, h3, span, text)
 import Html.Attributes exposing (attribute)
 import Instances.View
 import Model exposing (Model)
 import Modules.View
 import Palette exposing (classes, redFont)
-import Services.View
 
 
 view : Model -> Html msg
@@ -14,8 +14,8 @@ view model =
     div []
         [ h1 [ redFont ] [ text "Developer Hub" ]
         , welcomeText
-        , h3 [] [ text "Featured Services" ]
-        , Services.View.view model
+        , h3 [] [ text "Featured Blueprints" ]
+        , Blueprints.View.view model
         , h3 [] [ text "Featured Modules" ]
         , Modules.View.view model
         , h3 [] [ text "Service Instances" ]

@@ -1,4 +1,4 @@
-module Services.Air exposing (..)
+module Service.Air exposing (..)
 
 import Air exposing (Air)
 import AirScripts.CallPeers

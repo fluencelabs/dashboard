@@ -17,8 +17,8 @@ limitations under the License.
 -}
 
 import Browser exposing (Document, UrlRequest(..))
-import Html exposing (Html, div, header, text)
-import Html.Events exposing (onClick)
+import Html exposing (Html, div, header)
+import Html.Attributes exposing (style)
 import Model exposing (Model, Route(..))
 import Msg exposing (..)
 import Palette exposing (classes)
@@ -39,15 +39,14 @@ body : Model -> Html Msg
 body model =
     layout <|
         List.concat
-            [ [ header [ classes "w-100 bt bb b--black-10" ] [ routeView model model.page ] ]
-                ++ [ header [ classes "w-100 bt bb b--black-10", onClick (Click "get_all") ] [ text "GET ALL" ] ]
+            [ [ header [ classes "w-100" ] [ routeView model model.page ] ]
             ]
 
 
 layout : List (Html Msg) -> Html Msg
 layout elms =
     div [ classes "mw9 center w-70" ]
-        [ div [ classes "fl w-100 pa2" ]
+        [ div [ classes "fl w-100 pa2", style "font-family" "Roboto+Mono" ]
             ([]
                 ++ elms
             )

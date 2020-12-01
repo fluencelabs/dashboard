@@ -21,13 +21,13 @@ import Browser.Navigation as Nav
 import Dict exposing (Dict)
 import Modules.Model exposing (Module)
 import Nodes.Model exposing (Identify, emptyIdentify)
-import Services.Model exposing (Service)
+import Service.Model exposing (Service)
 import Url
 
 
 type Route
     = Page String
-    | Service String
+    | Blueprint String
     | Module String
     | Peer String
 
@@ -54,4 +54,5 @@ type alias Model =
     , discoveredPeers : Dict String PeerData
     , modules : Dict String Module
     , blueprints : Dict String Blueprint
+    , toggledInterface : Maybe String
     }

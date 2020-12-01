@@ -1,12 +1,12 @@
-module Services.View exposing (..)
+module Blueprints.View exposing (..)
 
-import Blueprints.Model exposing (Blueprint)
+import Blueprints.Model exposing (Blueprint, BlueprintInfo)
 import Dict exposing (Dict)
-import Html exposing (Html, div, text)
+import Html exposing (Html, a, div, text)
 import Html.Attributes exposing (attribute)
 import Model exposing (Model, PeerData)
 import Palette exposing (classes)
-import Services.Model exposing (Service, ServiceInfo)
+import Service.Model exposing (Service)
 import Utils.Utils exposing (instancesText)
 
 
@@ -17,7 +17,13 @@ view model =
             getBlueprintsToServices model.blueprints model.discoveredPeers
 
         info =
-            Dict.values allBps |> List.map (\( bp, servicesByPeers ) -> { name = bp.name, author = "Fluence Labs", instanceNumber = List.length (servicesByPeers |> List.map (\( _, s ) -> s) |> List.concat) })
+            Dict.values allBps |> List.map (\( bp, servicesByPeers ) ->
+                { name = bp.name
+                , id = bp.id
+                , author = "Fluence Labs"
+                , instanceNumber = List.length (servicesByPeers |> List.map (\( _, s ) -> s) |> List.concat)
+                }
+            )
 
         servicesView =
             List.map viewService info
@@ -25,13 +31,13 @@ view model =
     div [ classes "cf ph1-ns" ] servicesView
 
 
-viewService : ServiceInfo -> Html msg
-viewService service =
+viewService : BlueprintInfo -> Html msg
+viewService blueprint =
     div [ classes "fl w-third-ns pa2" ]
-        [ div [ attribute "href" "#", classes "fl w-100 link dim black mw5 dt hide-child ba b-black pa4 br2 solid" ]
-            [ div [ classes "w-100 mb2 b" ] [ text service.name ]
-            , div [ classes "w-100 mb4" ] [ text ("By " ++ service.author) ]
-            , div [ classes "w-100" ] [ instancesText service.instanceNumber ]
+        [ a [ attribute "href" ("/blueprint/" ++ blueprint.id), classes "fl w-100 link dim black mw5 dt hide-child ba b-black pa4 br2 solid" ]
+            [ div [ classes "w-100 mb2 b" ] [ text blueprint.name ]
+            , div [ classes "w-100 mb4" ] [ text ("By " ++ blueprint.author) ]
+            , div [ classes "w-100" ] [ instancesText blueprint.instanceNumber ]
             ]
         ]
 

@@ -26,8 +26,6 @@ import Route
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
 import Url
-import Url.Parser
-import Utils.TaskExtras exposing (run)
 import View exposing (view)
 
 
@@ -57,6 +55,7 @@ init flags url key =
             , discoveredPeers = Dict.empty
             , modules = Dict.empty
             , blueprints = Dict.empty
+            , toggledInterface = Nothing
             }
     in
     ( emptyModel, Route.routeCommand emptyModel r )

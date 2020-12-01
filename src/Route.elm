@@ -1,6 +1,7 @@
 module Route exposing (..)
 
 import AirScripts.DiscoverPeers as DiscoverPeers
+import BlueprintPage.View as BlueprintPage
 import Html exposing (Html, text)
 import HubPage.View as HubPage
 import Model exposing (Model, Route(..))
@@ -14,7 +15,7 @@ routeParser =
     oneOf
         [ map Peer (s "peer" </> string)
         , map Module (s "module" </> string)
-        , map Service (s "service" </> string)
+        , map Blueprint (s "blueprint" </> string)
         , map Page string
         ]
 
@@ -44,12 +45,11 @@ routeView model route =
         Peer peer ->
             text peer
 
-        Service serviceId ->
-            text serviceId
+        Blueprint id ->
+            BlueprintPage.view model id
 
         Module moduleName ->
             ModulePage.view model moduleName
-
 
 
 routeCommand : Model -> Route -> Cmd msg
@@ -61,7 +61,7 @@ routeCommand m r =
         Peer _ ->
             sendAir (DiscoverPeers.air m.peerId m.relayId)
 
-        Service string ->
+        Blueprint string ->
             sendAir (DiscoverPeers.air m.peerId m.relayId)
 
         Module string ->

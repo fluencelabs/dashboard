@@ -1,6 +1,6 @@
 module Modules.Model exposing (..)
 
-import Services.Model exposing (Interface)
+import Service.Model exposing (Interface)
 
 
 type alias Module =

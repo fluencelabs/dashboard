@@ -1,4 +1,4 @@
-module Services.Model exposing (..)
+module Service.Model exposing (..)
 
 
 type alias Signature =
@@ -25,11 +25,4 @@ type alias Service =
     { service_id : String
     , blueprint_id : String
     , interface : Interface
-    }
-
-
-type alias ServiceInfo =
-    { name : String
-    , author : String
-    , instanceNumber : Int
     }

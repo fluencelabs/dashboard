@@ -6,7 +6,7 @@ import Dict exposing (Dict)
 import Json.Encode exposing (Value)
 import Modules.Model exposing (Module)
 import Nodes.Model exposing (Identify)
-import Services.Model exposing (Service)
+import Service.Model exposing (Service)
 
 
 type alias SendParticle =

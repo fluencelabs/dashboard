@@ -8,3 +8,8 @@
 [data-elm-hot="true"] {
   height: inherit;
 }
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 48px;
+}

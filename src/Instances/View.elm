@@ -2,13 +2,13 @@ module Instances.View exposing (..)
 
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
-import Html exposing (Html, a, div, table, tbody, td, text, th, thead, tr)
+import Html exposing (Html, div, table, tbody, td, text, th, thead, tr)
 import Html.Attributes exposing (attribute)
 import Instances.Model exposing (Instance)
 import Model exposing (Model)
 import Nodes.Model exposing (Identify)
 import Palette exposing (classes)
-import Services.Model exposing (Service)
+import Service.Model exposing (Service)
 
 
 toInstance : String -> Identify -> Dict String Blueprint -> Service -> Instance
@@ -41,8 +41,8 @@ view model =
 viewTable : List Instance -> Html msg
 viewTable instances =
     div [ classes "pa1" ]
-        [ div [ classes "" ]
-            [ table [ classes "f6 w-100 mw8 center", attribute "cellspacing" "0" ]
+        [ div [ classes "mw8" ]
+            [ table [ classes "f6 w-100 center", attribute "cellspacing" "0" ]
                 [ thead []
                     [ tr [ classes "stripe-dark" ]
                         [ th [ classes "fw6 tl pa3 bg-white" ] [ text "SERVICE" ]
@@ -61,7 +61,7 @@ viewInstance : Instance -> Html msg
 viewInstance instance =
     tr [ classes "stripe-dark" ]
         [ td [ classes "pa3" ] [ text instance.name ]
-        , td [] [ a [ attribute "href" ("/service/" ++ instance.instance), classes "pa3 link dim hide-child" ] [ text instance.instance ] ]
+        , td [ classes "pa3" ] [ text instance.instance ]
         , td [ classes "pa3" ] [ text instance.peerId ]
         , td [ classes "pa3" ] [ text instance.ip ]
         ]

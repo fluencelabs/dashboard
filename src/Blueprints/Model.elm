@@ -6,3 +6,11 @@ type alias Blueprint =
     , id : String
     , name : String
     }
+
+
+type alias BlueprintInfo =
+    { name : String
+    , author : String
+    , instanceNumber : Int
+    , id: String
+    }
