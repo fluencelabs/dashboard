@@ -23,19 +23,20 @@ toInstance peerId identify blueprints service =
     { name = name, instance = service.service_id, peerId = peerId, ip = ip }
 
 
-view : Model -> Html msg
-view model =
+view : Model -> (Service -> Bool) -> (Int, Html msg)
+view model filter =
     let
         instances =
             Dict.toList model.discoveredPeers
                 |> List.map
                     (\( peer, data ) ->
                         data.services
+                            |> List.filter filter
                             |> List.map (toInstance peer data.identify model.blueprints)
                     )
                 |> List.concat
     in
-    viewTable instances
+    (List.length instances, viewTable instances)
 
 
 viewTable : List Instance -> Html msg

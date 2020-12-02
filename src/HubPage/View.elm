@@ -19,7 +19,7 @@ view model =
         , h3 [] [ text "Featured Modules" ]
         , Modules.View.view model
         , h3 [] [ text "Service Instances" ]
-        , Instances.View.view model
+        , Tuple.second (Instances.View.view model (\_ -> True))
         ]
 
 

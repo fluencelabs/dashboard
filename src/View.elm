@@ -18,7 +18,6 @@ limitations under the License.
 
 import Browser exposing (Document, UrlRequest(..))
 import Html exposing (Html, div, header)
-import Html.Attributes exposing (style)
 import Model exposing (Model, Route(..))
 import Msg exposing (..)
 import Palette exposing (classes)
@@ -45,8 +44,8 @@ body model =
 
 layout : List (Html Msg) -> Html Msg
 layout elms =
-    div [ classes "mw9 center w-70" ]
-        [ div [ classes "fl w-100 pa2", style "font-family" "Roboto+Mono" ]
+    div [ classes "mw8 center w-100" ]
+        [ div [ classes "fl w-100 pa2 ph4 bg-near-white" ]
             ([]
                 ++ elms
             )

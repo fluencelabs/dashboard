@@ -12,7 +12,7 @@ import Utils.Utils exposing (instancesText)
 
 getModuleShortInfo : Model -> List ModuleShortInfo
 getModuleShortInfo model =
-    getAllModules model.modules model.discoveredPeers |> Dict.toList |> List.map (\( moduleName, ( moduleInfo, peers ) ) -> { moduleInfo = moduleInfo, instanceNumber = List.length peers })
+    getAllModules model.modules model.discoveredPeers |> Dict.toList |> List.map (\( _, ( moduleInfo, peers ) ) -> { moduleInfo = moduleInfo, instanceNumber = List.length peers })
 
 
 getAllModules : Dict String Module -> Dict String PeerData -> Dict String ( Module, List String )
@@ -60,7 +60,7 @@ view modules =
 viewService : ModuleShortInfo -> Html msg
 viewService moduleInfo =
     div [ classes "fl w-third-ns pa2" ]
-        [ a [ attribute "href" ("/module/" ++ moduleInfo.moduleInfo.name), classes "fl w-100 link dim black mw5 dt hide-child ba b-black pa4 br2 solid" ]
+        [ a [ attribute "href" ("/module/" ++ moduleInfo.moduleInfo.name), classes "fl w-100 bg-white link dim black mw5 dt hide-child ba b-black pa2 br2 solid" ]
             [ p [ classes "tl di" ] [ span [ classes "b pl2" ] [ text moduleInfo.moduleInfo.name ], span [ classes "di fr pr2" ] [ instancesText moduleInfo.instanceNumber ] ]
             ]
         ]

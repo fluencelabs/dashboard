@@ -3,8 +3,9 @@ module BlueprintPage.View exposing (..)
 import BlueprintPage.Model exposing (BlueprintViewInfo)
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
-import Html exposing (Html, article, div, span, text)
+import Html exposing (Html, article, div, h3, span, text)
 import Html.Events exposing (onClick)
+import Instances.View
 import Interface.View exposing (instanceView)
 import Model exposing (Model)
 import Modules.Model exposing (Module)
@@ -20,12 +21,20 @@ view model id =
             blueprintToInfo model id
     in
     case blueprintInfo of
-        Just mi ->
-            div [ classes "cf ph2-ns" ]
-                [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text ("Blueprint: " ++ mi.name) ]
-                , span [ classes "fl w-100 light-red" ] [ text mi.id ]
-                , viewInfo mi
-                ]
+        Just bi ->
+            let
+                (instanceNum, instanceView) = Instances.View.view model (\service -> service.blueprint_id == id)
+            in
+                div [ classes "fl w-100 cf ph2-ns" ]
+                    [ div [ classes "fl w-100 mb2" ]
+                        [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text ("Blueprint: " ++ bi.name) ]
+                        , span [ classes "fl w-100 light-red" ] [ text bi.id ]
+                        ]
+                    , div [ classes "fl w-100 bg-white mt2 mh2 ph4 pt3" ] [ viewInfo bi ]
+                    , h3 [ classes "pt3" ] [ text ("Instances (" ++ (String.fromInt instanceNum) ++ ")") ]
+                    , div [ classes "mt2 bg-white" ]
+                        [ instanceView ]
+                    ]
 
         Nothing ->
             div [ classes "cf ph2-ns" ]
