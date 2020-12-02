@@ -42,17 +42,17 @@ view model filter =
 viewTable : List Instance -> Html msg
 viewTable instances =
     div [ classes "pa1" ]
-        [ div [ classes "mw8" ]
+        [ div [ classes "mw8 bg-white pa2 br2" ]
             [ table [ classes "f6 w-100 center", attribute "cellspacing" "0" ]
                 [ thead []
-                    [ tr [ classes "stripe-dark" ]
-                        [ th [ classes "fw6 tl pa3 bg-white" ] [ text "SERVICE" ]
-                        , th [ classes "fw6 tl pa3 bg-white" ] [ text "INSTANCE" ]
-                        , th [ classes "fw6 tl pa3 bg-white" ] [ text "NODE" ]
-                        , th [ classes "fw6 tl pa3 bg-white" ] [ text "IP" ]
+                    [ tr [ classes "" ]
+                        [ th [ classes "fw6 tl pa3" ] [ text "SERVICE" ]
+                        , th [ classes "fw6 tl pa3" ] [ text "INSTANCE" ]
+                        , th [ classes "fw6 tl pa3" ] [ text "NODE" ]
+                        , th [ classes "fw6 tl pa3" ] [ text "IP" ]
                         ]
                     ]
-                , tbody [ classes "lh-copy" ] (instances |> List.map viewInstance)
+                , tbody [ classes "" ] (instances |> List.map viewInstance)
                 ]
             ]
         ]
@@ -60,7 +60,7 @@ viewTable instances =
 
 viewInstance : Instance -> Html msg
 viewInstance instance =
-    tr [ classes "stripe-dark" ]
+    tr [ classes "" ]
         [ td [ classes "pa3" ] [ text instance.name ]
         , td [ classes "pa3" ] [ text instance.instance ]
         , td [ classes "pa3" ] [ text instance.peerId ]

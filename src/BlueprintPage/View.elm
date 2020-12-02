@@ -30,7 +30,7 @@ view model id =
                         [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text ("Blueprint: " ++ bi.name) ]
                         , span [ classes "fl w-100 light-red" ] [ text bi.id ]
                         ]
-                    , div [ classes "fl w-100 bg-white mt2 mh2 ph4 pt3" ] [ viewInfo bi ]
+                    , div [ classes "fl w-100 bg-white mt2 mh2 ph4 pt3 mb4" ] [ viewInfo bi ]
                     , h3 [ classes "pt3" ] [ text ("Instances (" ++ (String.fromInt instanceNum) ++ ")") ]
                     , div [ classes "mt2 bg-white" ]
                         [ instanceView ]

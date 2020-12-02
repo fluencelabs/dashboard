@@ -60,7 +60,7 @@ view modules =
 viewService : ModuleShortInfo -> Html msg
 viewService moduleInfo =
     div [ classes "fl w-third-ns pa2" ]
-        [ a [ attribute "href" ("/module/" ++ moduleInfo.moduleInfo.name), classes "fl w-100 bg-white link dim black mw5 dt hide-child ba b-black pa2 br2 solid" ]
+        [ a [ attribute "href" ("/module/" ++ moduleInfo.moduleInfo.name), classes "fl w-100 bg-white link dim black mw5 hide-child pa2 br2" ]
             [ p [ classes "tl di" ] [ span [ classes "b pl2" ] [ text moduleInfo.moduleInfo.name ], span [ classes "di fr pr2" ] [ instancesText moduleInfo.instanceNumber ] ]
             ]
         ]
