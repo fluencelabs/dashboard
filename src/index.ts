@@ -26,7 +26,7 @@ import { stage, faasNet } from './environments';
 
 const relayIdx = 1;
 
-export const relays: { peerId: string; multiaddr: string }[] = faasNet;
+export const relays: { peerId: string; multiaddr: string }[] = stage;
 
 function genFlags(peerId: string): any {
     return {

@@ -17,7 +17,8 @@ limitations under the License.
 -}
 
 import Browser exposing (Document, UrlRequest(..))
-import Html exposing (Html, div, header)
+import Html exposing (Html, div, header, img, p, text)
+import Html.Attributes exposing (attribute, style)
 import Model exposing (Model, Route(..))
 import Msg exposing (..)
 import Palette exposing (classes)
@@ -38,14 +39,21 @@ body : Model -> Html Msg
 body model =
     layout <|
         List.concat
-            [ [ header [ classes "w-100" ] [ routeView model model.page ] ]
+            [ [ header [ classes "w-100" ]
+                [ div [ classes "fl pa2 pb1 bg-white w-100" ]
+                    [ div [ classes "fl mv1 pl3", style "max-width" "96px"] [img [ classes "v-mid dib mw-100 h-auto", attribute "src" "/images/logo_new.svg"] []]
+                    , div [ classes "fl pl5 h-100" ] [p [classes "mv2"] [text "Developer Hub"]]
+                    ]
+                ]
+              ]
+            , [div [ classes "w-100 ph4 pa2"] [routeView model model.page]]
             ]
 
 
 layout : List (Html Msg) -> Html Msg
 layout elms =
     div [ classes "mw8 center w-100" ]
-        [ div [ classes "fl w-100 pa2 ph4 bg-near-white" ]
+        [ div [ classes "fl w-100 bg-near-white" ]
             ([]
                 ++ elms
             )
