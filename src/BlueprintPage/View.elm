@@ -30,7 +30,7 @@ view model id =
                         [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text ("Blueprint: " ++ bi.name) ]
                         , span [ classes "fl w-100 light-red" ] [ text bi.id ]
                         ]
-                    , div [ classes "fl w-100 bg-white mt2 mh2 ph4 pt3 mb4" ] [ viewInfo bi ]
+                    , div [ classes "fl w-100 bg-white mt2 mh2 ph4 pt3 mb4 pb2" ] [ viewInfo bi ]
                     , h3 [ classes "pt3" ] [ text ("Instances (" ++ (String.fromInt instanceNum) ++ ")") ]
                     , div [ classes "mt2 bg-white" ]
                         [ instanceView ]
@@ -38,7 +38,7 @@ view model id =
 
         Nothing ->
             div [ classes "cf ph2-ns" ]
-                [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text "Module not found" ]
+                [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text "Blueprint not found" ]
                 ]
 
 
@@ -90,7 +90,9 @@ viewToggledInterface isOpen name interface =
         interfaceView = if (isOpen) then [(div [classes "fl w-100 ph4"] (instanceView interface))] else []
     in
         div []
-        ([ div [classes "fl w-100 bg-near-white pa2", onClick (ToggleInterface name)] [text name] ]
+        ([ div [classes "fl w-100 shadow-2 bg-near-white pa2 mv2 pointer", onClick (ToggleInterface name)]
+            [ span [ classes "fl mh2 pv1 tl" ] [text name]
+            , div [ classes "o-40 f4 tr pr3" ] [if (isOpen) then text "▲" else text "▼"]] ]
         ++ interfaceView)
 
 
