@@ -2,7 +2,7 @@ module Instances.View exposing (..)
 
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
-import Html exposing (Html, div, table, tbody, td, text, th, thead, tr)
+import Html exposing (Html, div, p, table, tbody, td, text, th, thead, tr)
 import Html.Attributes exposing (attribute)
 import Instances.Model exposing (Instance)
 import Model exposing (Model)
@@ -61,8 +61,8 @@ viewTable instances =
 viewInstance : Instance -> Html msg
 viewInstance instance =
     tr [ classes "" ]
-        [ td [ classes "pa3" ] [ text instance.name ]
-        , td [ classes "pa3" ] [ text instance.instance ]
-        , td [ classes "pa3" ] [ text instance.peerId ]
-        , td [ classes "pa3" ] [ text instance.ip ]
+        [ td [ classes "pa3" ] [ p [classes "ws-normal"] [text instance.name ]]
+        , td [ classes "pa3" ] [ p [classes "ws-normal"] [text instance.instance ]]
+        , td [ classes "pa3" ] [ p [classes "ws-normal"] [text instance.peerId ]]
+        , td [ classes "pa3" ] [ p [classes "ws-normal"] [text instance.ip ]]
         ]
