@@ -28,9 +28,9 @@ welcomeText =
     div [ classes "w-two-thirds" ]
         [ span []
             [ text "Welcome to the Fluence Developer Hub! Start building with composing existing services or explore featured modules to create your custom services. Learn more about how to build applications in "
-            , a [ attribute "href" "/" ] [ text "Documentation" ]
-            , text " and "
-            , a [ attribute "href" "/" ] [ text "Tutorials" ]
+            , a [ attribute "href" "https://fluence-labs.readme.io/docs" ] [ text "Documentation" ]
+            --, text " and "
+            --, a [ attribute "href" "/" ] [ text "Tutorials" ]
             , text "."
             ]
         ]
