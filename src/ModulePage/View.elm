@@ -24,7 +24,7 @@ view model id =
                 (instanceNum, instanceView) = Instances.View.view model filter
             in
                 div [ classes "fl w-100 cf ph2-ns" ]
-                    [ div [ classes "fl w-100 mb2"]
+                    [ div [ classes "fl w-100 mb2 pt2"]
                         [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text ("Module: " ++ mi.name) ]
                         ]
                     , div [ classes "fl w-100 bg-white mt2 mh2 ph4 pt3" ] [ viewInfo mi ]

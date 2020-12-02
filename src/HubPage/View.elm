@@ -12,7 +12,7 @@ import Palette exposing (classes, redFont)
 view : Model -> Html msg
 view model =
     div []
-        [ h1 [ redFont ] [ text "Developer Hub" ]
+        [ h1 [ redFont, classes "pt4" ] [ text "Developer Hub" ]
         , welcomeText
         , h3 [] [ text "Featured Blueprints" ]
         , Blueprints.View.view model

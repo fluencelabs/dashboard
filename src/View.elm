@@ -17,7 +17,7 @@ limitations under the License.
 -}
 
 import Browser exposing (Document, UrlRequest(..))
-import Html exposing (Html, div, header, img, p, text)
+import Html exposing (Html, a, div, header, img, p, text)
 import Html.Attributes exposing (attribute, style)
 import Model exposing (Model, Route(..))
 import Msg exposing (..)
@@ -41,12 +41,16 @@ body model =
         List.concat
             [ [ header [ classes "w-100" ]
                 [ div [ classes "fl pa2 pb1 bg-white w-100" ]
-                    [ div [ classes "fl mv1 pl3", style "max-width" "96px"] [img [ classes "v-mid dib mw-100 h-auto", attribute "src" "/images/logo_new.svg"] []]
+                    [ div [ classes "fl mv1 pl3", style "max-width" "96px"]
+                        [ a [ attribute "href" "/"]
+                            [ img [ classes "v-mid dib mw-100 h-auto", attribute "src" "/images/logo_new.svg"] []
+                            ]
+                        ]
                     , div [ classes "fl pl5 h-100" ] [p [classes "mv2"] [text "Developer Hub"]]
                     ]
                 ]
               ]
-            , [div [ classes "w-100 ph4 pa2"] [routeView model model.page]]
+            , [div [ classes "w-100 pa4 pt2 mt2"] [routeView model model.page]]
             ]
 
 

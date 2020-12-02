@@ -26,7 +26,7 @@ view model id =
                 (instanceNum, instanceView) = Instances.View.view model (\service -> service.blueprint_id == id)
             in
                 div [ classes "fl w-100 cf ph2-ns" ]
-                    [ div [ classes "fl w-100 mb2" ]
+                    [ div [ classes "fl w-100 mb2 pt2" ]
                         [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text ("Blueprint: " ++ bi.name) ]
                         , span [ classes "fl w-100 light-red" ] [ text bi.id ]
                         ]
