@@ -12,5 +12,5 @@ type alias BlueprintInfo =
     { name : String
     , author : String
     , instanceNumber : Int
-    , id: String
+    , id : String
     }

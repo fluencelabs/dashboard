@@ -19,18 +19,23 @@ view model id =
     case moduleInfo of
         Just mi ->
             let
-                check = Maybe.map (\bp -> bp.dependencies |> List.member id )
-                filter = (\s -> model.blueprints |> Dict.get s.blueprint_id |> check |> Maybe.withDefault False)
-                (instanceNum, instanceView) = Instances.View.view model filter
+                check =
+                    Maybe.map (\bp -> bp.dependencies |> List.member id)
+
+                filter =
+                    \s -> model.blueprints |> Dict.get s.blueprint_id |> check |> Maybe.withDefault False
+
+                ( instanceNum, instanceView ) =
+                    Instances.View.view model filter
             in
-                div [ classes "fl w-100 cf ph2-ns" ]
-                    [ div [ classes "fl w-100 mb2 pt2"]
-                        [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text ("Module: " ++ mi.name) ]
-                        ]
-                    , div [ classes "fl w-100 bg-white mt2 mh2 ph4 pt3" ] [ viewInfo mi ]
-                    , h3 [ classes "pt3" ] [ text ("Instances (" ++ (String.fromInt instanceNum) ++ ")") ]
-                    , div [ classes "fl w-100 mt2 bg-white" ] [ instanceView ]
+            div [ classes "fl w-100 cf ph2-ns" ]
+                [ div [ classes "fl w-100 mb2 pt2" ]
+                    [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text ("Module: " ++ mi.name) ]
                     ]
+                , div [ classes "fl w-100 bg-white mt2 mh2 ph4 pt3" ] [ viewInfo mi ]
+                , h3 [ classes "pt3" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
+                , div [ classes "fl w-100 mt2 bg-white" ] [ instanceView ]
+                ]
 
         Nothing ->
             div [ classes "cf ph2-ns" ]

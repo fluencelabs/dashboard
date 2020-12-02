@@ -23,7 +23,7 @@ toInstance peerId identify blueprints service =
     { name = name, instance = service.service_id, peerId = peerId, ip = ip }
 
 
-view : Model -> (Service -> Bool) -> (Int, Html msg)
+view : Model -> (Service -> Bool) -> ( Int, Html msg )
 view model filter =
     let
         instances =
@@ -36,7 +36,7 @@ view model filter =
                     )
                 |> List.concat
     in
-    (List.length instances, viewTable instances)
+    ( List.length instances, viewTable instances )
 
 
 viewTable : List Instance -> Html msg

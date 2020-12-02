@@ -17,13 +17,15 @@ view model =
             getBlueprintsToServices model.blueprints model.discoveredPeers
 
         info =
-            Dict.values allBps |> List.map (\( bp, servicesByPeers ) ->
-                { name = bp.name
-                , id = bp.id
-                , author = "Fluence Labs"
-                , instanceNumber = List.length (servicesByPeers |> List.map (\( _, s ) -> s) |> List.concat)
-                }
-            )
+            Dict.values allBps
+                |> List.map
+                    (\( bp, servicesByPeers ) ->
+                        { name = bp.name
+                        , id = bp.id
+                        , author = "Fluence Labs"
+                        , instanceNumber = List.length (servicesByPeers |> List.map (\( _, s ) -> s) |> List.concat)
+                        }
+                    )
 
         servicesView =
             List.map viewService info

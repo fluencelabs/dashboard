@@ -96,10 +96,19 @@ update msg model =
         ToggleInterface id ->
             case model.toggledInterface of
                 Just ti ->
-                    ( { model | toggledInterface = if (id == ti) then Nothing else Just id }, Cmd.none )
+                    ( { model
+                        | toggledInterface =
+                            if id == ti then
+                                Nothing
+
+                            else
+                                Just id
+                      }
+                    , Cmd.none
+                    )
+
                 Nothing ->
                     ( { model | toggledInterface = Just id }, Cmd.none )
-
 
         RelayChanged relayId ->
             ( { model | relayId = relayId }, Cmd.none )
