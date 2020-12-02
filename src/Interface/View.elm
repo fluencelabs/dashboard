@@ -6,8 +6,8 @@ import Service.Model exposing (Interface, Record, Signature)
 import String.Interpolate exposing (interpolate)
 
 
-instanceView : Interface -> List (Html msg)
-instanceView interface =
+interfaceView : Interface -> List (Html msg)
+interfaceView interface =
     recordsView interface.record_types ++ signaturesView interface.function_signatures
 
 
@@ -38,7 +38,7 @@ signaturesView signatures =
 signatureView : Signature -> Html msg
 signatureView signature =
     div [ classes "i fl w-100 mv2" ]
-        [ text (interpolate "fn {0}({1}) -> {2}" [ signature.name, argumentsToString signature.arguments, outputToString signature.output_types ]) ]
+        [ text "fn ", span [classes "b"] [text signature.name], text (interpolate "({0}) -> {1}" [ argumentsToString signature.arguments, outputToString signature.output_types ]) ]
 
 
 argumentsToString : List (List String) -> String

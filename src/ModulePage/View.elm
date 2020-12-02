@@ -3,7 +3,7 @@ module ModulePage.View exposing (..)
 import Dict exposing (Dict)
 import Html exposing (Html, article, div, h3, span, text)
 import Instances.View
-import Interface.View exposing (instanceView)
+import Interface.View exposing (interfaceView)
 import Model exposing (Model)
 import ModulePage.Model exposing (ModuleViewInfo)
 import Modules.Model exposing (Module)
@@ -77,5 +77,5 @@ viewInfo moduleInfo =
         , div [ classes "fl w-30 gray mv1" ] [ text "DESCRIPTION" ]
         , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] [ text moduleInfo.description ] ]
         , div [ classes "fl w-30 gray mv1" ] [ text "INTERFACE" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] (instanceView moduleInfo.moduleInfo.interface) ]
+        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] (interfaceView moduleInfo.moduleInfo.interface) ]
         ]

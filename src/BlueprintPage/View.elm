@@ -6,7 +6,7 @@ import Dict exposing (Dict)
 import Html exposing (Html, article, div, h3, span, text)
 import Html.Events exposing (onClick)
 import Instances.View
-import Interface.View exposing (instanceView)
+import Interface.View exposing (interfaceView)
 import Model exposing (Model)
 import Modules.Model exposing (Module)
 import Msg exposing (Msg(..))
@@ -92,9 +92,9 @@ viewInfo blueprintInfo =
 viewToggledInterface : Bool -> String -> Interface -> Html Msg
 viewToggledInterface isOpen name interface =
     let
-        interfaceView =
+        interfaceViewEl =
             if isOpen then
-                [ div [ classes "fl w-100 ph4" ] (instanceView interface) ]
+                [ div [ classes "fl w-100 ph4" ] (interfaceView interface) ]
 
             else
                 []
@@ -111,5 +111,5 @@ viewToggledInterface isOpen name interface =
                 ]
             ]
          ]
-            ++ interfaceView
+            ++ interfaceViewEl
         )
