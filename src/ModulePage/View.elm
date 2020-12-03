@@ -1,7 +1,9 @@
 module ModulePage.View exposing (..)
 
 import Dict exposing (Dict)
-import Html exposing (Html, article, div, h3, span, text)
+import Html exposing (Html, a, article, div, h3, span, text)
+import Html.Attributes exposing (attribute)
+import Info exposing (getDescription, getSite, modulesDescription)
 import Instances.View
 import Interface.View exposing (interfaceView)
 import Model exposing (Model)
@@ -59,9 +61,9 @@ moduleToInfo modules id =
                         { name = name
                         , id = id
                         , author = "Fluence Labs"
-                        , authorPeerId = "fluence_labs_peer_id"
-                        , description = "Excelent module"
-                        , website = "https://github.com/fluencelabs/"
+                        , authorPeerId = ""
+                        , description = getDescription m.name
+                        , website = getSite m.name
                         , moduleInfo = m
                         }
                     )
@@ -74,6 +76,8 @@ viewInfo moduleInfo =
     article [ classes "cf" ]
         [ div [ classes "fl w-30 gray mv1" ] [ text "AUTHOR" ]
         , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black b" ] [ text moduleInfo.author ], span [ classes "fl w-100 black" ] [ text moduleInfo.authorPeerId ] ]
+        , div [ classes "fl w-30 gray mv1" ] [ text "WEBSITE" ]
+        , div [ classes "fl w-70 mv1" ] [ a [ attribute "href" moduleInfo.website, classes "fl w-100 black" ] [ text moduleInfo.website ] ]
         , div [ classes "fl w-30 gray mv1" ] [ text "DESCRIPTION" ]
         , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] [ text moduleInfo.description ] ]
         , div [ classes "fl w-30 gray mv1" ] [ text "INTERFACE" ]
