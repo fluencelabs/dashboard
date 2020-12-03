@@ -10,7 +10,7 @@ import Interface.View exposing (interfaceView)
 import Model exposing (Model)
 import Modules.Model exposing (Module)
 import Msg exposing (Msg(..))
-import Palette exposing (classes, redFont)
+import Palette exposing (classes, darkRed, redFont)
 import Service.Model exposing (Interface)
 
 
@@ -29,7 +29,7 @@ view model id =
             div [ classes "fl w-100 cf ph2-ns" ]
                 [ div [ classes "fl w-100 mb2 pt2" ]
                     [ span [ classes "fl w-100 f1 lh-title", redFont ] [ text ("Blueprint: " ++ bi.name) ]
-                    , span [ classes "fl w-100 light-red", redFont ] [ text bi.id ]
+                    , span [ classes "fl w-100", darkRed ] [ text bi.id ]
                     ]
                 , div [ classes "fl w-100 bg-white mt2 mh2 ph4 pt3 mb4 pb2" ] [ viewInfo bi ]
                 , h3 [ classes "pt3" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
@@ -75,12 +75,12 @@ viewInfo blueprintInfo =
     in
     article [ classes "cf" ]
         [ div [ classes "fl w-30 gray mv1" ] [ text "AUTHOR" ]
-        , div [ classes "fl w-70 mv1" ]
+        , div [ classes "fl w-70 mv1 lucida" ]
             [ span [ classes "fl w-100 black b" ] [ text blueprintInfo.author ]
             , span [ classes "fl w-100 black" ] [ text blueprintInfo.authorPeerId ]
             ]
         , div [ classes "fl w-30 gray mv1" ] [ text "DESCRIPTION" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] [ text blueprintInfo.description ] ]
+        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black lucida pv1" ] [ text blueprintInfo.description ] ]
         , div [ classes "fl w-30 gray mv1" ] [ text "INTERFACE" ]
         , div [ classes "fl w-70 mv1" ]
             (blueprintInfo.modules

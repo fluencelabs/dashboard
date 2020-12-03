@@ -41,8 +41,8 @@ view model filter =
 
 viewTable : List Instance -> Html msg
 viewTable instances =
-    div [ classes "pa1" ]
-        [ div [ classes "mw8 bg-white pa2 br2" ]
+    div [ classes "pa1 mt2" ]
+        [ div [ classes "mw8 bg-white pa2 br3" ]
             [ table [ classes "f6 w-100 center", attribute "cellspacing" "0" ]
                 [ thead []
                     [ tr [ classes "" ]
@@ -61,8 +61,8 @@ viewTable instances =
 viewInstance : Instance -> Html msg
 viewInstance instance =
     tr [ classes "" ]
-        [ td [ classes "pa3" ] [ p [classes "ws-normal"] [text instance.name ]]
-        , td [ classes "pa3" ] [ p [classes "ws-normal"] [text instance.instance ]]
-        , td [ classes "pa3" ] [ p [classes "ws-normal"] [text instance.peerId ]]
-        , td [ classes "pa3" ] [ p [classes "ws-normal"] [text instance.ip ]]
+        [ td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.name ]]
+        , td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.instance ]]
+        , td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.peerId ]]
+        , td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.ip ]]
         ]
