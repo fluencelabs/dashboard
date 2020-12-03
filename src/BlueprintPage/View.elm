@@ -10,7 +10,7 @@ import Interface.View exposing (interfaceView)
 import Model exposing (Model)
 import Modules.Model exposing (Module)
 import Msg exposing (Msg(..))
-import Palette exposing (classes)
+import Palette exposing (classes, redFont)
 import Service.Model exposing (Interface)
 
 
@@ -28,8 +28,8 @@ view model id =
             in
             div [ classes "fl w-100 cf ph2-ns" ]
                 [ div [ classes "fl w-100 mb2 pt2" ]
-                    [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text ("Blueprint: " ++ bi.name) ]
-                    , span [ classes "fl w-100 light-red" ] [ text bi.id ]
+                    [ span [ classes "fl w-100 f1 lh-title", redFont ] [ text ("Blueprint: " ++ bi.name) ]
+                    , span [ classes "fl w-100 light-red", redFont ] [ text bi.id ]
                     ]
                 , div [ classes "fl w-100 bg-white mt2 mh2 ph4 pt3 mb4 pb2" ] [ viewInfo bi ]
                 , h3 [ classes "pt3" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]

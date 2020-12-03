@@ -2,7 +2,7 @@ module Blueprints.View exposing (..)
 
 import Blueprints.Model exposing (Blueprint, BlueprintInfo)
 import Dict exposing (Dict)
-import Html exposing (Html, a, div, text)
+import Html exposing (Html, a, div, span, text)
 import Html.Attributes exposing (attribute)
 import Model exposing (Model, PeerData)
 import Palette exposing (classes)
@@ -35,11 +35,11 @@ view model =
 
 viewService : BlueprintInfo -> Html msg
 viewService blueprint =
-    div [ classes "fl w-third-ns pr2" ]
-        [ a [ attribute "href" ("/blueprint/" ++ blueprint.id), classes "fl bg-white w-100 black mw6 mh2 pa3 ph4 br2 ba b--white bw1 element-box" ]
-            [ div [ classes "w-100 mb2 b" ] [ text blueprint.name ]
-            , div [ classes "w-100 mb4" ] [ text ("By " ++ blueprint.author) ]
-            , div [ classes "w-100" ] [ instancesText blueprint.instanceNumber ]
+    div [ classes "fl w-third-ns pr3 lucida" ]
+        [ a [ attribute "href" ("/blueprint/" ++ blueprint.id), classes "fl w-100 bg-white black mw6 ma2 ph4 hide-child pa2 br3 element-box ba b--white bw1 no-underline" ]
+            [ div [ classes "w-100 mb3 pt1 b" ] [ text blueprint.name ]
+            , div [ classes "w-100 mb4" ] [ text "By ", span [classes "b"] [text blueprint.author] ]
+            , div [ classes "w-100 mt1" ] [ instancesText blueprint.instanceNumber ]
             ]
         ]
 

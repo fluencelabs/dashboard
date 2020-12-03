@@ -46,13 +46,13 @@ viewTable instances =
             [ table [ classes "f6 w-100 center", attribute "cellspacing" "0" ]
                 [ thead []
                     [ tr [ classes "" ]
-                        [ th [ classes "fw6 tl pa3" ] [ text "SERVICE" ]
-                        , th [ classes "fw6 tl pa3" ] [ text "INSTANCE" ]
-                        , th [ classes "fw6 tl pa3" ] [ text "NODE" ]
-                        , th [ classes "fw6 tl pa3" ] [ text "IP" ]
+                        [ th [ classes "fw6 tl pa3 gray" ] [ text "SERVICE" ]
+                        , th [ classes "fw6 tl pa3 gray" ] [ text "INSTANCE" ]
+                        , th [ classes "fw6 tl pa3 gray" ] [ text "NODE" ]
+                        , th [ classes "fw6 tl pa3 gray" ] [ text "IP" ]
                         ]
                     ]
-                , tbody [ classes "" ] (instances |> List.map viewInstance)
+                , tbody [ classes "lucida" ] (instances |> List.map viewInstance)
                 ]
             ]
         ]

@@ -20,3 +20,16 @@ h1 {
 .element-box:hover {
   border-color: #E11E5A;
 }
+
+.lucida {
+  font-family: 'Lucida Grande', Lucida, Tahoma, Verdana, Arial, sans-serif;
+  font-size: 14px
+}
+
+.welcome-text {
+  line-height: 20px;
+}
+
+.medium-roboto {
+  font-weight: 500;
+}
