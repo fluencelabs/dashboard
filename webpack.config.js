@@ -3,7 +3,6 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const { WebpackPluginServe: Serve } = require('webpack-plugin-serve');
 const TerserPlugin = require('terser-webpack-plugin');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 module.exports = (env, argv) => {
     const isDebug = argv.mode === 'development';
@@ -66,7 +65,6 @@ module.exports = (env, argv) => {
             minimizer: [new TerserPlugin()],
         },
         plugins: [
-            new BundleAnalyzerPlugin(),
             new CopyWebpackPlugin({
                 patterns: [{ from: './*.html' }, { from: './images/*.svg' }],
             }),

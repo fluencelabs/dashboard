@@ -22,7 +22,7 @@ import { registerService } from 'fluence/dist/globalState';
 import { ServiceOne } from 'fluence/dist/service';
 import * as serviceWorker from './serviceWorker';
 import { Elm } from './Main.elm';
-import { faasNetHttps } from './environments';
+import { faasNetHttps, faasNet, stage } from './environments';
 
 const relayIdx = 1;
 
