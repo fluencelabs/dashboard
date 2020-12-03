@@ -36,7 +36,7 @@ view model =
 viewService : BlueprintInfo -> Html msg
 viewService blueprint =
     div [ classes "fl w-third-ns pa2" ]
-        [ a [ attribute "href" ("/blueprint/" ++ blueprint.id), classes "fl bg-white w-100 link dim black mw5 hide-child pa3 br2" ]
+        [ a [ attribute "href" ("/blueprint/" ++ blueprint.id), classes "fl bg-white w-100 black mw5 pa3 br2 ba b--white bw1 element-box" ]
             [ div [ classes "w-100 mb2 b" ] [ text blueprint.name ]
             , div [ classes "w-100 mb4" ] [ text ("By " ++ blueprint.author) ]
             , div [ classes "w-100" ] [ instancesText blueprint.instanceNumber ]

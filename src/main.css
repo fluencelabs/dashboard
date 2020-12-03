@@ -16,3 +16,7 @@ body {
 h1 {
   font-family: 'Roboto Mono', monospace;
 }
+
+.element-box:hover {
+  border-color: #E11E5A;
+}
