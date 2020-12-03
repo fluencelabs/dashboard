@@ -54,12 +54,12 @@ view modules =
         modulesView =
             List.map viewService info
     in
-    div [ classes "cf ph2-ns" ] modulesView
+    div [ classes "cf" ] modulesView
 
 
 viewService : ModuleShortInfo -> Html msg
 viewService moduleInfo =
-    div [ classes "fl w-third-ns pa2" ]
+    div [ classes "fl w-third-ns pr2" ]
         [ a [ attribute "href" ("/module/" ++ moduleInfo.moduleInfo.name), classes "fl w-100 bg-white black mw6 mh2 ph4 hide-child pa2 br2 element-box ba b--white bw1" ]
             [ p [ classes "tl di" ] [ div [ classes "fl b w-100 mb1" ] [ text moduleInfo.moduleInfo.name ], div [ classes "fl w-100 pl1" ] [ instancesText moduleInfo.instanceNumber ] ]
             ]
