@@ -27,10 +27,6 @@ parse url =
 
 routeView : Model -> Route -> Html Msg
 routeView model route =
-    let
-        _ =
-            Debug.log "page" route
-    in
     case route of
         Page page ->
             case page of

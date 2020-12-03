@@ -87,10 +87,6 @@ update msg model =
                     ( updatedModel, Cmd.none )
 
                 _ ->
-                    let
-                        _ =
-                            Debug.log "event in ELM" name
-                    in
                     ( model, Cmd.none )
 
         ToggleInterface id ->

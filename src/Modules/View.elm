@@ -1,7 +1,7 @@
 module Modules.View exposing (..)
 
 import Dict exposing (Dict)
-import Html exposing (Html, a, div, p, span, text)
+import Html exposing (Html, a, div, p, text)
 import Html.Attributes exposing (attribute)
 import Maybe.Extra
 import Model exposing (Model, PeerData)
@@ -61,6 +61,6 @@ viewService : ModuleShortInfo -> Html msg
 viewService moduleInfo =
     div [ classes "fl w-third-ns pa2" ]
         [ a [ attribute "href" ("/module/" ++ moduleInfo.moduleInfo.name), classes "fl w-100 bg-white link dim black mw5 hide-child pa2 br2" ]
-            [ p [ classes "tl di" ] [ span [ classes "b pl2" ] [ text moduleInfo.moduleInfo.name ], span [ classes "di fr pr2" ] [ instancesText moduleInfo.instanceNumber ] ]
+            [ p [ classes "tl di" ] [ div [ classes "fl b w-100 mb1" ] [ text moduleInfo.moduleInfo.name ], div [ classes "fl w-100 pl1" ] [ instancesText moduleInfo.instanceNumber ] ]
             ]
         ]
