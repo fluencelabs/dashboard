@@ -41,8 +41,8 @@ view model filter =
 
 viewTable : List Instance -> Html msg
 viewTable instances =
-    div [ classes "pa1 mt2" ]
-        [ div [ classes "mw8 bg-white pa2 br3" ]
+    div [ classes "pa1 mt2 bg-white br3" ]
+        [ div [ classes "mw8 pa2 " ]
             [ table [ classes "f6 w-100 center", attribute "cellspacing" "0" ]
                 [ thead []
                     [ tr [ classes "" ]

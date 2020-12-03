@@ -33,7 +33,7 @@ view model id =
                     ]
                 , div [ classes "fl w-100 bg-white mt2 mh2 ph4 pt3 mb4 pb2" ] [ viewInfo bi ]
                 , h3 [ classes "pt3" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
-                , div [ classes "mt2 bg-white" ]
+                , div [ classes "mt2 mb4 bg-white" ]
                     [ instanceView ]
                 ]
 
