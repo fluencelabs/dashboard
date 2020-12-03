@@ -50,7 +50,7 @@ body model =
                         ]
                     ]
               ]
-            , [ div [ classes "w-100 pa4 pt2 mt2" ] [ routeView model model.page ] ]
+            , [ div [ classes "w-100 pa4 pt4 mt4" ] [ routeView model model.page ] ]
             ]
 
 

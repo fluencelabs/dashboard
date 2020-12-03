@@ -14,7 +14,7 @@ view model =
     div []
         [ h1 [ redFont, classes "pt4" ] [ text "Developer Hub" ]
         , welcomeText
-        , h3 [] [ text "Featured Blueprints" ]
+        , h3 [ classes "mt4 pt4" ] [ text "Featured Blueprints" ]
         , Blueprints.View.view model
         , h3 [] [ text "Featured Modules" ]
         , Modules.View.view model
