@@ -32,6 +32,7 @@ function genFlags(peerId: string): any {
     return {
         peerId,
         relayId: relays[relayIdx].peerId,
+        knownPeers: relays.map((v) => v.peerId),
     };
 }
 
@@ -92,7 +93,7 @@ function event(name: string,peer: string,peers?: string[],identify?: string[],se
             }
         }
 
-        const particle = await build(client.selfPeerId, part.script, map);
+        const particle = await build(client.selfPeerId, part.script, map, 25000);
         await client.sendParticle(particle);
     });
 })();
