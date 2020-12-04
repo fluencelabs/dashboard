@@ -100,7 +100,7 @@ viewToggledInterface isOpen name interface =
                 []
     in
     div []
-        ([ div [ classes "fl w-100 shadow-2 bg-near-white pa2 mv2 pointer", onClick (ToggleInterface name) ]
+        ([ div [ classes "fl w-100 light-shadow bg-near-white pa2 mv2 pointer", onClick (ToggleInterface name) ]
             [ span [ classes "fl mh2 pv1 tl" ] [ text name ]
             , div [ classes "o-40 f4 tr pr3" ]
                 [ if isOpen then

@@ -1,6 +1,6 @@
 module Route exposing (..)
 
-import AirScripts.DiscoverPeers as DiscoverPeers
+import AirScripts.GetAll as GetAll
 import BlueprintPage.View as BlueprintPage
 import Html exposing (Html, text)
 import HubPage.View as HubPage
@@ -53,13 +53,13 @@ routeCommand : Model -> Route -> Cmd msg
 routeCommand m r =
     case r of
         Page _ ->
-            sendAir (DiscoverPeers.air m.peerId m.relayId)
+            sendAir (GetAll.air m.peerId m.relayId m.knownPeers)
 
         Peer _ ->
-            sendAir (DiscoverPeers.air m.peerId m.relayId)
+            sendAir (GetAll.air m.peerId m.relayId m.knownPeers)
 
         Blueprint _ ->
-            sendAir (DiscoverPeers.air m.peerId m.relayId)
+            sendAir (GetAll.air m.peerId m.relayId m.knownPeers)
 
         Module _ ->
-            sendAir (DiscoverPeers.air m.peerId m.relayId)
+            sendAir (GetAll.air m.peerId m.relayId m.knownPeers)

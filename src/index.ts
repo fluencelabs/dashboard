@@ -32,6 +32,7 @@ function genFlags(peerId: string): any {
     return {
         peerId,
         relayId: relays[relayIdx].peerId,
+        knownPeers: relays.map((v) => v.peerId)
     };
 }
 

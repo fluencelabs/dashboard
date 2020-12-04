@@ -55,4 +55,5 @@ type alias Model =
     , modules : Dict String Module
     , blueprints : Dict String Blueprint
     , toggledInterface : Maybe String
+    , knownPeers : List String
     }

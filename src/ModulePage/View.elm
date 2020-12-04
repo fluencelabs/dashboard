@@ -1,15 +1,15 @@
 module ModulePage.View exposing (..)
 
 import Dict exposing (Dict)
-import Html exposing (Html, a, article, div, h3, span, text)
+import Html exposing (Html, a, article, div, h1, h3, span, text)
 import Html.Attributes exposing (attribute)
-import Info exposing (getDescription, getSite, modulesDescription)
+import Info exposing (getDescription, getSite)
 import Instances.View
 import Interface.View exposing (interfaceView)
 import Model exposing (Model)
 import ModulePage.Model exposing (ModuleViewInfo)
 import Modules.Model exposing (Module)
-import Palette exposing (classes)
+import Palette exposing (classes, redFont)
 
 
 view : Model -> String -> Html msg
@@ -32,7 +32,7 @@ view model id =
             in
             div [ classes "fl w-100 cf ph2-ns" ]
                 [ div [ classes "fl w-100 mb2 pt2" ]
-                    [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text ("Module: " ++ mi.name) ]
+                    [ h1 [ redFont, classes "f2 lh-copy ma0 mt4" ] [ text ("Module: " ++ mi.name) ]
                     ]
                 , div [ classes "fl w-100 bg-white mt2 ph4 pt3 mb4 pb2 br3" ] [ viewInfo mi ]
                 , h3 [ classes "pt3" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
