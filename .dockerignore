@@ -1,0 +1,5 @@
+*
+**/*
+!bundle/
+!Caddyfile
+!nginx.conf

@@ -54,7 +54,7 @@ module.exports = (env, argv) => {
             ],
         },
         mode: 'development',
-        watch: true,
+        watch: isDebug,
         output: {
             filename: 'bundle.js',
             path: path.resolve(__dirname, 'bundle'),
