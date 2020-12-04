@@ -23,7 +23,7 @@
             "elm-community/intdict": "3.0.0",
             "elm-community/list-extra": "8.2.4",
             "elm-community/maybe-extra": "5.2.0",
-            "ivadzy/bbase64": "1.1.1",
+            "chelovek0v/bbase64": "1.0.1",
             "lukewestby/elm-string-interpolate": "1.0.4",
             "mpizenberg/elm-pointer-events": "4.0.2",
             "rtfeldman/elm-iso8601-date-strings": "1.1.3"
