@@ -26,6 +26,10 @@ h1 {
   font-size: 14px
 }
 
+.lucida-in {
+  font-family: 'Lucida Grande', Lucida, Tahoma, Verdana, Arial, sans-serif;
+}
+
 .welcome-text {
   line-height: 20px;
 }

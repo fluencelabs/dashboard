@@ -1,8 +1,8 @@
 module HubPage.View exposing (..)
 
 import Blueprints.View
-import Html exposing (Html, a, div, h1, h3, span, text)
-import Html.Attributes exposing (attribute, style)
+import Html exposing (Html, a, div, h1, h2, span, text)
+import Html.Attributes exposing (attribute, )
 import Instances.View
 import Model exposing (Model)
 import Modules.View
@@ -14,11 +14,11 @@ view model =
     div []
         [ h1 [ redFont, classes "f2 lh-copy" ] [ text "Developer Hub" ]
         , welcomeText
-        , h3 [ classes "mt4 pt4 mb4 medium-roboto" ] [ text "Featured Blueprints" ]
+        , h2 [ classes "mt4 pt4 mb3 lucida-in f4" ] [ text "Featured Blueprints" ]
         , Blueprints.View.view model
-        , h3 [ classes "mt3 pt3 mb4 medium-roboto" ] [ text "Featured Modules" ]
+        , h2 [ classes "mt3 pt3 mb3 lucida-in f4" ] [ text "Featured Modules" ]
         , Modules.View.view model
-        , h3 [ classes "mt3 pt3 mb4 medium-roboto" ] [ text "Service Instances" ]
+        , h2 [ classes "mt3 pt3 mb3 lucida-in f4" ] [ text "Service Instances" ]
         , Tuple.second (Instances.View.view model (\_ -> True))
         ]
 
