@@ -7,7 +7,7 @@ import Html.Attributes exposing (attribute)
 import Instances.Model exposing (Instance)
 import Model exposing (Model)
 import Nodes.Model exposing (Identify)
-import Palette exposing (classes)
+import Palette exposing (classes, shortHashRaw)
 import Service.Model exposing (Service)
 
 
@@ -41,18 +41,18 @@ view model filter =
 
 viewTable : List Instance -> Html msg
 viewTable instances =
-    div [ classes "pa1" ]
-        [ div [ classes "mw8 bg-white pa2 br2" ]
-            [ table [ classes "f6 w-100 center", attribute "cellspacing" "0" ]
+    div [ classes "pa1 mt2 bg-white br3" ]
+        [ div [ classes "mw8-ns pa2 " ]
+            [ table [ classes "f6 w-100 center ws-normal-ns", attribute "cellspacing" "0" ]
                 [ thead []
                     [ tr [ classes "" ]
-                        [ th [ classes "fw6 tl pa3" ] [ text "SERVICE" ]
-                        , th [ classes "fw6 tl pa3" ] [ text "INSTANCE" ]
-                        , th [ classes "fw6 tl pa3" ] [ text "NODE" ]
-                        , th [ classes "fw6 tl pa3" ] [ text "IP" ]
+                        [ th [ classes "fw6 tl pa3 gray" ] [ text "SERVICE" ]
+                        , th [ classes "fw6 tl pa3 gray" ] [ text "INSTANCE" ]
+                        , th [ classes "fw6 tl pa3 gray" ] [ text "NODE" ]
+                        , th [ classes "fw6 tl pa3 gray" ] [ text "IP" ]
                         ]
                     ]
-                , tbody [ classes "" ] (instances |> List.map viewInstance)
+                , tbody [ classes "lucida" ] (instances |> List.map viewInstance)
                 ]
             ]
         ]
@@ -61,8 +61,8 @@ viewTable instances =
 viewInstance : Instance -> Html msg
 viewInstance instance =
     tr [ classes "" ]
-        [ td [ classes "pa3" ] [ p [classes "ws-normal"] [text instance.name ]]
-        , td [ classes "pa3" ] [ p [classes "ws-normal"] [text instance.instance ]]
-        , td [ classes "pa3" ] [ p [classes "ws-normal"] [text instance.peerId ]]
-        , td [ classes "pa3" ] [ p [classes "ws-normal"] [text instance.ip ]]
+        [ td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.name ]]
+        , td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.instance ]]
+        , td [ classes "ph3" ] [ p [classes "ws-normal"] [text (shortHashRaw 8 instance.peerId) ]]
+        , td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.ip ]]
         ]

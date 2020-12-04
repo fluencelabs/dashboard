@@ -3,14 +3,14 @@ module BlueprintPage.View exposing (..)
 import BlueprintPage.Model exposing (BlueprintViewInfo)
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
-import Html exposing (Html, article, div, h3, span, text)
+import Html exposing (Html, article, div, h1, h3, span, text)
 import Html.Events exposing (onClick)
 import Instances.View
 import Interface.View exposing (interfaceView)
 import Model exposing (Model)
 import Modules.Model exposing (Module)
 import Msg exposing (Msg(..))
-import Palette exposing (classes)
+import Palette exposing (classes, darkRed, redFont)
 import Service.Model exposing (Interface)
 
 
@@ -26,14 +26,14 @@ view model id =
                 ( instanceNum, instanceView ) =
                     Instances.View.view model (\service -> service.blueprint_id == id)
             in
-            div [ classes "fl w-100 cf ph2-ns" ]
-                [ div [ classes "fl w-100 mb2 pt2" ]
-                    [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text ("Blueprint: " ++ bi.name) ]
-                    , span [ classes "fl w-100 light-red" ] [ text bi.id ]
+            div [ classes "fl w-100" ]
+                [ div [ classes "fl w-100 mb2" ]
+                    [ h1 [ redFont, classes "f2 lh-copy ma0 mt4" ] [ text ("Blueprint: " ++ bi.name) ]
+                    , span [ classes "fl w-100", darkRed ] [ text bi.id ]
                     ]
-                , div [ classes "fl w-100 bg-white mt2 mh2 ph4 pt3 mb4 pb2" ] [ viewInfo bi ]
+                , div [ classes "fl w-100 bg-white mt2 ph4 pt3 mb4 pb2 br3" ] [ viewInfo bi ]
                 , h3 [ classes "pt3" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
-                , div [ classes "mt2 bg-white" ]
+                , div [ classes "mt2 mb4 bg-white br3" ]
                     [ instanceView ]
                 ]
 
@@ -75,12 +75,12 @@ viewInfo blueprintInfo =
     in
     article [ classes "cf" ]
         [ div [ classes "fl w-30 gray mv1" ] [ text "AUTHOR" ]
-        , div [ classes "fl w-70 mv1" ]
+        , div [ classes "fl w-70 mv1 lucida" ]
             [ span [ classes "fl w-100 black b" ] [ text blueprintInfo.author ]
             , span [ classes "fl w-100 black" ] [ text blueprintInfo.authorPeerId ]
             ]
         , div [ classes "fl w-30 gray mv1" ] [ text "DESCRIPTION" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] [ text blueprintInfo.description ] ]
+        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black lucida pv1" ] [ text blueprintInfo.description ] ]
         , div [ classes "fl w-30 gray mv1" ] [ text "INTERFACE" ]
         , div [ classes "fl w-70 mv1" ]
             (blueprintInfo.modules
@@ -100,7 +100,7 @@ viewToggledInterface isOpen name interface =
                 []
     in
     div []
-        ([ div [ classes "fl w-100 shadow-2 bg-near-white pa2 mv2 pointer", onClick (ToggleInterface name) ]
+        ([ div [ classes "fl w-100 light-shadow bg-near-white pa2 mv2 pointer", onClick (ToggleInterface name) ]
             [ span [ classes "fl mh2 pv1 tl" ] [ text name ]
             , div [ classes "o-40 f4 tr pr3" ]
                 [ if isOpen then
