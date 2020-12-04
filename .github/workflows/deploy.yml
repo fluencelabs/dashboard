@@ -9,9 +9,9 @@ jobs:
       - name: Deploy to Digital Ocean droplet via SSH
           uses: appleboy/ssh-action@v0.1.4
           with:
-            HOST: ${{ secrets.HOST }}
-            USERNAME: ${{ secrets.USERNAME }}
-            KEY: ${{ secrets.SSHKEY }}
+            HOST: ${{ secrets.DASHBOARD_HOST }}
+            USERNAME: ${{ secrets.DASHBOARD_USERNAME }}
+            KEY: ${{ secrets.DASHBOARD_SSHKEY }}
             script: |
               docker pull fluencelabs/dashboard:latest
               docker rm -f dashboard
