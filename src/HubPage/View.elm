@@ -2,7 +2,7 @@ module HubPage.View exposing (..)
 
 import Blueprints.View
 import Html exposing (Html, a, div, h1, h2, span, text)
-import Html.Attributes exposing (attribute, )
+import Html.Attributes exposing (attribute)
 import Instances.View
 import Model exposing (Model)
 import Modules.View
