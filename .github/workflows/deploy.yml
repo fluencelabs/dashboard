@@ -1,4 +1,4 @@
-name: Deploy dashboard@master to DigitalOcean
+name: deploy
 on:
   workflow_dispatch:
 
@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to Digital Ocean droplet via SSH
+      - name: Deploy dashboard@master to DigitalOcean via SSH
           uses: appleboy/ssh-action@v0.1.4
           with:
             HOST: ${{ secrets.DASHBOARD_HOST }}
