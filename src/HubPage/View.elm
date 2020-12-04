@@ -14,11 +14,11 @@ view model =
     div []
         [ h1 [ redFont, classes "f2 lh-copy" ] [ text "Developer Hub" ]
         , welcomeText
-        , h3 [ classes "mt4 pt4 mb1 medium-roboto" ] [ text "Featured Blueprints" ]
+        , h3 [ classes "mt4 pt4 mb4 medium-roboto" ] [ text "Featured Blueprints" ]
         , Blueprints.View.view model
-        , h3 [ classes "mt3 pt3 mb1 medium-roboto" ] [ text "Featured Modules" ]
+        , h3 [ classes "mt3 pt3 mb4 medium-roboto" ] [ text "Featured Modules" ]
         , Modules.View.view model
-        , h3 [ classes "mt3 pt3 mb1 medium-roboto" ] [ text "Service Instances" ]
+        , h3 [ classes "mt3 pt3 mb4 medium-roboto" ] [ text "Service Instances" ]
         , Tuple.second (Instances.View.view model (\_ -> True))
         ]
 
