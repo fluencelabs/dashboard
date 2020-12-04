@@ -58,6 +58,7 @@ module.exports = {
             patterns: [
                 {from: './*.html'},
                 {from: './images/*.svg'},
+                {from: './favicon.ico'},
             ]
         }),
         new webpack.ProvidePlugin({
