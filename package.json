@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-serve --open",
-    "pack": "webpack",
-    "dev": "parcel index.html",
+    "pack": "webpack --mode production",
     "prettier-format": "prettier --config .prettierrc 'src/**/*.ts' --write"
   },
   "repository": {
@@ -50,7 +49,6 @@
     "ts-loader": "8.0.11",
     "typescript": "4.1.2",
     "webpack": "5.7.0",
-    "webpack-bundle-analyzer": "^4.2.0",
     "webpack-cli": "4.2.0",
     "webpack-nano": "^1.1.0",
     "webpack-plugin-serve": "^1.2.0",

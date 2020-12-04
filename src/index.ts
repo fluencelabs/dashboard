@@ -22,17 +22,17 @@ import { registerService } from 'fluence/dist/globalState';
 import { ServiceOne } from 'fluence/dist/service';
 import * as serviceWorker from './serviceWorker';
 import { Elm } from './Main.elm';
-import {faasNet, stage} from './environments';
+import { faasNetHttps, faasNet, stage } from './environments';
 
 const relayIdx = 1;
 
-export const relays: { peerId: string; multiaddr: string }[] = stage;
+export const relays: { peerId: string; multiaddr: string }[] = faasNetHttps;
 
 function genFlags(peerId: string): any {
     return {
         peerId,
         relayId: relays[relayIdx].peerId,
-        knownPeers: relays.map((v) => v.peerId)
+        knownPeers: relays.map((v) => v.peerId),
     };
 }
 
@@ -97,8 +97,6 @@ function event(name: string,peer: string,peers?: string[],identify?: string[],se
         await client.sendParticle(particle);
     });
 })();
-
-Fluence.setLogLevel('trace')
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
