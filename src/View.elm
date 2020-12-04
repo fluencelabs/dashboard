@@ -56,7 +56,7 @@ body model =
 
 layout : List (Html Msg) -> Html Msg
 layout elms =
-    div [ classes "mw8 center w-100" ]
+    div [ classes "mw8-ns center w-100" ]
         [ div [ classes "fl w-100 bg-near-white" ]
             ([]
                 ++ elms

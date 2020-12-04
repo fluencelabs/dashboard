@@ -7,7 +7,7 @@ import Html.Attributes exposing (attribute)
 import Instances.Model exposing (Instance)
 import Model exposing (Model)
 import Nodes.Model exposing (Identify)
-import Palette exposing (classes)
+import Palette exposing (classes, shortHashRaw)
 import Service.Model exposing (Service)
 
 
@@ -42,8 +42,8 @@ view model filter =
 viewTable : List Instance -> Html msg
 viewTable instances =
     div [ classes "pa1 mt2 bg-white br3" ]
-        [ div [ classes "mw8 pa2 " ]
-            [ table [ classes "f6 w-100 center", attribute "cellspacing" "0" ]
+        [ div [ classes "mw8-ns pa2 " ]
+            [ table [ classes "f6 w-100 center ws-normal-ns", attribute "cellspacing" "0" ]
                 [ thead []
                     [ tr [ classes "" ]
                         [ th [ classes "fw6 tl pa3 gray" ] [ text "SERVICE" ]
@@ -63,6 +63,6 @@ viewInstance instance =
     tr [ classes "" ]
         [ td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.name ]]
         , td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.instance ]]
-        , td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.peerId ]]
+        , td [ classes "ph3" ] [ p [classes "ws-normal"] [text (shortHashRaw 8 instance.peerId) ]]
         , td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.ip ]]
         ]
