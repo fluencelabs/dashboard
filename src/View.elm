@@ -40,9 +40,9 @@ body model =
     layout <|
         List.concat
             [ [ header [ classes "w-100" ]
-                    [ div [ classes "w-100 fl pa2 pb1 bg-white one-edge-shadow" ]
+                    [ div [ classes "w-100 fl ph2 pv3 pb1 bg-white one-edge-shadow" ]
                         [ div [ classes "mw8-ns center ph3"]
-                            [ div [ classes "fl mv1 pl3", style "max-width" "96px" ]
+                            [ div [ classes "fl mv1 pl3", style "max-width" "114px" ]
                                 [ a [ attribute "href" "/" ]
                                     [ img [ classes "v-mid dib mw-100 h-auto", attribute "src" "/images/logo_new.svg" ] []
                                     ]
