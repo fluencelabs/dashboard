@@ -4,6 +4,7 @@ import BlueprintPage.Model exposing (BlueprintViewInfo)
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
 import Html exposing (Html, article, div, h1, h3, span, text)
+import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import Instances.View
 import Interface.View exposing (interfaceView)
@@ -74,15 +75,15 @@ viewInfo blueprintInfo =
             \id -> blueprintInfo.openedModule |> Maybe.map (\om -> om == id) |> Maybe.withDefault False
     in
     article [ classes "cf" ]
-        [ div [ classes "fl w-30 gray mv1" ] [ text "AUTHOR" ]
-        , div [ classes "fl w-70 mv1 lucida" ]
+        [ div [ classes "fl w-100 w-30-ns gray mv1", style "word-break" "break-all" ] [ text "AUTHOR" ]
+        , div [ classes "fl w-100 w-70-ns mv1 lucida" ]
             [ span [ classes "fl w-100 black b" ] [ text blueprintInfo.author ]
-            , span [ classes "fl w-100 black" ] [ text blueprintInfo.authorPeerId ]
+            , span [ classes "fl w-100 black", style "word-break" "break-all" ] [ text blueprintInfo.authorPeerId ]
             ]
-        , div [ classes "fl w-30 gray mv1" ] [ text "DESCRIPTION" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black lucida pv1" ] [ text blueprintInfo.description ] ]
-        , div [ classes "fl w-30 gray mv1" ] [ text "INTERFACE" ]
-        , div [ classes "fl w-70 mv1" ]
+        , div [ classes "fl w-100 w-30-ns gray mv1", style "word-break" "break-all" ] [ text "DESCRIPTION" ]
+        , div [ classes "fl w-100 w-70-ns mv1", style "word-break" "break-all" ] [ span [ classes "fl w-100 black lucida pv1" ] [ text blueprintInfo.description ] ]
+        , div [ classes "fl w-100 w-30-ns gray mv1", style "word-break" "break-all" ] [ text "INTERFACE" ]
+        , div [ classes "fl w-100 w-70-ns mv1", style "word-break" "break-all" ]
             (blueprintInfo.modules
                 |> List.map (\m -> viewToggledInterface (checkToggle m.name) m.name m.interface)
             )

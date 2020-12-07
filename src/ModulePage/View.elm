@@ -2,7 +2,7 @@ module ModulePage.View exposing (..)
 
 import Dict exposing (Dict)
 import Html exposing (Html, a, article, div, h1, h3, span, text)
-import Html.Attributes exposing (attribute)
+import Html.Attributes exposing (attribute, style)
 import Info exposing (getDescription, getSite)
 import Instances.View
 import Interface.View exposing (interfaceView)
@@ -74,12 +74,12 @@ moduleToInfo modules id =
 viewInfo : ModuleViewInfo -> Html msg
 viewInfo moduleInfo =
     article [ classes "cf" ]
-        [ div [ classes "fl w-30 gray mv1" ] [ text "AUTHOR" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black b" ] [ text moduleInfo.author ], span [ classes "fl w-100 black" ] [ text moduleInfo.authorPeerId ] ]
-        , div [ classes "fl w-30 gray mv1" ] [ text "WEBSITE" ]
-        , div [ classes "fl w-70 mv1" ] [ a [ attribute "href" moduleInfo.website, classes "fl w-100 black" ] [ text moduleInfo.website ] ]
-        , div [ classes "fl w-30 gray mv1" ] [ text "DESCRIPTION" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] [ text moduleInfo.description ] ]
-        , div [ classes "fl w-30 gray mv1" ] [ text "INTERFACE" ]
-        , div [ classes "fl w-70 mv1" ] [ span [ classes "fl w-100 black" ] (interfaceView moduleInfo.moduleInfo.interface) ]
+        [ div [ style "word-break" "break-all", classes "fl w-100 w-30-ns gray mv1" ] [ text "AUTHOR" ]
+        , div [ style "word-break" "break-all", classes "fl w-100 w-70-ns mv1" ] [ span [ classes "fl w-100 black b" ] [ text moduleInfo.author ], span [ classes "fl w-100 black" ] [ text moduleInfo.authorPeerId ] ]
+        , div [ style "word-break" "break-all", classes "fl w-100 w-30-ns gray mv1" ] [ text "WEBSITE" ]
+        , div [ style "word-break" "break-all", classes "fl w-100 w-70-ns mv1" ] [ a [ attribute "href" moduleInfo.website, classes "fl w-100 black" ] [ text moduleInfo.website ] ]
+        , div [ style "word-break" "break-all", classes "fl w-100 w-30-ns gray mv1" ] [ text "DESCRIPTION" ]
+        , div [ style "word-break" "break-all", classes "fl w-100 w-70-ns mv1" ] [ span [ classes "fl w-100 black" ] [ text moduleInfo.description ] ]
+        , div [ style "word-break" "break-all", classes "fl w-100 w-30-ns gray mv1" ] [ text "INTERFACE" ]
+        , div [ style "word-break" "break-all", classes "fl w-100 w-70-ns mv1" ] [ span [ classes "fl w-100 black" ] (interfaceView moduleInfo.moduleInfo.interface) ]
         ]
