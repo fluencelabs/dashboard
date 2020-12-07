@@ -35,7 +35,7 @@ view model =
 
 viewService : BlueprintInfo -> Html msg
 viewService blueprint =
-    div [ classes "fl w-third pr3 lucida" ]
+    div [ classes "fl w-100 w-third-ns pr3 lucida" ]
         [ a [ attribute "href" ("/blueprint/" ++ blueprint.id), classes "fl w-100 bg-white black mw6 mr3 mb3 ph3 hide-child pa2 br3 element-box ba b--white bw1 no-underline" ]
             [ div [ classes "w-100 mb2 pt1 b" ] [ text blueprint.name ]
             , div [ classes "w-100 mb4 f7" ] [ text "By ", span [classes "b lucida-in"] [text blueprint.author] ]

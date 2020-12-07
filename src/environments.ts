@@ -54,10 +54,6 @@ export const faasNet: Node[] = [
         peerId: '12D3KooWMhVpgfQxBLkQkJed8VFNvgN4iE6MD7xCybb1ZYWW2Gtz',
     },
     {
-        multiaddr: '/ip4/165.227.164.206/tcp/9100/ws/p2p/12D3KooWPnLxnY71JDxvB3zbjKu9k1BCYNthGZw6iGrLYsR1RnWM',
-        peerId: '12D3KooWPnLxnY71JDxvB3zbjKu9k1BCYNthGZw6iGrLYsR1RnWM',
-    },
-    {
         multiaddr: '/ip4/138.197.189.50/tcp/9001/ws/p2p/12D3KooWHk9BjDQBUqnavciRPhAYFvqKBe4ZiPPvde7vDaqgn5er',
         peerId: '12D3KooWHk9BjDQBUqnavciRPhAYFvqKBe4ZiPPvde7vDaqgn5er',
     },
@@ -103,10 +99,6 @@ export const faasNetHttps: Node[] = [
     {
         multiaddr: '/dns4/net01.fluence.dev/tcp/19990/wss/p2p/12D3KooWMhVpgfQxBLkQkJed8VFNvgN4iE6MD7xCybb1ZYWW2Gtz',
         peerId: '12D3KooWMhVpgfQxBLkQkJed8VFNvgN4iE6MD7xCybb1ZYWW2Gtz',
-    },
-    {
-        multiaddr: '/dns4/net01.fluence.dev/tcp/19100/wss/p2p/12D3KooWPnLxnY71JDxvB3zbjKu9k1BCYNthGZw6iGrLYsR1RnWM',
-        peerId: '12D3KooWPnLxnY71JDxvB3zbjKu9k1BCYNthGZw6iGrLYsR1RnWM',
     },
     {
         multiaddr: '/dns4/net02.fluence.dev/tcp/19001/wss/p2p/12D3KooWHk9BjDQBUqnavciRPhAYFvqKBe4ZiPPvde7vDaqgn5er',

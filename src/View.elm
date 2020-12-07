@@ -40,24 +40,26 @@ body model =
     layout <|
         List.concat
             [ [ header [ classes "w-100" ]
-                    [ div [ classes "fl pa2 pb1 bg-white w-100 one-edge-shadow" ]
-                        [ div [ classes "fl mv1 pl3", style "max-width" "96px" ]
-                            [ a [ attribute "href" "/" ]
-                                [ img [ classes "v-mid dib mw-100 h-auto", attribute "src" "/images/logo_new.svg" ] []
+                    [ div [ classes "w-100 fl pa2 pb1 bg-white one-edge-shadow" ]
+                        [ div [ classes "mw8-ns center ph3"]
+                            [ div [ classes "fl mv1 pl3", style "max-width" "96px" ]
+                                [ a [ attribute "href" "/" ]
+                                    [ img [ classes "v-mid dib mw-100 h-auto", attribute "src" "/images/logo_new.svg" ] []
+                                    ]
                                 ]
+                            , div [ classes "fl pl5 h-100" ] [ p [ classes "mv2" ] [ b [] [text "Developer Hub" ]] ]
                             ]
-                        , div [ classes "fl pl5 h-100" ] [ p [ classes "mv2" ] [ b [] [text "Developer Hub" ]] ]
                         ]
                     ]
               ]
-            , [ div [ classes "w-100 pa4 pt3 mt4" ] [ routeView model model.page ] ]
+            , [ div [ classes "mw8-ns center w-100 pa4 pt3 mt4" ] [ routeView model model.page ] ]
             ]
 
 
 layout : List (Html Msg) -> Html Msg
 layout elms =
-    div [ classes "mw8-ns center w-100" ]
-        [ div [ classes "fl w-100 bg-near-white" ]
+    div [ classes "center w-100" ]
+        [ div [ classes "fl w-100" ]
             ([]
                 ++ elms
             )

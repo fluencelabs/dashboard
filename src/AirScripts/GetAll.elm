@@ -3,6 +3,43 @@ module AirScripts.GetAll exposing (..)
 import Air exposing (Air, callBI, fold, next, par, relayEvent, seq, set)
 import Json.Encode exposing (list, string)
 
+askRelayScript : Air
+askRelayScript =
+    (seq
+        (callBI "relayId" ( "op", "identity" ) [] Nothing)
+        (askAllAndSend "relayId")
+    )
+
+askPeersScript : Air
+askPeersScript =
+    (fold "knownPeers" "p" <|
+        par
+            (seq
+                (callBI "p" ( "op", "identity" ) [] Nothing)
+                (askAllAndSend "p")
+            )
+            (next "p")
+    )
+
+findAndAskNeighbours : Air
+findAndAskNeighbours =
+    seq
+        (callBI "relayId" ( "op", "identity" ) [] Nothing)
+        (seq
+            (callBI "relayId" ( "dht", "neighborhood" ) [ "clientId" ] (Just "neigh"))
+            (fold "neigh" "n" <|
+                par
+                    (seq
+                        (callBI "n" ( "dht", "neighborhood" ) [ "clientId" ] (Just "moreNeigh"))
+                        (fold "moreNeigh" "mp" <|
+                            par
+                                (askAllAndSend "mp")
+                                (next "mp")
+                        )
+                    )
+                    (next "n")
+            ))
+
 air : String -> String -> List String -> Air
 air peerId relayId peers =
     let
@@ -17,44 +54,15 @@ air peerId relayId peers =
 
         askRelay = (\innerAir ->
                 par
-                    (seq
-                        (callBI "relayId" ( "op", "identity" ) [] Nothing)
-                        (askAllAndSend "relayId")
-                    )
+                    askRelayScript
                     innerAir
             )
 
         askPeers = (\innerAir ->
                 par
-                    (fold "knownPeers" "p" <|
-                        par
-                            (seq
-                                (callBI "p" ( "op", "identity" ) [] Nothing)
-                                (askAllAndSend "p")
-                            )
-                            (next "p")
-                    )
+                    askPeersScript
                     innerAir
             )
-
-        findAndAskNeighbours =
-            seq
-                (callBI "relayId" ( "op", "identity" ) [] Nothing)
-                (seq
-                    (callBI "relayId" ( "dht", "neighborhood" ) [ "clientId" ] (Just "neigh"))
-                    (fold "neigh" "n" <|
-                        par
-                            (seq
-                                (callBI "n" ( "dht", "neighborhood" ) [ "clientId" ] (Just "moreNeigh"))
-                                (fold "moreNeigh" "mp" <|
-                                    par
-                                        (askAllAndSend "mp")
-                                        (next "mp")
-                                )
-                            )
-                            (next "n")
-                    ))
-
     in
     clientIdSet <| relayIdSet <| peersSet <| (askRelay <| askPeers <| findAndAskNeighbours)
 
