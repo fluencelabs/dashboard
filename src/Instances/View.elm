@@ -3,7 +3,7 @@ module Instances.View exposing (..)
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
 import Html exposing (Html, div, p, table, tbody, td, text, th, thead, tr)
-import Html.Attributes exposing (attribute)
+import Html.Attributes exposing (attribute, style)
 import Instances.Model exposing (Instance)
 import Model exposing (Model)
 import Nodes.Model exposing (Identify)
@@ -43,7 +43,7 @@ viewTable : List Instance -> Html msg
 viewTable instances =
     div [ classes "pa1 mt2 bg-white br3" ]
         [ div [ classes "mw8-ns pa2 " ]
-            [ table [ classes "f6 w-100 center ws-normal-ns", attribute "cellspacing" "0" ]
+            [ table [ classes "f6 w-100 center ws-normal-ns", attribute "cellspacing" "0", style "word-break" "break-all" ]
                 [ thead []
                     [ tr [ classes "" ]
                         [ th [ classes "fw6 tl pa3 gray" ] [ text "SERVICE" ]
