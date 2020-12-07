@@ -48,18 +48,25 @@ routeView model route =
         Module moduleName ->
             ModulePage.view model moduleName
 
+getAllCmd : String -> String -> List String -> Cmd msg
+getAllCmd peerId relayId knownPeers =
+    Cmd.batch
+        [ sendAir (GetAll.askRelayScript peerId relayId)
+        , sendAir (GetAll.askPeersScript peerId relayId knownPeers)
+        , sendAir (GetAll.findAndAskNeighboursScript peerId relayId)
+        ]
 
 routeCommand : Model -> Route -> Cmd msg
 routeCommand m r =
     case r of
         Page _ ->
-            sendAir (GetAll.air m.peerId m.relayId m.knownPeers)
+            getAllCmd m.peerId m.relayId m.knownPeers
 
         Peer _ ->
-            sendAir (GetAll.air m.peerId m.relayId m.knownPeers)
+            getAllCmd m.peerId m.relayId m.knownPeers
 
         Blueprint _ ->
-            sendAir (GetAll.air m.peerId m.relayId m.knownPeers)
+            getAllCmd m.peerId m.relayId m.knownPeers
 
         Module _ ->
-            sendAir (GetAll.air m.peerId m.relayId m.knownPeers)
+            getAllCmd m.peerId m.relayId m.knownPeers

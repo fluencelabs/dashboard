@@ -27,7 +27,7 @@ import Modules.Model exposing (Module)
 import Msg exposing (..)
 import Nodes.Model exposing (Identify)
 import Port exposing (sendAir)
-import Route
+import Route exposing (getAllCmd)
 import Service.Model exposing (Service)
 import Url
 
@@ -74,7 +74,7 @@ update msg model =
                                 |> List.filter (\( _, data ) -> List.isEmpty data.identify.external_addresses)
                                 |> List.map Tuple.first
                     in
-                    ( { model | discoveredPeers = updatedDict }, sendAir (AirScripts.GetAll.air model.peerId model.relayId emptyPeers) )
+                    ( { model | discoveredPeers = updatedDict }, getAllCmd model.peerId model.relayId [] )
 
                 "all_info" ->
                     let

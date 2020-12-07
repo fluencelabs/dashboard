@@ -3,15 +3,26 @@ module AirScripts.GetAll exposing (..)
 import Air exposing (Air, callBI, fold, next, par, relayEvent, seq, set)
 import Json.Encode exposing (list, string)
 
-askRelayScript : Air
-askRelayScript =
+askRelaySchema : Air
+askRelaySchema =
     (seq
         (callBI "relayId" ( "op", "identity" ) [] Nothing)
         (askAllAndSend "relayId")
     )
 
-askPeersScript : Air
-askPeersScript =
+askRelayScript : String -> String -> Air
+askRelayScript peerId relayId =
+    let
+        clientIdSet =
+            set "clientId" <| string peerId
+
+        relayIdSet =
+            set "relayId" <| string relayId
+    in
+        clientIdSet <| relayIdSet <| askRelaySchema
+
+askPeersSchema : Air
+askPeersSchema =
     (fold "knownPeers" "p" <|
         par
             (seq
@@ -21,8 +32,22 @@ askPeersScript =
             (next "p")
     )
 
-findAndAskNeighbours : Air
-findAndAskNeighbours =
+askPeersScript : String -> String -> List String -> Air
+askPeersScript peerId relayId peers =
+    let
+        clientIdSet =
+            set "clientId" <| string peerId
+
+        relayIdSet =
+            set "relayId" <| string relayId
+
+        peersSet =
+            set "knownPeers" <| list string peers
+    in
+        clientIdSet <| relayIdSet <| peersSet <| askPeersSchema
+
+findAndAskNeighboursSchema : Air
+findAndAskNeighboursSchema =
     seq
         (callBI "relayId" ( "op", "identity" ) [] Nothing)
         (seq
@@ -40,6 +65,17 @@ findAndAskNeighbours =
                     (next "n")
             ))
 
+findAndAskNeighboursScript : String -> String ->Air
+findAndAskNeighboursScript peerId relayId =
+    let
+        clientIdSet =
+            set "clientId" <| string peerId
+
+        relayIdSet =
+            set "relayId" <| string relayId
+    in
+        clientIdSet <| relayIdSet <| findAndAskNeighboursSchema
+
 air : String -> String -> List String -> Air
 air peerId relayId peers =
     let
@@ -54,17 +90,17 @@ air peerId relayId peers =
 
         askRelay = (\innerAir ->
                 par
-                    askRelayScript
+                    askRelaySchema
                     innerAir
             )
 
         askPeers = (\innerAir ->
                 par
-                    askPeersScript
+                    askPeersSchema
                     innerAir
             )
     in
-    clientIdSet <| relayIdSet <| peersSet <| (askRelay <| askPeers <| findAndAskNeighbours)
+    clientIdSet <| relayIdSet <| peersSet <| (askRelay <| askPeers <| findAndAskNeighboursSchema)
 
 askAllAndSend : String -> Air
 askAllAndSend var =
