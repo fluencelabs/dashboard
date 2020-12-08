@@ -9,9 +9,12 @@
   height: inherit;
 }
 
+html { font-size: 87.5%; }
+
 body {
   font-family: 'Roboto Mono', monospace;
   background-color: #F4F4F4;
+  font-size: 1rem;
 }
 
 h1 {
@@ -22,12 +25,21 @@ h1 {
   border-color: #E11E5A;
 }
 
+.gray-font {
+  color: #7d7d7d;
+}
+
+.gray-font2 {
+  color: #898989;
+}
+
 .lucida {
   font-family: 'Lucida Grande', Lucida, Tahoma, Verdana, Arial, sans-serif;
 }
 
 .lucida-in {
   font-family: 'Lucida Grande', Lucida, Tahoma, Verdana, Arial, sans-serif;
+  color: black;
 }
 
 .welcome-text {
