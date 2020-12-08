@@ -28,7 +28,7 @@ view model id =
             in
             div [ classes "fl w-100" ]
                 [ div [ classes "fl w-100 pb4 pt4" ]
-                    [ div [ redFont, classes "f1 fw4 pt5" ] [ text ("Blueprint: " ++ bi.name) ]
+                    [ div [ redFont, classes "f1 fw4 pt3 pb2" ] [ text ("Blueprint: " ++ bi.name) ]
                     , span [ classes "fl w-100", darkRed ] [ text bi.id ]
                     ]
                 , div [ classes "fl w-100 bg-white mt2 ph4 pt3 mb5 pb3 br3" ] [ viewInfo bi ]

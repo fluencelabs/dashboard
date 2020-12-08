@@ -37,7 +37,7 @@ signaturesView signatures =
 
 signatureView : Signature -> Html msg
 signatureView signature =
-    div [ classes "i fl w-100 mv2" ]
+    div [ classes "i f6 fl w-100 mv2" ]
         [ text "fn "
         , span [classes "fw5"] [text signature.name]
         , text (interpolate "({0}) -> {1}" [ argumentsToString signature.arguments, outputToString signature.output_types ]) ]

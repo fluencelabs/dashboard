@@ -33,7 +33,7 @@ view model id =
             in
             div [ classes "fl w-100 cf ph2-ns" ]
                 [ div [ classes "fl w-100 mb2 pt4 pb4" ]
-                    [ div [ redFont, classes "f1 fw4 pt5" ] [ text ("Module: " ++ mi.name) ]
+                    [ div [ redFont, classes "f1 fw4 pt3" ] [ text ("Module: " ++ mi.name) ]
                     ]
                 , div [ classes "fl w-100 bg-white mt2 ph4 pt3 mb4 pb2 br3" ] [ viewInfo mi ]
                 , div [ classes "pt4 fw5 f3 pb4" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]

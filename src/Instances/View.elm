@@ -49,7 +49,7 @@ view model filter =
 
 viewTable : List Instance -> Html msg
 viewTable instances =
-    div [ classes "pa1 mt2 bg-white br3 overflow-auto" ]
+    div [ classes "pa1 bg-white br3 overflow-auto" ]
         [ div [ classes "mw8-ns pa2 " ]
             [ table [ classes "f6 w-100 center ws-normal-ns", attribute "cellspacing" "0" ]
                 [ thead []
