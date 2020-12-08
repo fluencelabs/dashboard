@@ -18,7 +18,11 @@ toInstance peerId identify blueprints service =
             blueprints |> Dict.get service.blueprint_id |> Maybe.map .name |> Maybe.withDefault "unknown"
 
         ip =
-            List.head identify.external_addresses |> Maybe.map (String.split "/") |> Maybe.map (List.drop 2) |> Maybe.andThen List.head |> Maybe.withDefault "unknown"
+            List.head identify.external_addresses
+                |> Maybe.map (String.split "/")
+                |> Maybe.map (List.drop 2)
+                |> Maybe.andThen List.head
+                |> Maybe.withDefault "unknown"
     in
     { name = name, instance = service.service_id, peerId = peerId, ip = ip }
 
@@ -41,7 +45,7 @@ view model filter =
 
 viewTable : List Instance -> Html msg
 viewTable instances =
-    div [ classes "pa1 mt2 bg-white br3" ]
+    div [ classes "pa1 mt2 bg-white br3 overflow-auto" ]
         [ div [ classes "mw8-ns pa2 " ]
             [ table [ classes "f6 w-100 center ws-normal-ns", attribute "cellspacing" "0" ]
                 [ thead []

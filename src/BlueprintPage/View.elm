@@ -3,7 +3,7 @@ module BlueprintPage.View exposing (..)
 import BlueprintPage.Model exposing (BlueprintViewInfo)
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
-import Html exposing (Html, article, div, h2, span, text)
+import Html exposing (Html, article, div, span, text)
 import Html.Events exposing (onClick)
 import Instances.View
 import Interface.View exposing (interfaceView)
@@ -27,12 +27,12 @@ view model id =
                     Instances.View.view model (\service -> service.blueprint_id == id)
             in
             div [ classes "fl w-100" ]
-                [ div [ classes "fl w-100 pb3 pt4" ]
+                [ div [ classes "fl w-100 pb4 pt4" ]
                     [ div [ redFont, classes "f1 fw4 pt5" ] [ text ("Blueprint: " ++ bi.name) ]
                     , span [ classes "fl w-100", darkRed ] [ text bi.id ]
                     ]
                 , div [ classes "fl w-100 bg-white mt2 ph4 pt3 mb5 pb3 br3" ] [ viewInfo bi ]
-                , h2 [ classes "pt4 fw5 f3 pb3" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
+                , div [ classes "pt4 fw5 f3 pb4" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
                 , div [ classes "fl w-100 mt2 mb4 bg-white br3" ]
                     [ instanceView ]
                 ]

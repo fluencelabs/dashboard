@@ -1,7 +1,7 @@
 module ModulePage.View exposing (..)
 
 import Dict exposing (Dict)
-import Html exposing (Html, a, article, div, h2, span, text)
+import Html exposing (Html, a, article, div, span, text)
 import Html.Attributes exposing (attribute, property)
 import Info exposing (getDescription, getSite)
 import Instances.View
@@ -32,11 +32,11 @@ view model id =
                     Instances.View.view model filter
             in
             div [ classes "fl w-100 cf ph2-ns" ]
-                [ div [ classes "fl w-100 mb2 pt4 pb3" ]
+                [ div [ classes "fl w-100 mb2 pt4 pb4" ]
                     [ div [ redFont, classes "f1 fw4 pt5" ] [ text ("Module: " ++ mi.name) ]
                     ]
                 , div [ classes "fl w-100 bg-white mt2 ph4 pt3 mb4 pb2 br3" ] [ viewInfo mi ]
-                , h2 [ classes "pt4 fw5 f3 pb3" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
+                , div [ classes "pt4 fw5 f3 pb4" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
                 , div [ classes "fl w-100 mt2 mb4 bg-white br3" ] [ instanceView ]
                 ]
 
