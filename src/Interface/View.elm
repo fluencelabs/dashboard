@@ -18,7 +18,7 @@ recordsView record =
 
 recordView : Record -> Html msg
 recordView record =
-    div [ classes "i" ]
+    div [ classes "i f6" ]
         ([ span [ classes "fl w-100 mt2" ] [ text (record.name ++ " {") ] ]
             ++ fieldsView record.fields
             ++ [ span [ classes "fl w-100 mb2" ] [ text "}" ] ]
@@ -38,7 +38,9 @@ signaturesView signatures =
 signatureView : Signature -> Html msg
 signatureView signature =
     div [ classes "i fl w-100 mv2" ]
-        [ text "fn ", span [classes "b fs-normal"] [text signature.name], text (interpolate "({0}) -> {1}" [ argumentsToString signature.arguments, outputToString signature.output_types ]) ]
+        [ text "fn "
+        , span [classes "fw5"] [text signature.name]
+        , text (interpolate "({0}) -> {1}" [ argumentsToString signature.arguments, outputToString signature.output_types ]) ]
 
 
 argumentsToString : List (List String) -> String

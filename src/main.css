@@ -25,6 +25,14 @@ h1 {
   border-color: #E11E5A;
 }
 
+.fluence-red {
+  color: #E11E5A;
+}
+
+.table-red-row:hover {
+  background-color: #FFF8F8;
+}
+
 .gray-font {
   color: #7d7d7d;
 }

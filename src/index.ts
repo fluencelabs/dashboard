@@ -24,7 +24,7 @@ import * as serviceWorker from './serviceWorker';
 import { Elm } from './Main.elm';
 import { faasNetHttps, Node } from './environments';
 
-const relayIdx = 1;
+const relayIdx = 4;
 
 export const relays: Node[] = faasNetHttps;
 
@@ -63,8 +63,8 @@ function event(name: string,peer: string,peers?: string[],identify?: string[],se
 
     const eventService = new ServiceOne('event', (fnName, args: any[]) => {
         console.log('event service called: ', fnName);
-        console.log('from: ', args[0]);
-        console.log('event service args: ', args);
+        // console.log('from: ', args[0]);
+        // console.log('event service args: ', args);
 
         try {
             if (fnName === 'peers_discovered') {

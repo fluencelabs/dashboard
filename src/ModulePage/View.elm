@@ -1,11 +1,12 @@
 module ModulePage.View exposing (..)
 
 import Dict exposing (Dict)
-import Html exposing (Html, a, article, div, h1, h3, span, text)
-import Html.Attributes exposing (attribute, style)
+import Html exposing (Html, a, article, div, h2, span, text)
+import Html.Attributes exposing (attribute, property)
 import Info exposing (getDescription, getSite)
 import Instances.View
 import Interface.View exposing (interfaceView)
+import Json.Encode exposing (string)
 import Model exposing (Model)
 import ModulePage.Model exposing (ModuleViewInfo)
 import Modules.Model exposing (Module)
@@ -31,17 +32,17 @@ view model id =
                     Instances.View.view model filter
             in
             div [ classes "fl w-100 cf ph2-ns" ]
-                [ div [ classes "fl w-100 mb2 pt2" ]
-                    [ h1 [ redFont, classes "f2 lh-copy ma0 mt4" ] [ text ("Module: " ++ mi.name) ]
+                [ div [ classes "fl w-100 mb2 pt4 pb3" ]
+                    [ div [ redFont, classes "f1 fw4 pt5" ] [ text ("Module: " ++ mi.name) ]
                     ]
                 , div [ classes "fl w-100 bg-white mt2 ph4 pt3 mb4 pb2 br3" ] [ viewInfo mi ]
-                , h3 [ classes "pt3" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
+                , h2 [ classes "pt4 fw5 f3 pb3" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
                 , div [ classes "fl w-100 mt2 mb4 bg-white br3" ] [ instanceView ]
                 ]
 
         Nothing ->
             div [ classes "cf ph2-ns" ]
-                [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text "Module not found" ]
+                [
                 ]
 
 
@@ -70,16 +71,23 @@ moduleToInfo modules id =
     in
     info
 
+resString = String.fromChar (Char.fromCode 160)
+
+empty = span [ ] [ text resString ]
 
 viewInfo : ModuleViewInfo -> Html msg
 viewInfo moduleInfo =
     article [ classes "cf" ]
-        [ div [ style "word-break" "break-all", classes "fl w-100 w-30-ns gray mv1" ] [ text "AUTHOR" ]
-        , div [ style "word-break" "break-all", classes "fl w-100 w-70-ns mv1" ] [ span [ classes "fl w-100 black b" ] [ text moduleInfo.author ], span [ classes "fl w-100 black" ] [ text moduleInfo.authorPeerId ] ]
-        , div [ style "word-break" "break-all", classes "fl w-100 w-30-ns gray mv1" ] [ text "WEBSITE" ]
-        , div [ style "word-break" "break-all", classes "fl w-100 w-70-ns mv1" ] [ a [ attribute "href" moduleInfo.website, classes "fl w-100 black" ] [ text moduleInfo.website ] ]
-        , div [ style "word-break" "break-all", classes "fl w-100 w-30-ns gray mv1" ] [ text "DESCRIPTION" ]
-        , div [ style "word-break" "break-all", classes "fl w-100 w-70-ns mv1" ] [ span [ classes "fl w-100 black" ] [ text moduleInfo.description ] ]
-        , div [ style "word-break" "break-all", classes "fl w-100 w-30-ns gray mv1" ] [ text "INTERFACE" ]
-        , div [ style "word-break" "break-all", classes "fl w-100 w-70-ns mv1" ] [ span [ classes "fl w-100 black" ] (interfaceView moduleInfo.moduleInfo.interface) ]
+        [ div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "AUTHOR" ]
+        , div [ classes "fl w-100 w-80-ns mv3" ]
+            [ span [ classes "fl w-100 black b lucida" ] [ text moduleInfo.author ] ]
+        , div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "WEBSITE" ]
+        , div [ classes "fl w-100 w-80-ns mv3 lucida" ]
+            [ if moduleInfo.website == "" then empty else a [ attribute "href" moduleInfo.website, classes "fl w-100 fluence-red" ] [ text moduleInfo.website ] ]
+        , div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "DESCRIPTION" ]
+        , div [ classes "fl w-100 w-80-ns mv3 lucida" ]
+            [ span [ classes "fl w-100 black", property "innerHTML" (string "&nbsp;123") ] [ text moduleInfo.description ] ]
+        , div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "INTERFACE" ]
+        , div [ classes "fl w-100 w-80-ns mv3" ]
+            [ span [ classes "fl w-100 black" ] (interfaceView moduleInfo.moduleInfo.interface) ]
         ]

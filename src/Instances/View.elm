@@ -3,7 +3,7 @@ module Instances.View exposing (..)
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
 import Html exposing (Html, div, p, table, tbody, td, text, th, thead, tr)
-import Html.Attributes exposing (attribute, style)
+import Html.Attributes exposing (attribute)
 import Instances.Model exposing (Instance)
 import Model exposing (Model)
 import Nodes.Model exposing (Identify)
@@ -43,10 +43,10 @@ viewTable : List Instance -> Html msg
 viewTable instances =
     div [ classes "pa1 mt2 bg-white br3" ]
         [ div [ classes "mw8-ns pa2 " ]
-            [ table [ classes "f6 w-100 center ws-normal-ns", attribute "cellspacing" "0", style "word-break" "break-all" ]
+            [ table [ classes "f6 w-100 center ws-normal-ns", attribute "cellspacing" "0" ]
                 [ thead []
                     [ tr [ classes "" ]
-                        [ th [ classes "fw5 tl pa3 gray-font" ] [ text "SERVICE" ]
+                        [ th [ classes "fw5 tl pa3 gray-font" ] [ text "BLUEPRINT" ]
                         , th [ classes "fw5 tl pa3 gray-font" ] [ text "INSTANCE" ]
                         , th [ classes "fw5 tl pa3 gray-font" ] [ text "NODE" ]
                         , th [ classes "fw5 tl pa3 gray-font" ] [ text "IP" ]
@@ -60,7 +60,7 @@ viewTable instances =
 
 viewInstance : Instance -> Html msg
 viewInstance instance =
-    tr [ classes "" ]
+    tr [ classes "table-red-row" ]
         [ td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.name ]]
         , td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.instance ]]
         , td [ classes "ph3" ] [ p [classes "ws-normal"] [text (shortHashRaw 8 instance.peerId) ]]

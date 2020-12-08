@@ -3,8 +3,7 @@ module BlueprintPage.View exposing (..)
 import BlueprintPage.Model exposing (BlueprintViewInfo)
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
-import Html exposing (Html, article, div, h1, h3, span, text)
-import Html.Attributes exposing (style)
+import Html exposing (Html, article, div, h2, span, text)
 import Html.Events exposing (onClick)
 import Instances.View
 import Interface.View exposing (interfaceView)
@@ -28,19 +27,19 @@ view model id =
                     Instances.View.view model (\service -> service.blueprint_id == id)
             in
             div [ classes "fl w-100" ]
-                [ div [ classes "fl w-100 mb2" ]
-                    [ h1 [ redFont, classes "f2 lh-copy ma0 mt4" ] [ text ("Blueprint: " ++ bi.name) ]
+                [ div [ classes "fl w-100 pb3 pt4" ]
+                    [ div [ redFont, classes "f1 fw4 pt5" ] [ text ("Blueprint: " ++ bi.name) ]
                     , span [ classes "fl w-100", darkRed ] [ text bi.id ]
                     ]
-                , div [ classes "fl w-100 bg-white mt2 ph4 pt3 mb4 pb2 br3" ] [ viewInfo bi ]
-                , h3 [ classes "pt3" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
-                , div [ classes "mt2 mb4 bg-white br3" ]
+                , div [ classes "fl w-100 bg-white mt2 ph4 pt3 mb5 pb3 br3" ] [ viewInfo bi ]
+                , h2 [ classes "pt4 fw5 f3 pb3" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
+                , div [ classes "fl w-100 mt2 mb4 bg-white br3" ]
                     [ instanceView ]
                 ]
 
         Nothing ->
             div [ classes "cf ph2-ns" ]
-                [ span [ classes "fl w-100 f1 lh-title dark-red" ] [ text "Blueprint not found" ]
+                [
                 ]
 
 
@@ -75,15 +74,13 @@ viewInfo blueprintInfo =
             \id -> blueprintInfo.openedModule |> Maybe.map (\om -> om == id) |> Maybe.withDefault False
     in
     article [ classes "cf" ]
-        [ div [ classes "fl w-100 w-30-ns gray mv1", style "word-break" "break-all" ] [ text "AUTHOR" ]
-        , div [ classes "fl w-100 w-70-ns mv1 lucida" ]
-            [ span [ classes "fl w-100 black b" ] [ text blueprintInfo.author ]
-            , span [ classes "fl w-100 black", style "word-break" "break-all" ] [ text blueprintInfo.authorPeerId ]
-            ]
-        , div [ classes "fl w-100 w-30-ns gray mv1", style "word-break" "break-all" ] [ text "DESCRIPTION" ]
-        , div [ classes "fl w-100 w-70-ns mv1", style "word-break" "break-all" ] [ span [ classes "fl w-100 black lucida pv1" ] [ text blueprintInfo.description ] ]
-        , div [ classes "fl w-100 w-30-ns gray mv1", style "word-break" "break-all" ] [ text "INTERFACE" ]
-        , div [ classes "fl w-100 w-70-ns mv1", style "word-break" "break-all" ]
+        [ div [ classes "fl w-100 w-20-ns gray-font mv3" ] [ text "AUTHOR" ]
+        , div [ classes "fl w-100 w-80-ns mv3 lucida" ]
+            [ span [ classes "fl w-100 black b" ] [ text blueprintInfo.author ] ]
+        , div [ classes "fl w-100 w-20-ns gray-font mv3" ] [ text "DESCRIPTION" ]
+        , div [ classes "fl w-100 w-80-ns mv3" ] [ span [ classes "fl w-100 black lucida pv1" ] [ text blueprintInfo.description ] ]
+        , div [ classes "fl w-100 w-20-ns gray-font mv3" ] [ text "INTERFACE" ]
+        , div [ classes "fl w-100 w-80-ns mv3" ]
             (blueprintInfo.modules
                 |> List.map (\m -> viewToggledInterface (checkToggle m.name) m.name m.interface)
             )
@@ -95,7 +92,7 @@ viewToggledInterface isOpen name interface =
     let
         interfaceViewEl =
             if isOpen then
-                [ div [ classes "fl w-100 ph4" ] (interfaceView interface) ]
+                [ div [ classes "fl w-100 ph3" ] (interfaceView interface) ]
 
             else
                 []
