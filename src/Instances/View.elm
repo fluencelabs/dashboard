@@ -2,7 +2,7 @@ module Instances.View exposing (..)
 
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
-import Html exposing (Html, div, p, table, tbody, td, text, th, thead, tr)
+import Html exposing (Html, a, div, p, table, tbody, td, text, th, thead, tr)
 import Html.Attributes exposing (attribute)
 import Instances.Model exposing (Instance)
 import Model exposing (Model)
@@ -14,8 +14,12 @@ import Service.Model exposing (Service)
 toInstance : String -> Identify -> Dict String Blueprint -> Service -> Instance
 toInstance peerId identify blueprints service =
     let
-        name =
-            blueprints |> Dict.get service.blueprint_id |> Maybe.map .name |> Maybe.withDefault "unknown"
+        bp =
+            blueprints |> Dict.get service.blueprint_id
+
+        name = bp |> Maybe.map .name |> Maybe.withDefault "unknown"
+
+        blueprintId = bp |> Maybe.map .id |> Maybe.withDefault "#"
 
         ip =
             List.head identify.external_addresses
@@ -24,7 +28,7 @@ toInstance peerId identify blueprints service =
                 |> Maybe.andThen List.head
                 |> Maybe.withDefault "unknown"
     in
-    { name = name, instance = service.service_id, peerId = peerId, ip = ip }
+    { name = name, blueprintId = blueprintId, instance = service.service_id, peerId = peerId, ip = ip }
 
 
 view : Model -> (Service -> Bool) -> ( Int, Html msg )
@@ -65,7 +69,7 @@ viewTable instances =
 viewInstance : Instance -> Html msg
 viewInstance instance =
     tr [ classes "table-red-row" ]
-        [ td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.name ]]
+        [ td [ classes "ph3" ] [ p [classes "ws-normal"] [ a [ attribute "href" ("/blueprint/" ++ instance.blueprintId), classes "black" ] [text instance.name ]]]
         , td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.instance ]]
         , td [ classes "ph3" ] [ p [classes "ws-normal"] [text (shortHashRaw 8 instance.peerId) ]]
         , td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.ip ]]
