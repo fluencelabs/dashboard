@@ -57,6 +57,7 @@ init flags url key =
             , blueprints = Dict.empty
             , toggledInterface = Nothing
             , knownPeers = flags.knownPeers
+            , isInitialized = False
             }
     in
     ( emptyModel, Route.routeCommand emptyModel r )

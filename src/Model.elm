@@ -56,4 +56,5 @@ type alias Model =
     , blueprints : Dict String Blueprint
     , toggledInterface : Maybe String
     , knownPeers : List String
+    , isInitialized : Bool
     }

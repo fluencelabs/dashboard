@@ -16,7 +16,6 @@ limitations under the License.
 
 -}
 
-import AirScripts.GetAll
 import Blueprints.Model exposing (Blueprint)
 import Browser
 import Browser.Navigation as Nav
@@ -26,7 +25,6 @@ import Model exposing (Model, PeerData, emptyPeerData)
 import Modules.Model exposing (Module)
 import Msg exposing (..)
 import Nodes.Model exposing (Identify)
-import Port exposing (sendAir)
 import Route exposing (getAllCmd)
 import Service.Model exposing (Service)
 import Url
@@ -46,7 +44,7 @@ update msg model =
                 cmd =
                     Route.routeCommand model route
             in
-            ( { model | url = url, page = route, toggledInterface = Nothing }, cmd )
+            ( { model | url = url, isInitialized = True, page = route, toggledInterface = Nothing }, cmd )
 
         LinkClicked urlRequest ->
             case urlRequest of

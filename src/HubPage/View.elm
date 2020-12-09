@@ -11,7 +11,7 @@ import Palette exposing (classes, redFont)
 
 view : Model -> Html msg
 view model =
-    div [ classes "pt4" ]
+    div [ classes "fl w-100 pt4" ]
         [ div [ redFont, classes "f1 fw4 pt3 pb3" ] [ text "Developer Hub" ]
         , welcomeText
         , div [ classes "pt4 f3 fw5 pb4" ] [ text "Featured Blueprints" ]

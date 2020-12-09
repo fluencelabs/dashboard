@@ -60,15 +60,4 @@ getAllCmd peerId relayId knownPeers =
 
 routeCommand : Model -> Route -> Cmd msg
 routeCommand m r =
-    case r of
-        Page _ ->
-            getAllCmd m.peerId m.relayId m.knownPeers
-
-        Peer _ ->
-            getAllCmd m.peerId m.relayId m.knownPeers
-
-        Blueprint _ ->
-            getAllCmd m.peerId m.relayId m.knownPeers
-
-        Module _ ->
-            getAllCmd m.peerId m.relayId m.knownPeers
+    if m.isInitialized then Cmd.none else getAllCmd m.peerId m.relayId m.knownPeers
