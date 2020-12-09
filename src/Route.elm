@@ -48,6 +48,7 @@ routeView model route =
         Module moduleName ->
             ModulePage.view model moduleName
 
+
 getAllCmd : String -> String -> List String -> Cmd msg
 getAllCmd peerId relayId knownPeers =
     Cmd.batch
@@ -55,6 +56,7 @@ getAllCmd peerId relayId knownPeers =
         , sendAir (GetAll.askPeersScript peerId relayId knownPeers)
         , sendAir (GetAll.findAndAskNeighboursScript peerId relayId)
         ]
+
 
 routeCommand : Model -> Route -> Cmd msg
 routeCommand m r =

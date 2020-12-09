@@ -17,9 +17,11 @@ toInstance peerId identify blueprints service =
         bp =
             blueprints |> Dict.get service.blueprint_id
 
-        name = bp |> Maybe.map .name |> Maybe.withDefault "unknown"
+        name =
+            bp |> Maybe.map .name |> Maybe.withDefault "unknown"
 
-        blueprintId = bp |> Maybe.map .id |> Maybe.withDefault "#"
+        blueprintId =
+            bp |> Maybe.map .id |> Maybe.withDefault "#"
 
         ip =
             List.head identify.external_addresses
@@ -69,8 +71,8 @@ viewTable instances =
 viewInstance : Instance -> Html msg
 viewInstance instance =
     tr [ classes "table-red-row" ]
-        [ td [ classes "ph3" ] [ p [classes "ws-normal"] [ a [ attribute "href" ("/blueprint/" ++ instance.blueprintId), classes "black" ] [text instance.name ]]]
-        , td [ classes "ph3" ] [ p [classes "ws-normal"] [text instance.instance ]]
-        , td [ classes "ph3 dn dtc-ns" ] [ p [classes "ws-normal"] [text (shortHashRaw 8 instance.peerId) ]]
-        , td [ classes "ph3 dn dtc-ns" ] [ p [classes "ws-normal"] [text instance.ip ]]
+        [ td [ classes "ph3" ] [ p [ classes "ws-normal" ] [ a [ attribute "href" ("/blueprint/" ++ instance.blueprintId), classes "black" ] [ text instance.name ] ] ]
+        , td [ classes "ph3" ] [ p [ classes "ws-normal" ] [ text instance.instance ] ]
+        , td [ classes "ph3 dn dtc-ns" ] [ p [ classes "ws-normal" ] [ text (shortHashRaw 8 instance.peerId) ] ]
+        , td [ classes "ph3 dn dtc-ns" ] [ p [ classes "ws-normal" ] [ text instance.ip ] ]
         ]

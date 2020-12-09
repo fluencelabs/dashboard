@@ -41,16 +41,20 @@ body model =
         List.concat
             [ [ header [ classes "w-100" ]
                     [ div [ classes "w-100 fl pv2 bg-white one-edge-shadow" ]
-                        [ div [ classes "mw8-ns center ph3"]
+                        [ div [ classes "mw8-ns center ph3" ]
                             [ div [ classes "fl mv1 pl3" ]
                                 [ a [ attribute "href" "/" ]
-                                    [ img [ classes "mw-100", style "height" "30px"
-                                    , attribute "src" "/images/logo_new.svg"
-                                    , style "position" "relative"
-                                    , style "top" "0.16rem" ] []
+                                    [ img
+                                        [ classes "mw-100"
+                                        , style "height" "30px"
+                                        , attribute "src" "/images/logo_new.svg"
+                                        , style "position" "relative"
+                                        , style "top" "0.16rem"
+                                        ]
+                                        []
                                     ]
                                 ]
-                            , div [ classes "fl pl5 h-auto" ] [ p [ classes "h-100 m-auto fw4" ] [ text "Developer Hub" ] ]
+                            , div [ classes "fl pl5 h-auto" ] [ p [ classes "h-100 m-auto fw4" ] [ a [ attribute "href" "/", classes "link black" ] [ text "Developer Hub" ] ] ]
                             ]
                         ]
                     ]

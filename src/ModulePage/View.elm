@@ -42,8 +42,7 @@ view model id =
 
         Nothing ->
             div [ classes "cf ph2-ns" ]
-                [
-                ]
+                []
 
 
 moduleToInfo : Dict String Module -> String -> Maybe ModuleViewInfo
@@ -71,9 +70,14 @@ moduleToInfo modules id =
     in
     info
 
-resString = String.fromChar (Char.fromCode 160)
 
-empty = span [ ] [ text resString ]
+resString =
+    String.fromChar (Char.fromCode 160)
+
+
+empty =
+    span [] [ text resString ]
+
 
 viewInfo : ModuleViewInfo -> Html msg
 viewInfo moduleInfo =
@@ -83,7 +87,12 @@ viewInfo moduleInfo =
             [ span [ classes "fl w-100 black b lucida" ] [ text moduleInfo.author ] ]
         , div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "WEBSITE" ]
         , div [ classes "fl w-100 w-80-ns mv3 lucida" ]
-            [ if moduleInfo.website == "" then empty else a [ attribute "href" moduleInfo.website, classes "fl w-100 fluence-red" ] [ text moduleInfo.website ] ]
+            [ if moduleInfo.website == "" then
+                empty
+
+              else
+                a [ attribute "href" moduleInfo.website, classes "fl w-100 fluence-red" ] [ text moduleInfo.website ]
+            ]
         , div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "DESCRIPTION" ]
         , div [ classes "fl w-100 w-80-ns mv3 lucida" ]
             [ span [ classes "fl w-100 black", property "innerHTML" (string "&nbsp;123") ] [ text moduleInfo.description ] ]

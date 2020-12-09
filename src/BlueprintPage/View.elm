@@ -39,8 +39,7 @@ view model id =
 
         Nothing ->
             div [ classes "cf ph2-ns" ]
-                [
-                ]
+                []
 
 
 blueprintToInfo : Model -> String -> Maybe BlueprintViewInfo
