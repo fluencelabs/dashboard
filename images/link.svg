@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="14px" viewBox="0 0 15 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 59.1 (86144) - https://sketch.com -->
+    <title>Group 2</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Dashboard-Service-Copy-2" transform="translate(-327.000000, -455.000000)">
+            <g id="service" transform="translate(38.000000, 233.000000)">
+                <g id="module-copy" transform="translate(204.000000, 222.000000)">
+                    <g id="Group-2" transform="translate(86.000000, 0.000000)">
+                        <path d="M13,8.56648788 L12.9635721,11.5 C12.9635721,12.3284271 12.2380734,13 11.3431255,13 L1.62044651,13 C0.725498613,13 0,12.3284271 0,11.5 L0,2.5 C0,1.67157288 0.725498613,1 1.62044651,1 L4.75322774,1.01985636" id="Path" stroke="#898989" stroke-width="2"></path>
+                        <polygon id="Line-2" fill="#898989" fill-rule="nonzero" points="14 0 12 0 12 7 14 7"></polygon>
+                        <polygon id="Line-4" fill="#898989" fill-rule="nonzero" points="13.4142136 2 13.4142136 0 6.41421356 0 6.41421356 2"></polygon>
+                        <polygon id="Line-5" fill="#898989" fill-rule="nonzero" points="12.8284271 2.41421356 11.4142136 1 6 6.41421356 7.41421356 7.82842712"></polygon>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

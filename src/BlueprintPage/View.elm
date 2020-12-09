@@ -3,7 +3,8 @@ module BlueprintPage.View exposing (..)
 import BlueprintPage.Model exposing (BlueprintViewInfo)
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
-import Html exposing (Html, article, div, span, text)
+import Html exposing (Html, a, article, div, img, span, text)
+import Html.Attributes exposing (attribute)
 import Html.Events exposing (onClick)
 import Instances.View
 import Interface.View exposing (interfaceView)
@@ -78,7 +79,7 @@ viewInfo blueprintInfo =
             [ span [ classes "fl w-100 black b" ] [ text blueprintInfo.author ] ]
         , div [ classes "fl w-100 w-20-ns gray-font mv3" ] [ text "DESCRIPTION" ]
         , div [ classes "fl w-100 w-80-ns mv3" ] [ span [ classes "fl w-100 black lucida pv1" ] [ text blueprintInfo.description ] ]
-        , div [ classes "fl w-100 w-20-ns gray-font mv3" ] [ text "INTERFACE" ]
+        , div [ classes "fl w-100 w-20-ns gray-font mv3" ] [ text "MODULES" ]
         , div [ classes "fl w-100 w-80-ns mv3" ]
             (blueprintInfo.modules
                 |> List.map (\m -> viewToggledInterface (checkToggle m.name) m.name m.interface)
@@ -99,6 +100,7 @@ viewToggledInterface isOpen name interface =
     div []
         ([ div [ classes "fl w-100 light-shadow bg-near-white pa2 mv2 pointer", onClick (ToggleInterface name) ]
             [ span [ classes "fl mh2 pv1 tl" ] [ text name ]
+            , div [ attribute "href" ("/module/" ++ name), classes "fl" ] [ img [ attribute "src" "/images/link.svg" ] [ ] ]
             , div [ classes "o-40 f4 tr pr3" ]
                 [ if isOpen then
                     text "▲"
