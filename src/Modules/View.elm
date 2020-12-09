@@ -1,5 +1,6 @@
 module Modules.View exposing (..)
 
+import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
 import Html exposing (Html, a, div, p, text)
 import Html.Attributes exposing (attribute)
@@ -7,27 +8,28 @@ import Maybe.Extra
 import Model exposing (Model, PeerData)
 import Modules.Model exposing (Module, ModuleShortInfo)
 import Palette exposing (classes)
+import Service.Model exposing (Service)
 import Utils.Utils exposing (instancesText)
 
 
 getModuleShortInfo : Model -> List ModuleShortInfo
 getModuleShortInfo model =
-    getAllModules model.modules model.discoveredPeers
+    getAllModules model.blueprints model.modules model.discoveredPeers
         |> Dict.toList
-        |> List.map (\( _, ( moduleInfo, peers ) ) -> { moduleInfo = moduleInfo, instanceNumber = List.length peers })
+        |> List.map (\( _, ( moduleInfo, services ) ) -> { moduleInfo = moduleInfo, instanceNumber = List.length services })
 
 
-getAllModules : Dict String Module -> Dict String PeerData -> Dict String ( Module, List String )
-getAllModules modules peerData =
+getAllModules : Dict String Blueprint -> Dict String Module -> Dict String PeerData -> Dict String ( Module, List Service )
+getAllModules blueprints modules peerData =
     let
         peerDatas =
             Dict.toList peerData
 
         allModulesByPeers =
-            peerDatas |> List.map (\( peer, pd ) -> pd.modules |> List.map (\ms -> ( peer, ms ))) |> List.concat
+            peerDatas |> List.map (\( _, pd ) -> pd.modules |> List.map (\ms -> ( pd, ms ))) |> List.concat
 
         peersByModuleName =
-            allModulesByPeers |> List.foldr (updateDict modules) Dict.empty
+            allModulesByPeers |> List.foldr (updateDict blueprints modules) Dict.empty
     in
     peersByModuleName
 
@@ -36,15 +38,31 @@ getAllModules modules peerData =
 -- group by module name and append peers
 
 
-updateDict : Dict String Module -> ( String, String ) -> Dict String ( Module, List String ) -> Dict String ( Module, List String )
-updateDict modules ( peer, moduleName ) dict =
+updateDict : Dict String Blueprint -> Dict String Module -> ( PeerData, String ) -> Dict String ( Module, List Service ) -> Dict String ( Module, List Service )
+updateDict blueprints modules ( peerData, moduleName ) dict =
+    let
+        filter =
+            \name -> \list -> list |> List.filter (filterByModuleName blueprints name)
+    in
     dict
         |> Dict.update moduleName
             (\oldM ->
                 Maybe.Extra.or
-                    (oldM |> Maybe.map (\( info, peers ) -> ( info, List.append [ peer ] peers )))
-                    (Dict.get moduleName modules |> Maybe.map (\m -> ( m, [ peer ] )))
+                    (oldM |> Maybe.map (\( info, services ) -> ( info, List.append (filter info.name peerData.services) services )))
+                    (Dict.get moduleName modules |> Maybe.map (\m -> ( m, filter m.name peerData.services )))
             )
+
+
+filterByModuleName : Dict String Blueprint -> String -> (Service -> Bool)
+filterByModuleName bps moduleName =
+    let
+        check =
+            Maybe.map (\bp -> bp.dependencies |> List.member moduleName)
+
+        filter =
+            \s -> bps |> Dict.get s.blueprint_id |> check |> Maybe.withDefault False
+    in
+    filter
 
 
 view : Model -> Html msg
