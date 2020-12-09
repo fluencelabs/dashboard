@@ -14,11 +14,11 @@ view model =
     div [ classes "fl w-100 pt4" ]
         [ div [ redFont, classes "f1 fw4 pt3 pb3" ] [ text "Developer Hub" ]
         , welcomeText
-        , div [ classes "pt4 f3 fw5 pb4" ] [ text "Featured Blueprints" ]
+        , div [ classes "pt4 f3 fw5 pb4" ] [ text "Featured Service Blueprints" ]
         , Blueprints.View.view model
         , div [ classes "pt4 f3 fw5 pb4" ] [ text "Featured Modules" ]
         , Modules.View.view model
-        , div [ classes "pt4 f3 fw5 pb4" ] [ text "Blueprint Instances" ]
+        , div [ classes "pt4 f3 fw5 pb4" ] [ text "Services" ]
         , Tuple.second (Instances.View.view model (\_ -> True))
         ]
 

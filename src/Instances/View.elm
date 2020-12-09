@@ -57,7 +57,7 @@ viewTable instances =
                 [ thead []
                     [ tr [ classes "" ]
                         [ th [ classes "fw5 tl pa3 gray-font" ] [ text "BLUEPRINT" ]
-                        , th [ classes "fw5 tl pa3 gray-font" ] [ text "INSTANCE" ]
+                        , th [ classes "fw5 tl pa3 gray-font" ] [ text "SERVICE ID" ]
                         , th [ classes "fw5 tl pa3 gray-font dn dtc-ns" ] [ text "NODE" ]
                         , th [ classes "fw5 tl pa3 gray-font dn dtc-ns" ] [ text "IP" ]
                         ]

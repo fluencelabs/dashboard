@@ -36,7 +36,7 @@ view model id =
                     [ div [ redFont, classes "f1 fw4 pt3" ] [ text ("Module: " ++ mi.name) ]
                     ]
                 , div [ classes "fl w-100 bg-white mt2 ph4 pt3 mb4 pb2 br3" ] [ viewInfo mi ]
-                , div [ classes "pt4 fw5 f3 pb4" ] [ text ("Instances (" ++ String.fromInt instanceNum ++ ")") ]
+                , div [ classes "pt4 fw5 f3 pb4" ] [ text ("Services (" ++ String.fromInt instanceNum ++ ")") ]
                 , div [ classes "fl w-100 mt2 mb4 bg-white br3" ] [ instanceView ]
                 ]
 
