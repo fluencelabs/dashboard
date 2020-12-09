@@ -99,9 +99,9 @@ viewToggledInterface isOpen name interface =
     in
     div []
         ([ div [ classes "fl w-100 light-shadow bg-near-white pa2 mv2 pointer", onClick (ToggleInterface name) ]
-            [ span [ classes "fl mh2 pv1 tl" ] [ text name ]
-            , div [ attribute "href" ("/module/" ++ name), classes "fl" ] [ img [ attribute "src" "/images/link.svg" ] [ ] ]
-            , div [ classes "o-40 f4 tr pr3" ]
+            [ span [ classes "fl mh2 pv1 tldib v-mid dib v-mid" ] [ text name ]
+            , img [ attribute "src" "/images/link.svg", attribute "href" ("/module/" ++ name), classes "dib v-mid mt1" ] []
+            , div [ classes "fl o-40 f4 fr pr3 dib v-mid" ]
                 [ if isOpen then
                     text "▲"
 

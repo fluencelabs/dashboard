@@ -60,4 +60,8 @@ getAllCmd peerId relayId knownPeers =
 
 routeCommand : Model -> Route -> Cmd msg
 routeCommand m r =
-    if m.isInitialized then Cmd.none else getAllCmd m.peerId m.relayId m.knownPeers
+    if m.isInitialized then
+        Cmd.none
+
+    else
+        getAllCmd m.peerId m.relayId m.knownPeers
