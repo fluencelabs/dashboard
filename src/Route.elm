@@ -56,14 +56,12 @@ routeView model route =
 getAllCmd : String -> String -> List String -> Cmd msg
 getAllCmd peerId relayId knownPeers =
     Cmd.batch
-        [ sendAir (GetAll.askRelayScript peerId relayId)
-        , sendAir (GetAll.askPeersScript peerId relayId knownPeers)
-        , sendAir (GetAll.findAndAskNeighboursScript peerId relayId)
+        [ sendAir (GetAll.air peerId relayId knownPeers)
         ]
 
 
 routeCommand : Model -> Route -> Cmd msg
-routeCommand m r =
+routeCommand m _ =
     if m.isInitialized then
         Cmd.none
 

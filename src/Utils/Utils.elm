@@ -15,6 +15,7 @@ instancesText num =
     else
         Html.text (strNum ++ " instances")
 
+
 servicesText : Int -> Html msg
 servicesText num =
     let

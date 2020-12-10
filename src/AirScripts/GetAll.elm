@@ -96,9 +96,12 @@ air peerId relayId peers =
 
         askRelay =
             \innerAir ->
-                par
-                    askRelaySchema
-                    innerAir
+                seq
+                    (callBI "relayId" ( "op", "identity" ) [] Nothing)
+                    (par
+                        askRelaySchema
+                        innerAir
+                    )
 
         askPeers =
             \innerAir ->
