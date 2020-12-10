@@ -24,7 +24,7 @@ import * as serviceWorker from './serviceWorker';
 import { Elm } from './Main.elm';
 import { faasNetHttps, Node } from './environments';
 
-const relayIdx = 4;
+const relayIdx = 8;
 
 export const relays: Node[] = faasNetHttps;
 
