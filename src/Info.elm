@@ -22,11 +22,11 @@ getDescription name =
 modulesDescription : Dict String ModuleDescription
 modulesDescription =
     Dict.fromList
-        [ ( "sqlite3", { site = "https://github.com/fluencelabs/sqlite", description = "A database that ported on Wasm" } )
-        , ( "history", { site = "https://github.com/fluencelabs/aqua-demo/tree/master/services/history", description = "Middleware that stores history (i.e. chat messages) in sqlite" } )
-        , ( "user-list", { site = "https://github.com/fluencelabs/aqua-demo/tree/master/services/user-list", description = "Middleware that stores users with their auth (i.e. chat members) in sqlite" } )
-        , ( "redis", { site = "https://github.com/fluencelabs/redis", description = "A database that ported on Wasm" } )
+        [ ( "sqlite3", { site = "https://github.com/fluencelabs/sqlite", description = "Popular embeddable database compiled to WebAssembly" } )
+        , ( "Message History", { site = "https://github.com/fluencelabs/aqua-demo/tree/master/services/history", description = "Stores message log, used in the Chat application" } )
+        , ( "User List", { site = "https://github.com/fluencelabs/aqua-demo/tree/master/services/user-list", description = "Basically an address book. Used in the Chat application to store chat users" } )
+        , ( "redis", { site = "https://github.com/fluencelabs/redis", description = "Popular embeddable database compiled to WebAssembly" } )
         , ( "curl", { site = "https://github.com/fluencelabs/fce/tree/master/examples/url-downloader/curl", description = "Module that call 'curl' command" } )
-        , ( "facade", { site = "https://github.com/fluencelabs/fce/tree/master/examples/url-downloader/facade", description = "An API facade for Url-Downloader app" } )
         , ( "local_storage", { site = "https://github.com/fluencelabs/fce/tree/master/examples/url-downloader/local_storage", description = "Could be used to store data" } )
+        , ( "Url Downloader", { site = "https://github.com/fluencelabs/fce/tree/master/examples/url-downloader/facade", description = "cURL adapter, allows to download anything by URL" } )
         ]

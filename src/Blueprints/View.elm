@@ -7,7 +7,7 @@ import Html.Attributes exposing (attribute)
 import Model exposing (Model, PeerData)
 import Palette exposing (classes)
 import Service.Model exposing (Service)
-import Utils.Utils exposing (instancesText)
+import Utils.Utils exposing (servicesText)
 
 
 view : Model -> Html msg
@@ -42,7 +42,7 @@ viewService blueprint =
             ]
             [ div [ classes "w-100 mb3 pt1 b f3 overflow-hidden" ] [ text blueprint.name ]
             , div [ classes "w-100 mb4 fw4 gray-font" ] [ text "By ", span [ classes "lucida-in normal" ] [ text blueprint.author ] ]
-            , div [ classes "w-100 mt1 lucida gray-font" ] [ instancesText blueprint.instanceNumber ]
+            , div [ classes "w-100 mt1 lucida gray-font" ] [ servicesText blueprint.instanceNumber ]
             ]
         ]
 
