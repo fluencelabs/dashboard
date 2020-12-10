@@ -50,7 +50,7 @@ function event(name: string,peer: string,peers?: string[],identify?: string[],se
 /* eslint-enable */
 
 (async () => {
-    // Fluence.setLogLevel('silent')
+    Fluence.setLogLevel('silent')
     const pid = await Fluence.generatePeerId();
     const flags = genFlags(pid.toB58String());
 
@@ -63,9 +63,9 @@ function event(name: string,peer: string,peers?: string[],identify?: string[],se
     });
 
     const eventService = new ServiceOne('event', (fnName, args: any[]) => {
-        console.log('event service called: ', fnName);
+        // console.log('event service called: ', fnName);
         // console.log('from: ', args[0]);
-        // console.log('event service args: ', args);
+        console.log(`event from ${args[0]} received:`, args);
 
         try {
             if (fnName === 'peers_discovered') {
@@ -95,6 +95,7 @@ function event(name: string,peer: string,peers?: string[],identify?: string[],se
         }
 
         const particle = await build(client.selfPeerId, part.script, map, 45000);
+        console.log("Building a particle with AIR script: ", particle)
         await client.sendParticle(particle);
     });
 })();

@@ -6,6 +6,7 @@ import Dict exposing (Dict)
 import Html exposing (Html, a, article, div, img, span, text)
 import Html.Attributes exposing (attribute)
 import Html.Events exposing (onClick)
+import Info exposing (getBlueprintDescription)
 import Instances.View
 import Interface.View exposing (interfaceView)
 import Model exposing (Model)
@@ -56,7 +57,7 @@ blueprintToInfo model id =
                 , id = id
                 , author = "Fluence Labs"
                 , authorPeerId = "fluence_labs_peer_id"
-                , description = "Excelent blueprint"
+                , description = getBlueprintDescription bp.name
                 , website = "https://github.com/fluencelabs/"
                 , blueprint = bp
                 , modules = modules

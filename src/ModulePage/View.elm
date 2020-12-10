@@ -3,7 +3,7 @@ module ModulePage.View exposing (..)
 import Dict exposing (Dict)
 import Html exposing (Html, a, article, div, span, text)
 import Html.Attributes exposing (attribute, property)
-import Info exposing (getDescription, getSite)
+import Info exposing (getModuleDescription, getSite)
 import Instances.View
 import Interface.View exposing (interfaceView)
 import Json.Encode exposing (string)
@@ -62,7 +62,7 @@ moduleToInfo modules id =
                         , id = id
                         , author = "Fluence Labs"
                         , authorPeerId = ""
-                        , description = getDescription m.name
+                        , description = getModuleDescription m.name
                         , website = getSite m.name
                         , moduleInfo = m
                         }
