@@ -7,6 +7,7 @@ import HubPage.View as HubPage
 import Model exposing (Model, Route(..))
 import ModulePage.View as ModulePage
 import Msg exposing (Msg)
+import NodePage.View as NodePage
 import Port exposing (sendAir)
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
 
@@ -35,6 +36,9 @@ routeView model route =
 
                 "hub" ->
                     HubPage.view model
+
+                "nodes" ->
+                    NodePage.view model
 
                 _ ->
                     text ("undefined page: " ++ page)
