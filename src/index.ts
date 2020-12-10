@@ -50,6 +50,7 @@ function event(name: string,peer: string,peers?: string[],identify?: string[],se
 /* eslint-enable */
 
 (async () => {
+    // Fluence.setLogLevel('silent')
     const pid = await Fluence.generatePeerId();
     const flags = genFlags(pid.toB58String());
 
@@ -93,7 +94,7 @@ function event(name: string,peer: string,peers?: string[],identify?: string[],se
             }
         }
 
-        const particle = await build(client.selfPeerId, part.script, map, 25000);
+        const particle = await build(client.selfPeerId, part.script, map, 45000);
         await client.sendParticle(particle);
     });
 })();

@@ -25,9 +25,9 @@ toInstance peerId identify blueprints service =
 
         ip =
             List.head identify.external_addresses
-                |> Maybe.map (String.split "/")
-                |> Maybe.map (List.drop 2)
-                |> Maybe.andThen List.head
+                --|> Maybe.map (String.split "/")
+                --|> Maybe.map (List.drop 2)
+                --|> Maybe.andThen List.head
                 |> Maybe.withDefault "unknown"
     in
     { name = name, blueprintId = blueprintId, instance = service.service_id, peerId = peerId, ip = ip }
@@ -59,7 +59,7 @@ viewTable instances =
                         [ th [ classes "fw5 tl pa3 gray-font" ] [ text "BLUEPRINT" ]
                         , th [ classes "fw5 tl pa3 gray-font" ] [ text "SERVICE ID" ]
                         , th [ classes "fw5 tl pa3 gray-font dn dtc-ns" ] [ text "NODE" ]
-                        , th [ classes "fw5 tl pa3 gray-font dn dtc-ns" ] [ text "IP" ]
+                        , th [ classes "fw5 tl pa3 gray-font dn dtc-ns" ] [ text "MULTIADDR" ]
                         ]
                     ]
                 , tbody [ classes "lucida" ] (instances |> List.map viewInstance)

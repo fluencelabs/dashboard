@@ -47,7 +47,7 @@ nodesView nodes =
                 [ thead []
                     [ tr [ classes "" ]
                         [ th [ classes "fw5 tl pa3 gray-font" ] [ text "NODE ID" ]
-                        , th [ classes "fw5 tl pa3 gray-font" ] [ text "IP" ]
+                        , th [ classes "fw5 tl pa3 gray-font" ] [ text "MULTIADDR" ]
                         , th [ classes "fw5 tl pa3 gray-font dn dtc-ns" ] [ text "SERVICES" ]
                         ]
                     ]
