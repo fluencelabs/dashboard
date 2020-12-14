@@ -12,3 +12,4 @@ type Msg
     | AquamarineEvent Port.ReceiveEvent
     | RelayChanged String
     | ToggleInterface String
+    | Reload

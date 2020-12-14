@@ -16,6 +16,7 @@ limitations under the License.
 
 -}
 
+import AirScripts.GetAll as GetAll
 import Blueprints.Model exposing (Blueprint)
 import Browser
 import Browser.Navigation as Nav
@@ -25,6 +26,7 @@ import Model exposing (Model, PeerData, emptyPeerData)
 import Modules.Model exposing (Module)
 import Msg exposing (..)
 import Nodes.Model exposing (Identify)
+import Port exposing (sendAir)
 import Route exposing (getAllCmd)
 import Service.Model exposing (Service)
 import Url
@@ -66,11 +68,6 @@ update msg model =
 
                         updatedDict =
                             Dict.union model.discoveredPeers newDict
-
-                        emptyPeers =
-                            Dict.toList updatedDict
-                                |> List.filter (\( _, data ) -> List.isEmpty data.identify.external_addresses)
-                                |> List.map Tuple.first
                     in
                     ( { model | discoveredPeers = updatedDict }, getAllCmd model.peerId model.relayId [] )
 
@@ -106,6 +103,9 @@ update msg model =
 
         RelayChanged relayId ->
             ( { model | relayId = relayId }, Cmd.none )
+
+        Reload ->
+            ( model, sendAir (GetAll.air model.peerId model.relayId model.knownPeers) )
 
 
 updateModel : Model -> String -> Identify -> List Service -> List Module -> List Blueprint -> Model

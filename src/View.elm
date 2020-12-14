@@ -19,6 +19,7 @@ limitations under the License.
 import Browser exposing (Document, UrlRequest(..))
 import Html exposing (Html, a, div, header, img, p, text)
 import Html.Attributes exposing (attribute, style)
+import Html.Events exposing (onClick)
 import Model exposing (Model, Route(..))
 import Msg exposing (..)
 import Palette exposing (classes)
@@ -62,6 +63,19 @@ body model =
                             , div [ classes "fl pl5 h-auto" ]
                                 [ p [ classes "h-100 m-auto fw4" ]
                                     [ a [ attribute "href" "/nodes", classes "link black" ] [ text "Nodes" ]
+                                    ]
+                                ]
+                            , div [ classes "fl fr" ]
+                                [ a [ attribute "href" "/" ]
+                                    [ img
+                                        [ classes "mw-100"
+                                        , style "height" "20px"
+                                        , attribute "src" "/images/reload.svg"
+                                        , style "position" "relative"
+                                        , style "top" "0.85rem"
+                                        , onClick Reload
+                                        ]
+                                        []
                                     ]
                                 ]
                             ]

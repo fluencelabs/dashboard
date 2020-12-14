@@ -8,6 +8,7 @@ type alias ModuleDescription =
     , description : String
     }
 
+
 type alias BlueprintDescription =
     { description : String
     }
@@ -22,9 +23,11 @@ getModuleDescription : String -> String
 getModuleDescription name =
     modulesDescription |> Dict.get name |> Maybe.map .description |> Maybe.withDefault ""
 
+
 getBlueprintDescription : String -> String
 getBlueprintDescription name =
     blueprintsDescription |> Dict.get name |> Maybe.map .description |> Maybe.withDefault ""
+
 
 modulesDescription : Dict String ModuleDescription
 modulesDescription =
@@ -40,6 +43,7 @@ modulesDescription =
         , ( "url_downloader", { site = "https://github.com/fluencelabs/fce/tree/master/examples/url-downloader/facade", description = "Adapter module for cURL CLI utility" } )
         , ( "facade_url_downloader", { site = "https://github.com/fluencelabs/fce/tree/master/examples/url-downloader/facade", description = "Adapter module for cURL CLI utility" } )
         ]
+
 
 blueprintsDescription : Dict String BlueprintDescription
 blueprintsDescription =
