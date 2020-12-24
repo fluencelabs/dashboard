@@ -56,7 +56,7 @@ fold iter item (Air d s) =
 
 flattenOp : String -> String
 flattenOp s =
-    s ++ '!'
+    s ++ "!"
 
 
 next : String -> Air

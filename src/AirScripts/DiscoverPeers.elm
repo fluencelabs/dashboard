@@ -1,6 +1,6 @@
 module AirScripts.DiscoverPeers exposing (..)
 
-import Air exposing (Air, callBI, fold, next, par, relayEvent, seq, set)
+import Air exposing (Air, callBI, flattenOp, fold, next, par, relayEvent, seq, set)
 import Json.Encode as Encode
 
 
