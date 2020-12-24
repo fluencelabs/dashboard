@@ -18,7 +18,7 @@ air peerId relayId =
                 (callBI "relayId" ( "dht", "neighborhood" ) [ "clientId" ] (Just "peers"))
                 (par
                     (relayEvent "peers_discovered" [ "relayId", "peers" ])
-                    (fold "peers" "p" <|
+                    (fold (flattenOp "peers") "p" <|
                         par
                             (seq
                                 (callBI "p" ( "dht", "neighborhood" ) [ "clientId" ] (Just "morePeers"))

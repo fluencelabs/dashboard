@@ -54,6 +54,11 @@ fold iter item (Air d s) =
     Air d ("(fold " ++ iter ++ " " ++ item ++ "\n" ++ s ++ ")\n")
 
 
+flattenOp : String -> String
+flattenOp s =
+    s ++ '!'
+
+
 next : String -> Air
 next item =
     Air Dict.empty ("(next " ++ item ++ ")\n")

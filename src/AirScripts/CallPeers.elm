@@ -1,6 +1,6 @@
 module AirScripts.CallPeers exposing (..)
 
-import Air exposing (Air, callBI, fold, next, par, relayEvent, seq, set)
+import Air exposing (Air, callBI, flattenOp, fold, next, par, relayEvent, seq, set)
 import Json.Encode exposing (list, string)
 
 
@@ -19,7 +19,7 @@ air peerId relayId ( event, service, fnName ) peers =
         airScript =
             seq
                 (callBI "relayId" ( "op", "identity" ) [] Nothing)
-                (fold "peers" "p" <|
+                (fold (flattenOp "peers") "p" <|
                     par
                         (seq
                             (callBI "p" ( service, fnName ) [] (Just "result"))
