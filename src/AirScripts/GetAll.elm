@@ -25,7 +25,7 @@ askRelayScript peerId relayId =
 
 askPeersSchema : Air
 askPeersSchema =
-    fold (flattenOp "knownPeers") "p" <|
+    fold "knownPeers" "p" <|
         par
             (seq
                 (callBI "p" ( "op", "identity" ) [] Nothing)
@@ -55,11 +55,11 @@ findAndAskNeighboursSchema =
         (callBI "relayId" ( "op", "identity" ) [] Nothing)
         (seq
             (callBI "relayId" ( "dht", "neighborhood" ) [ "clientId" ] (Just "neigh"))
-            (fold (flattenOp "neigh") "n" <|
+            (fold "neigh" "n" <|
                 par
                     (seq
                         (callBI "n" ( "dht", "neighborhood" ) [ "clientId" ] (Just "moreNeigh"))
-                        (fold (flattenOp "moreNeigh") "mp" <|
+                        (fold "moreNeigh" "mp" <|
                             par
                                 (askAllAndSend "mp")
                                 (next "mp")

@@ -19,7 +19,7 @@ air peerId relayId ( event, service, fnName ) peers =
         airScript =
             seq
                 (callBI "relayId" ( "op", "identity" ) [] Nothing)
-                (fold (flattenOp "peers") "p" <|
+                (fold "peers" "p" <|
                     par
                         (seq
                             (callBI "p" ( service, fnName ) [] (Just "result"))
