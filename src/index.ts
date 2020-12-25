@@ -22,11 +22,11 @@ import { registerService } from 'fluence/dist/globalState';
 import { ServiceOne } from 'fluence/dist/service';
 import * as serviceWorker from './serviceWorker';
 import { Elm } from './Main.elm';
-import { faasNetHttps, Node } from './environments';
+import { faasNetHttps, dev, Node } from './environments';
 
-const relayIdx = 8;
+const relayIdx = 2;
 
-export const relays: Node[] = faasNetHttps;
+export const relays: Node[] = dev;
 
 function genFlags(peerId: string): any {
     return {
@@ -37,20 +37,37 @@ function genFlags(peerId: string): any {
 }
 
 /* eslint-disable */
-function event(name: string,peer: string,peers?: string[],identify?: string[],services?: any[],blueprints?: string[],modules?: string[],
+function event(
+    name: string,
+    peer: string,
+    peers?: string[],
+    identify?: string[],
+    services?: any[],
+    blueprints?: string[],
+    modules?: string[],
 ) {
-    if (!peers) { peers = null; }
-    if (!services) { services = null; }
-    if (!modules) { modules = null; }
-    if (!identify) { identify = null; }
-    if (!blueprints) { blueprints = null; }
+    if (!peers) {
+        peers = null;
+    }
+    if (!services) {
+        services = null;
+    }
+    if (!modules) {
+        modules = null;
+    }
+    if (!identify) {
+        identify = null;
+    }
+    if (!blueprints) {
+        blueprints = null;
+    }
 
     return { name, peer, peers, identify, services, modules, blueprints };
 }
 /* eslint-enable */
 
 (async () => {
-    Fluence.setLogLevel('silent')
+    Fluence.setLogLevel('silent');
     const pid = await Fluence.generatePeerId();
     const flags = genFlags(pid.toB58String());
 
@@ -62,7 +79,7 @@ function event(name: string,peer: string,peers?: string[],identify?: string[],se
         flags,
     });
 
-    const eventService = new ServiceOne('event', (fnName, args: any[]) => {
+    const eventService = new ServiceOne('event', (fnName, args: any[], _tetraplets) => {
         // console.log('event service called: ', fnName);
         // console.log('from: ', args[0]);
         console.log(`event from ${args[0]} received:`, args);
@@ -95,7 +112,7 @@ function event(name: string,peer: string,peers?: string[],identify?: string[],se
         }
 
         const particle = await build(client.selfPeerId, part.script, map, 45000);
-        console.log("Building a particle with AIR script: ", particle)
+        console.log('Building a particle with AIR script: ', particle);
         await client.sendParticle(particle);
     });
 })();
