@@ -22,11 +22,11 @@ import { registerService } from 'fluence/dist/globalState';
 import { ServiceOne } from 'fluence/dist/service';
 import * as serviceWorker from './serviceWorker';
 import { Elm } from './Main.elm';
-import { faasNetHttps, Node } from './environments';
+import { faasNetHttps, dev, Node } from './environments';
 
-const relayIdx = 8;
+const relayIdx = 2;
 
-export const relays: Node[] = faasNetHttps;
+export const relays: Node[] = dev;
 
 function genFlags(peerId: string): any {
     return {
