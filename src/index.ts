@@ -26,7 +26,7 @@ import { faasNetHttps, dev, Node } from './environments';
 
 const relayIdx = 2;
 
-export const relays: Node[] = dev;
+export const relays: Node[] = faasNetHttps;
 
 function genFlags(peerId: string): any {
     return {
