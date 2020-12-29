@@ -20,9 +20,9 @@ import Fluence from 'fluence';
 import { build } from 'fluence/dist/particle';
 import { registerService } from 'fluence/dist/globalState';
 import { ServiceOne } from 'fluence/dist/service';
+import { faasNetHttps, dev, Node } from '@fluencelabs/fluence-network-environment';
 import * as serviceWorker from './serviceWorker';
 import { Elm } from './Main.elm';
-import { faasNetHttps, dev, Node } from './environments';
 
 const relayIdx = 2;
 
