@@ -16,17 +16,15 @@
 
 import 'tachyons/css/tachyons.min.css';
 import './main.css';
-import Fluence from 'fluence';
-import { build } from 'fluence/dist/particle';
-import { registerService } from 'fluence/dist/globalState';
-import { ServiceOne } from 'fluence/dist/service';
-import { faasNetHttps, dev, Node } from '@fluencelabs/fluence-network-environment';
+import { stage, dev, Node } from '@fluencelabs/fluence-network-environment';
 import * as serviceWorker from './serviceWorker';
 import { Elm } from './Main.elm';
+import {createClient, generatePeerId} from "@fluencelabs/fluence";
+import {FluenceEvent} from "@fluencelabs/fluence/dist/FluenceClient";
 
-const relayIdx = 2;
+const relayIdx = 3;
 
-export const relays: Node[] = faasNetHttps;
+export const relays: Node[] = dev;
 
 function genFlags(peerId: string): any {
     return {
@@ -67,21 +65,21 @@ function event(
 /* eslint-enable */
 
 (async () => {
-    Fluence.setLogLevel('silent');
-    const pid = await Fluence.generatePeerId();
+    const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String());
 
     // If the relay is ever changed, an event shall be sent to elm
-    const client = await Fluence.connect(relays[relayIdx].multiaddr, pid);
+    console.log(relays[relayIdx].multiaddr)
+    const client = await createClient(relays[relayIdx].multiaddr, pid);
 
     const app = Elm.Main.init({
         node: document.getElementById('root'),
         flags,
     });
 
-    const eventService = new ServiceOne('event', (fnName, args: any[], _tetraplets) => {
-        // console.log('event service called: ', fnName);
-        // console.log('from: ', args[0]);
+    let handler = (fEvent: FluenceEvent) => {
+        let args = fEvent.args;
+        let fnName = fEvent.type
         console.log(`event from ${args[0]} received:`, args);
 
         try {
@@ -97,8 +95,8 @@ function event(
         }
 
         return {};
-    });
-    registerService(eventService);
+    }
+    client.subscribe('event', handler);
 
     app.ports.sendParticle.subscribe(async (part: any) => {
         console.log('Going to build particle', part);
@@ -111,9 +109,9 @@ function event(
             }
         }
 
-        const particle = await build(client.selfPeerId, part.script, map, 45000);
-        console.log('Building a particle with AIR script: ', particle);
-        await client.sendParticle(particle);
+        console.log('Building a particle with AIR script: ', part.script);
+        console.log('With data: ', part.data);
+        await client.sendScript(part.script, map, 45000);
     });
 })();
 
