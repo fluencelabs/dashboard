@@ -23,10 +23,10 @@ import { createClient, generatePeerId, Particle, sendParticle, subscribeToEvent 
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 
-const relayIdx = 2;
+const relayIdx = 3;
 
-// const relays: Node[] = dev;
-const relays: Node[] = testNet;
+// const relays: Node[] = testNet;
+const relays: Node[] = dev;
 
 function genFlags(peerId: string): any {
     return {
@@ -67,7 +67,6 @@ function event(
 /* eslint-enable */
 
 (async () => {
-    log.setLevel('debug');
     const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String());
 
