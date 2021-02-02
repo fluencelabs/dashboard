@@ -67,6 +67,7 @@ function event(
 /* eslint-enable */
 
 (async () => {
+    log.setLevel('silent')
     const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String());
 
