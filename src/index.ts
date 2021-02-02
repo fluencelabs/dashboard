@@ -16,17 +16,17 @@
 
 import 'tachyons/css/tachyons.min.css';
 import './main.css';
-import Fluence from 'fluence';
-import { build } from 'fluence/dist/particle';
-import { registerService } from 'fluence/dist/globalState';
-import { ServiceOne } from 'fluence/dist/service';
-import { faasNetHttps, dev, Node } from '@fluencelabs/fluence-network-environment';
-import * as serviceWorker from './serviceWorker';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import log from 'loglevel';
+import { Node, dev, testNet } from '@fluencelabs/fluence-network-environment';
+import { createClient, generatePeerId, Particle, sendParticle, subscribeToEvent } from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
+import * as serviceWorker from './serviceWorker';
 
-const relayIdx = 2;
+const relayIdx = 3;
 
-export const relays: Node[] = faasNetHttps;
+// const relays: Node[] = testNet;
+const relays: Node[] = dev;
 
 function genFlags(peerId: string): any {
     return {
@@ -67,53 +67,36 @@ function event(
 /* eslint-enable */
 
 (async () => {
-    Fluence.setLogLevel('silent');
-    const pid = await Fluence.generatePeerId();
+    const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String());
 
     // If the relay is ever changed, an event shall be sent to elm
-    const client = await Fluence.connect(relays[relayIdx].multiaddr, pid);
+    const client = await createClient(relays[relayIdx].multiaddr, pid);
 
     const app = Elm.Main.init({
         node: document.getElementById('root'),
         flags,
     });
 
-    const eventService = new ServiceOne('event', (fnName, args: any[], _tetraplets) => {
-        // console.log('event service called: ', fnName);
-        // console.log('from: ', args[0]);
-        console.log(`event from ${args[0]} received:`, args);
-
+    subscribeToEvent(client, 'event', 'peers_discovered', (args, _tetraplets) => {
         try {
-            if (fnName === 'peers_discovered') {
-                app.ports.eventReceiver.send(event(fnName, args[0], args[1]));
-            } else if (fnName === 'all_info') {
-                app.ports.eventReceiver.send(event(fnName, args[0], undefined, args[1], args[2], args[3], args[4]));
-            } else {
-                console.error('UNHANDLED');
-            }
+            app.ports.eventReceiver.send(event('peers_discovered', args[0], args[1]));
         } catch (err) {
-            console.error(err);
+            log.error('Elm eventreceiver failed: ', err);
         }
-
-        return {};
     });
-    registerService(eventService);
 
-    app.ports.sendParticle.subscribe(async (part: any) => {
-        console.log('Going to build particle', part);
-        const jsonData = part.data;
-
-        const map = new Map<string, string>();
-        for (const v in jsonData) {
-            if (jsonData.hasOwnProperty(v)) {
-                map.set(v, jsonData[v]);
-            }
+    subscribeToEvent(client, 'event', 'all_info', (args, _tetraplets) => {
+        try {
+            app.ports.eventReceiver.send(event('all_info', args[0], undefined, args[1], args[2], args[3], args[4]));
+        } catch (err) {
+            log.error('Elm eventreceiver failed: ', err);
         }
+    });
 
-        const particle = await build(client.selfPeerId, part.script, map, 45000);
-        console.log('Building a particle with AIR script: ', particle);
-        await client.sendParticle(particle);
+    app.ports.sendParticle.subscribe(async (part: { script: string; data: any }) => {
+        const particle = new Particle(part.script, part.data, 45000);
+        await sendParticle(client, particle);
     });
 })();
 
@@ -122,12 +105,8 @@ function event(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-async function test() {}
-
 declare global {
     interface Window {
         test: any;
     }
 }
-
-window.test = test;
