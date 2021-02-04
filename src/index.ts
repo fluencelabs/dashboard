@@ -107,8 +107,15 @@ function event(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
+function setLogLevel(level: any) {
+    log.setLevel(level)
+}
+
 declare global {
     interface Window {
         test: any;
+        setLogLevel: any;
     }
 }
+
+window.setLogLevel = setLogLevel
