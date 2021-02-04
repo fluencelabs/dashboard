@@ -70,6 +70,7 @@ function event(
     log.setLevel('silent')
     const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String());
+    console.log("connect with client: " + pid.toB58String())
 
     // If the relay is ever changed, an event shall be sent to elm
     const client = await createClient(relays[relayIdx].multiaddr, pid);
