@@ -15,17 +15,17 @@ view model =
     let
         allBps =
             getBlueprintsToServices model.blueprints model.discoveredPeers
-
-        info =
-            Dict.values allBps
-                |> List.map
-                    (\( bp, servicesByPeers ) ->
-                        { name = bp.name
-                        , id = bp.id
-                        , author = "Fluence Labs"
-                        , instanceNumber = List.length (servicesByPeers |> List.map (\( _, s ) -> s) |> List.concat)
-                        }
-                    )
+        -- TODO HACK: this is a hack to filter bloat blueprints until we have a predefined list of good ones
+        filteredBps = Dict.values allBps |> List.filter (\(_, services) -> List.length services > 3)
+        info = List.map
+            (\( bp, servicesByPeers ) ->
+                { name = bp.name
+                , id = bp.id
+                , author = "Fluence Labs"
+                , instanceNumber = List.length (servicesByPeers |> List.map (\( _, s ) -> s) |> List.concat)
+                }
+            )
+            filteredBps
 
         servicesView =
             List.map viewService info
