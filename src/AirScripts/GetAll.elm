@@ -117,12 +117,12 @@ askAllAndSend var =
     seq
         (callBI var ( "peer", "identify" ) [] (Just "ident"))
         (seq
-            (callBI var ( "dist", "get_blueprints" ) [] (Just "blueprints"))
+            (callBI var ( "dist", "list_blueprints" ) [] (Just "blueprints"))
             (seq
-                (callBI var ( "dist", "get_modules" ) [] (Just "modules"))
+                (callBI var ( "dist", "list_modules" ) [] (Just "modules"))
                 (seq
-                    (callBI var ( "srv", "get_interfaces" ) [] (Just "interfaces"))
-                    (relayEvent "all_info" [ var, "ident", "interfaces", "blueprints", "modules" ])
+                    (callBI var ( "srv", "list" ) [] (Just "services"))
+                    (relayEvent "all_info" [ var, "ident", "services", "blueprints", "modules" ])
                 )
             )
         )

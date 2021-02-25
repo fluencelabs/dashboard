@@ -6,4 +6,4 @@ import AirScripts.CallPeers
 
 air : String -> String -> List String -> Air
 air peerId relayId peers =
-    AirScripts.CallPeers.air peerId relayId ( "modules_discovered", "dist", "get_modules" ) peers
+    AirScripts.CallPeers.air peerId relayId ( "modules_discovered", "dist", "list_modules" ) peers
