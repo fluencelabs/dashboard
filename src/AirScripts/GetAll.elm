@@ -115,7 +115,7 @@ air peerId relayId peers =
 askAllAndSend : String -> Air
 askAllAndSend var =
     seq
-        (callBI var ( "op", "identify" ) [] (Just "ident"))
+        (callBI var ( "peer", "identify" ) [] (Just "ident"))
         (seq
             (callBI var ( "dist", "get_blueprints" ) [] (Just "blueprints"))
             (seq
