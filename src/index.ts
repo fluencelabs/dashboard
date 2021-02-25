@@ -42,10 +42,10 @@ function event(
     name: string,
     peer: string,
     peers?: string[],
-    identify?: string[],
+    identify?: any,
     services?: any[],
-    blueprints?: any[],
     modules?: any[],
+    blueprints?: any[],
 ) {
     if (!peers) {
         peers = null;
@@ -96,7 +96,7 @@ function event(
             let services = args[2];
             let blueprints = args[3];
             let modules = args[4];
-            let eventRaw: any = {
+            let eventRaw = {
                 peerId: peerId,
                 identify: identify,
                 services: services,
@@ -104,9 +104,10 @@ function event(
                 modules: modules,
             }
 
-            const inputEvent: any = eventType.cast(eventRaw);
+            const inputEventRaw: any = eventType.cast(eventRaw);
+            const inputEvent = inputEventRaw as EventType;
 
-            app.ports.eventReceiver.send(event('all_info', inputEvent.peerId, undefined, inputEvent.identify.external_addresses, inputEvent.services, inputEvent.blueprints, inputEvent.modules));
+            app.ports.eventReceiver.send(event('all_info', inputEvent.peerId, undefined, inputEvent.identify, inputEvent.services, inputEvent.modules, inputEvent.blueprints));
         } catch (err) {
             log.error('Elm eventreceiver failed: ', err);
         }

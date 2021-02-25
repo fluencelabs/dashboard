@@ -24,6 +24,6 @@ type alias Interface =
 type alias Service =
     { id : String
     , blueprint_id : String
-    , interface : Interface
+    --, interface : Interface
     , owner_id : String
     }
