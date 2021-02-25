@@ -22,6 +22,7 @@ import { Node, dev, testNet } from '@fluencelabs/fluence-network-environment';
 import { createClient, generatePeerId, Particle, sendParticle, subscribeToEvent } from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
+import {EventType, eventType} from "./types";
 
 const relayIdx = 3;
 
@@ -43,8 +44,8 @@ function event(
     peers?: string[],
     identify?: string[],
     services?: any[],
-    blueprints?: string[],
-    modules?: string[],
+    blueprints?: any[],
+    modules?: any[],
 ) {
     if (!peers) {
         peers = null;
@@ -90,7 +91,22 @@ function event(
 
     subscribeToEvent(client, 'event', 'all_info', (args, _tetraplets) => {
         try {
-            app.ports.eventReceiver.send(event('all_info', args[0], undefined, args[1], args[2], args[3], args[4]));
+            let peerId = args[0];
+            let identify = args[1];
+            let services = args[2];
+            let blueprints = args[3];
+            let modules = args[4];
+            let eventRaw: any = {
+                peerId: peerId,
+                identify: identify,
+                services: services,
+                blueprints: blueprints,
+                modules: modules,
+            }
+
+            const inputEvent: EventType = eventType.cast(eventRaw);
+
+            app.ports.eventReceiver.send(event('all_info', inputEvent.peerId, undefined, inputEvent.identify.external_addresses, inputEvent.services, inputEvent.blueprints, inputEvent.modules));
         } catch (err) {
             log.error('Elm eventreceiver failed: ', err);
         }
