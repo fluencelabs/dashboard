@@ -1,4 +1,4 @@
-export const SCRIPT: string = `
+export const SCRIPT = `
 (seq
     (call %init_peer_id% ("" "load") ["relayId"] relayId)
     (seq
@@ -53,11 +53,11 @@ export const SCRIPT: string = `
                     (seq
                         (call relayId ("op" "identity") [])
                         (seq
-                            (call relayId ("dht" "neighborhood") [clientId] neigh)
+                            (call relayId ("kad" "neighborhood") [clientId] neigh)
                             (fold neigh n
                                 (par
                                     (seq
-                                        (call n ("dht" "neighborhood") [clientId] moreNeigh)
+                                        (call n ("kad" "neighborhood") [clientId] moreNeigh)
                                         (fold moreNeigh mp
                                             (par
                                                 (seq
@@ -90,4 +90,4 @@ export const SCRIPT: string = `
         )
     )
 )
-`
+`;

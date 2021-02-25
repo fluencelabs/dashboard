@@ -25,7 +25,7 @@ import * as serviceWorker from './serviceWorker';
 
 const relayIdx = 3;
 
-const relays: Node[] = testNet;
+const relays: Node[] = dev;
 // const relays: Node[] = dev;
 
 function genFlags(peerId: string): any {
@@ -67,10 +67,10 @@ function event(
 /* eslint-enable */
 
 (async () => {
-    log.setLevel('silent')
+    log.setLevel('silent');
     const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String());
-    console.log("connect with client: " + pid.toB58String())
+    console.log(`connect with client: ${pid.toB58String()}`);
 
     // If the relay is ever changed, an event shall be sent to elm
     const client = await createClient(relays[relayIdx].multiaddr, pid);
@@ -108,7 +108,7 @@ function event(
 serviceWorker.unregister();
 
 function setLogLevel(level: any) {
-    log.setLevel(level)
+    log.setLevel(level);
 }
 
 declare global {
@@ -118,4 +118,4 @@ declare global {
     }
 }
 
-window.setLogLevel = setLogLevel
+window.setLogLevel = setLogLevel;

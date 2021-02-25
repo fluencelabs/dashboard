@@ -54,11 +54,11 @@ findAndAskNeighboursSchema =
     seq
         (callBI "relayId" ( "op", "identity" ) [] Nothing)
         (seq
-            (callBI "relayId" ( "dht", "neighborhood" ) [ "clientId" ] (Just "neigh"))
+            (callBI "relayId" ( "kad", "neighborhood" ) [ "clientId" ] (Just "neigh"))
             (fold "neigh" "n" <|
                 par
                     (seq
-                        (callBI "n" ( "dht", "neighborhood" ) [ "clientId" ] (Just "moreNeigh"))
+                        (callBI "n" ( "kad", "neighborhood" ) [ "clientId" ] (Just "moreNeigh"))
                         (fold "moreNeigh" "mp" <|
                             par
                                 (askAllAndSend "mp")
