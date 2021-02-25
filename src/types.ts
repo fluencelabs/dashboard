@@ -13,26 +13,22 @@ export const blueprint: SchemaOf<Blueprint> = object({
     facade: string().nullable().notRequired(),
 });
 
-export const mountedBinaries: SchemaOf<MountedBinaries> = object({
-    curl: string().required(),
-});
-
 export const identify: SchemaOf<Identify> = object({
     external_addresses: array(string()).required(),
 });
 
 export const wasi: SchemaOf<Wasi> = object({
-    envs: object().notRequired(),
-    mapped_dirs: object().notRequired(),
-    preopened_files: array(object()).notRequired(),
+    envs: object().notRequired().nullable(),
+    mapped_dirs: object().notRequired().nullable(),
+    preopened_files: array(string()).notRequired().nullable(),
 })
 
 export const config: SchemaOf<Config> = object({
-    logger_enabled: boolean().required(),
-    logging_mask: object().required(),
-    mem_pages_count: number().required(),
-    mounted_binaries: mountedBinaries.required(),
-    wasi: wasi.required(),
+    logger_enabled: boolean().notRequired().nullable(),
+    logging_mask: object().notRequired().nullable(),
+    mem_pages_count: number().notRequired().nullable(),
+    mounted_binaries: object().notRequired().nullable(),
+    wasi: wasi.notRequired().nullable(),
 })
 
 export const module: SchemaOf<Module> = object({
@@ -62,10 +58,6 @@ export interface Blueprint {
     name: string;
 }
 
-export interface MountedBinaries {
-    curl: string;
-}
-
 export interface Wasi {
     envs?: any;
     mapped_dirs?: any;
@@ -73,11 +65,11 @@ export interface Wasi {
 }
 
 export interface Config {
-    logger_enabled: boolean;
+    logger_enabled?: boolean;
     logging_mask?: any;
-    mem_pages_count: number;
-    mounted_binaries: MountedBinaries;
-    wasi: Wasi;
+    mem_pages_count?: number;
+    mounted_binaries?: any;
+    wasi?: Wasi;
 }
 
 export interface Module {

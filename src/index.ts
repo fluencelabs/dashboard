@@ -104,7 +104,7 @@ function event(
                 modules: modules,
             }
 
-            const inputEvent: EventType = eventType.cast(eventRaw);
+            const inputEvent: any = eventType.cast(eventRaw);
 
             app.ports.eventReceiver.send(event('all_info', inputEvent.peerId, undefined, inputEvent.identify.external_addresses, inputEvent.services, inputEvent.blueprints, inputEvent.modules));
         } catch (err) {
