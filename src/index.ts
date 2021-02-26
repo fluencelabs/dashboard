@@ -26,7 +26,7 @@ import {EventType, eventType} from "./types";
 
 const relayIdx = 3;
 
-const relays: Node[] = dev;
+const relays: Node[] = testNet;
 // const relays: Node[] = dev;
 
 function genFlags(peerId: string): any {
