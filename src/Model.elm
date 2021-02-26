@@ -53,6 +53,7 @@ type alias Model =
     , page : Route
     , discoveredPeers : Dict String PeerData
     , modules : Dict String Module
+    , modulesByHash : Dict String Module
     , blueprints : Dict String Blueprint
     , toggledInterface : Maybe String
     , knownPeers : List String

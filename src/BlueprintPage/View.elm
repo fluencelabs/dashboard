@@ -14,6 +14,7 @@ import Modules.Model exposing (Module)
 import Msg exposing (Msg(..))
 import Palette exposing (classes, darkRed, redFont)
 import Service.Model exposing (Interface)
+import List.Unique exposing (..)
 
 
 view : Model -> String -> Html Msg
@@ -49,8 +50,15 @@ blueprintToInfo model id =
     case Dict.get id model.blueprints of
         Just bp ->
             let
+                hashes = bp.dependencies
+                    |> List.map (\d -> String.split ":" d)
+                    |> List.map (\p -> Maybe.withDefault [] (List.tail p))
+                    |> List.map (\p -> Maybe.withDefault "" (List.head p))
                 modules =
                     bp.dependencies |> List.map (\d -> Dict.get d model.modules) |> List.filterMap identity
+                modulesByHash =
+                    hashes |> List.map (\d -> Dict.get d model.modulesByHash) |> List.filterMap identity
+                m = List.Unique.filterDuplicates (List.concat [modules, modulesByHash])
             in
             Just
                 { name = bp.name
@@ -60,7 +68,7 @@ blueprintToInfo model id =
                 , description = getBlueprintDescription bp.name
                 , website = "https://github.com/fluencelabs/"
                 , blueprint = bp
-                , modules = modules
+                , modules = m
                 , openedModule = model.toggledInterface
                 }
 
@@ -82,9 +90,10 @@ viewInfo blueprintInfo =
         , div [ classes "fl w-100 w-80-ns mv3" ] [ span [ classes "fl w-100 black lucida pv1" ] [ text blueprintInfo.description ] ]
         , div [ classes "fl w-100 w-20-ns gray-font mv3" ] [ text "MODULES" ]
         , div [ classes "fl w-100 w-80-ns mv3" ]
-            (blueprintInfo.modules
-                |> List.map (\m -> viewToggledInterface (checkToggle m.name) m.name m.interface)
-            )
+            [text (String.join ", " (blueprintInfo.modules |> List.map (\m -> m.name)))]
+            --(blueprintInfo.modules
+            --    |> List.map (\m -> viewToggledInterface (checkToggle m.name) m.name)
+            --)
         ]
 
 
@@ -93,28 +102,29 @@ alwaysPreventDefault msg =
     { message = msg, stopPropagation = True, preventDefault = True }
 
 
-viewToggledInterface : Bool -> String -> Interface -> Html Msg
-viewToggledInterface isOpen name interface =
+--viewToggledInterface : Bool -> String -> Interface -> Html Msg
+viewToggledInterface : Bool -> String -> Html Msg
+viewToggledInterface isOpen name =
     let
         interfaceViewEl =
             if isOpen then
-                [ div [ classes "fl w-100 ph3" ] (interfaceView interface) ]
-
+                --[ div [ classes "fl w-100 ph3" ] (interfaceView interface) ]
+                []
             else
                 []
     in
     div []
         ([ div [ classes "fl w-100 light-shadow bg-near-white pa2 mv2 pointer", onClick (ToggleInterface name) ]
             [ span [ classes "fl mh2 pv1 tldib v-mid dib v-mid" ] [ text name ]
-            , a [ attribute "href" ("/module/" ++ name), classes "fl dib v-mid mt1" ] [ img [ attribute "src" "/images/link.svg" ] [] ]
-            , div [ classes "fl o-40 f4 fr pr3 dib v-mid" ]
-                [ if isOpen then
-                    text "▲"
-
-                  else
-                    text "▼"
-                ]
+            --, a [ attribute "href" ("/module/" ++ name), classes "fl dib v-mid mt1" ] [ img [ attribute "src" "/images/link.svg" ] [] ]
+            --, div [ classes "fl o-40 f4 fr pr3 dib v-mid" ]
+            --    [ if isOpen then
+            --        text "▲"
+            --
+            --      else
+            --        text "▼"
+            --    ]
             ]
          ]
-            ++ interfaceViewEl
+            --++ interfaceViewEl
         )

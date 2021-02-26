@@ -54,6 +54,7 @@ init flags url key =
             , page = r
             , discoveredPeers = Dict.empty
             , modules = Dict.empty
+            , modulesByHash = Dict.empty
             , blueprints = Dict.empty
             , toggledInterface = Nothing
             , knownPeers = flags.knownPeers

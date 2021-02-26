@@ -117,11 +117,17 @@ updateModel model peer identify services modules blueprints =
         moduleDict =
             modules |> List.map (\m -> ( m.name, m )) |> Dict.fromList
 
+        moduleDictByHash =
+            modules |> List.map (\m -> ( m.hash, m )) |> Dict.fromList
+
         blueprintDict =
             blueprints |> List.map (\b -> ( b.id, b )) |> Dict.fromList
 
         updatedModules =
             Dict.union moduleDict model.modules
+
+        updatedModulesByHash =
+            Dict.union moduleDictByHash model.modulesByHash
 
         updatedBlueprints =
             Dict.union blueprintDict model.blueprints
@@ -132,4 +138,4 @@ updateModel model peer identify services modules blueprints =
         updated =
             Dict.insert peer newData model.discoveredPeers
     in
-    { model | discoveredPeers = updated, modules = updatedModules, blueprints = updatedBlueprints }
+    { model | discoveredPeers = updated, modules = updatedModules, modulesByHash = updatedModulesByHash, blueprints = updatedBlueprints }

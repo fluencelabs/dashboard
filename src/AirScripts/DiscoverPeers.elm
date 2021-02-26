@@ -15,13 +15,13 @@ air peerId relayId =
 
         airScript =
             seq
-                (callBI "relayId" ( "dht", "neighborhood" ) [ "clientId" ] (Just "peers"))
+                (callBI "relayId" ( "kad", "neighborhood" ) [ "clientId" ] (Just "peers"))
                 (par
                     (relayEvent "peers_discovered" [ "relayId", "peers" ])
                     (fold "peers" "p" <|
                         par
                             (seq
-                                (callBI "p" ( "dht", "neighborhood" ) [ "clientId" ] (Just "morePeers"))
+                                (callBI "p" ( "kad", "neighborhood" ) [ "clientId" ] (Just "morePeers"))
                                 (relayEvent "peers_discovered" [ "p", "morePeers" ])
                             )
                             (next "p")

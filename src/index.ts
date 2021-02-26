@@ -22,10 +22,11 @@ import { Node, dev, testNet } from '@fluencelabs/fluence-network-environment';
 import { createClient, generatePeerId, Particle, sendParticle, subscribeToEvent } from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
+import {EventType, eventType} from "./types";
 
 const relayIdx = 3;
 
-const relays: Node[] = testNet;
+const relays: Node[] = dev;
 // const relays: Node[] = dev;
 
 function genFlags(peerId: string): any {
@@ -41,10 +42,10 @@ function event(
     name: string,
     peer: string,
     peers?: string[],
-    identify?: string[],
+    identify?: any,
     services?: any[],
-    blueprints?: string[],
-    modules?: string[],
+    modules?: any[],
+    blueprints?: any[],
 ) {
     if (!peers) {
         peers = null;
@@ -67,10 +68,10 @@ function event(
 /* eslint-enable */
 
 (async () => {
-    log.setLevel('silent')
+    log.setLevel('silent');
     const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String());
-    console.log("connect with client: " + pid.toB58String())
+    console.log(`connect with client: ${pid.toB58String()}`);
 
     // If the relay is ever changed, an event shall be sent to elm
     const client = await createClient(relays[relayIdx].multiaddr, pid);
@@ -90,7 +91,23 @@ function event(
 
     subscribeToEvent(client, 'event', 'all_info', (args, _tetraplets) => {
         try {
-            app.ports.eventReceiver.send(event('all_info', args[0], undefined, args[1], args[2], args[3], args[4]));
+            let peerId = args[0];
+            let identify = args[1];
+            let services = args[2];
+            let blueprints = args[3];
+            let modules = args[4];
+            let eventRaw = {
+                peerId: peerId,
+                identify: identify,
+                services: services,
+                blueprints: blueprints,
+                modules: modules,
+            }
+
+            const inputEventRaw: any = eventType.cast(eventRaw);
+            const inputEvent = inputEventRaw as EventType;
+
+            app.ports.eventReceiver.send(event('all_info', inputEvent.peerId, undefined, inputEvent.identify, inputEvent.services, inputEvent.modules, inputEvent.blueprints));
         } catch (err) {
             log.error('Elm eventreceiver failed: ', err);
         }
@@ -108,7 +125,7 @@ function event(
 serviceWorker.unregister();
 
 function setLogLevel(level: any) {
-    log.setLevel(level)
+    log.setLevel(level);
 }
 
 declare global {
@@ -118,4 +135,4 @@ declare global {
     }
 }
 
-window.setLogLevel = setLogLevel
+window.setLogLevel = setLogLevel;

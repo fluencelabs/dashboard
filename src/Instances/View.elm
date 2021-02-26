@@ -30,7 +30,7 @@ toInstance peerId identify blueprints service =
                 --|> Maybe.andThen List.head
                 |> Maybe.withDefault "unknown"
     in
-    { name = name, blueprintId = blueprintId, instance = service.service_id, peerId = peerId, ip = ip }
+    { name = name, blueprintId = blueprintId, instance = service.id, peerId = peerId, ip = ip }
 
 
 view : Model -> (Service -> Bool) -> ( Int, Html msg )

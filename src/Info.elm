@@ -42,6 +42,7 @@ modulesDescription =
         , ( "curl_adapter", { site = "https://github.com/fluencelabs/fce/tree/master/examples/url-downloader/facade", description = "Adapter module for cURL CLI utility" } )
         , ( "url_downloader", { site = "https://github.com/fluencelabs/fce/tree/master/examples/url-downloader/facade", description = "Adapter module for cURL CLI utility" } )
         , ( "facade_url_downloader", { site = "https://github.com/fluencelabs/fce/tree/master/examples/url-downloader/facade", description = "Adapter module for cURL CLI utility" } )
+        , ( "curl_template", { site = "https://github.com/fluencelabs/examples/tree/main/curl_template", description = "Template service to start hacking on Fluence with curl" } )
         ]
 
 
@@ -53,4 +54,7 @@ blueprintsDescription =
         , ( "User List", { description = "Basically an address book. Used in the Chat application to store chat users" } )
         , ( "Redis", { description = "Popular NoSQL K/V storage compiled to WebAssembly, stores data in memory" } )
         , ( "URL Downloader", { description = "cURL adapter, allows to download anything by URL" } )
+        , ( "history", { description = "Stores message log, used in History service" } )
+        , ( "userlist", { description = "Address book implementation module, used in User List service" } )
+        , ( "curl_template", { description = "Template service to start hacking on Fluence with curl" } )
         ]
