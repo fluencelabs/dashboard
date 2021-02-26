@@ -82,10 +82,7 @@ empty =
 viewInfo : ModuleViewInfo -> Html msg
 viewInfo moduleInfo =
     article [ classes "cf" ]
-        [ div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "HASH" ]
-        , div [ classes "fl w-100 w-80-ns mv3" ]
-          [ span [ classes "fl w-100 black b lucida" ] [ text moduleInfo.moduleInfo.hash ] ]
-        , div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "AUTHOR" ]
+        [ div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "AUTHOR" ]
         , div [ classes "fl w-100 w-80-ns mv3" ]
             [ span [ classes "fl w-100 black b lucida" ] [ text moduleInfo.author ] ]
         , div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "WEBSITE" ]
@@ -99,6 +96,7 @@ viewInfo moduleInfo =
         , div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "DESCRIPTION" ]
         , div [ classes "fl w-100 w-80-ns mv3 lucida" ]
             [ span [ classes "fl w-100 black", property "innerHTML" (string "&nbsp;123") ] [ text moduleInfo.description ] ]
+
         --, div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "INTERFACE" ]
         --, div [ classes "fl w-100 w-80-ns mv3" ]
         --    [ span [ classes "fl w-100 black" ] (interfaceView moduleInfo.moduleInfo.interface) ]

@@ -14,22 +14,28 @@ import Utils.Utils exposing (instancesText)
 
 getModuleShortInfo : Model -> List ModuleShortInfo
 getModuleShortInfo model =
-    getAllModules model.blueprints model.modules model.discoveredPeers
-        |> Dict.toList
-        |> List.map (\( _, ( moduleInfo, services ) ) -> { moduleInfo = moduleInfo, instanceNumber = List.length services })
+    let
+        all = getAllModules model.blueprints model.modules model.modulesByHash model.discoveredPeers
+        res = all
+                    |> Dict.toList
+                    |> List.map (\( _, ( moduleInfo, services ) ) -> { moduleInfo = moduleInfo, instanceNumber = List.length services })
+
+    in
+        res
 
 
-getAllModules : Dict String Blueprint -> Dict String Module -> Dict String PeerData -> Dict String ( Module, List Service )
-getAllModules blueprints modules peerData =
+
+getAllModules : Dict String Blueprint -> Dict String Module -> Dict String Module -> Dict String PeerData -> Dict String ( Module, List Service )
+getAllModules blueprints modules modulesByHash peerData =
     let
         peerDatas =
             Dict.toList peerData
 
         allModulesByPeers =
-            peerDatas |> List.map (\( _, pd ) -> pd.modules |> List.map (\ms -> ( pd, ms ))) |> List.concat
+            peerDatas |> List.map (\( _, pd ) -> pd.modules |> List.map (\ms -> ( pd, ms, Maybe.withDefault "" (Maybe.map .hash (modules |> Dict.get ms)) ))) |> List.concat
 
         peersByModuleName =
-            allModulesByPeers |> List.foldr (updateDict blueprints modules) Dict.empty
+            allModulesByPeers |> List.foldr (updateDict blueprints modules modulesByHash) Dict.empty
     in
     peersByModuleName
 
@@ -38,26 +44,60 @@ getAllModules blueprints modules peerData =
 -- group by module name and append peers
 
 
-updateDict : Dict String Blueprint -> Dict String Module -> ( PeerData, String ) -> Dict String ( Module, List Service ) -> Dict String ( Module, List Service )
-updateDict blueprints modules ( peerData, moduleName ) dict =
+updateDict : Dict String Blueprint -> Dict String Module -> Dict String Module -> ( PeerData, String, String ) -> Dict String ( Module, List Service ) -> Dict String ( Module, List Service )
+updateDict blueprints modules modulesByHash ( peerData, moduleName, moduleHash ) dict =
     let
-        filter =
+        filterByHash =
+            \hash -> \list -> list |> List.filter (filterByModuleHash blueprints hash)
+
+        filterByName =
             \name -> \list -> list |> List.filter (filterByModuleName blueprints name)
+
+        allModules =
+            Dict.union modules modulesByHash
+
+        dictNames =
+            dict
+                |> Dict.update moduleName
+                    (\oldM ->
+                        Maybe.Extra.or
+                            (oldM |> Maybe.map (\( info, services ) -> ( info, List.concat [ filterByHash moduleHash peerData.services, filterByName info.name peerData.services, services ] )))
+                            (Dict.get moduleName allModules |> Maybe.map (\m -> ( m, List.append (filterByHash moduleHash peerData.services) (filterByName m.name peerData.services) )))
+                    )
     in
-    dict
-        |> Dict.update moduleName
-            (\oldM ->
-                Maybe.Extra.or
-                    (oldM |> Maybe.map (\( info, services ) -> ( info, List.append (filter info.name peerData.services) services )))
-                    (Dict.get moduleName modules |> Maybe.map (\m -> ( m, filter m.name peerData.services )))
-            )
+    dictNames
 
 
 filterByModuleName : Dict String Blueprint -> String -> (Service -> Bool)
 filterByModuleName bps moduleName =
     let
+        names =
+            \bp ->
+                bp.dependencies
+                    |> List.map (\d -> String.split ":" d)
+                    |> List.map (\p -> Maybe.withDefault [] (List.tail p))
+                    |> List.map (\p -> Maybe.withDefault "" (List.head p))
         check =
-            Maybe.map (\bp -> bp.dependencies |> List.member moduleName)
+            Maybe.map (\bp -> names bp |> List.member moduleName)
+
+        filter =
+            \s -> bps |> Dict.get s.blueprint_id |> check |> Maybe.withDefault False
+    in
+    filter
+
+
+filterByModuleHash : Dict String Blueprint -> String -> (Service -> Bool)
+filterByModuleHash bps moduleHash =
+    let
+        hashes =
+            \bp ->
+                bp.dependencies
+                    |> List.map (\d -> String.split ":" d)
+                    |> List.map (\p -> Maybe.withDefault [] (List.tail p))
+                    |> List.map (\p -> Maybe.withDefault "" (List.head p))
+
+        check =
+            Maybe.map (\bp -> hashes bp |> List.member moduleHash)
 
         filter =
             \s -> bps |> Dict.get s.blueprint_id |> check |> Maybe.withDefault False
