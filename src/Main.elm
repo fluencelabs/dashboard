@@ -23,6 +23,7 @@ import Dict
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Route
+import Spinner
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
 import Url
@@ -59,6 +60,7 @@ init flags url key =
             , toggledInterface = Nothing
             , knownPeers = flags.knownPeers
             , isInitialized = False
+            , spinner = Spinner.init
             }
     in
     ( emptyModel, Route.routeCommand emptyModel r )

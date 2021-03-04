@@ -9,6 +9,7 @@ import Model exposing (Model)
 import Nodes.Model exposing (Identify)
 import Palette exposing (classes, shortHashRaw)
 import Service.Model exposing (Service)
+import SpinnerView exposing (spinner)
 
 
 toInstance : String -> Identify -> Dict String Blueprint -> Service -> Instance
@@ -45,8 +46,15 @@ view model filter =
                             |> List.map (toInstance peer data.identify model.blueprints)
                     )
                 |> List.concat
+
+        finalView =
+            if List.length instances == 0 then
+                Html.div [] (spinner model)
+
+            else
+                viewTable instances
     in
-    ( List.length instances, viewTable instances )
+    ( List.length instances, finalView )
 
 
 viewTable : List Instance -> Html msg

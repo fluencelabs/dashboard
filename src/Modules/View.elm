@@ -9,20 +9,22 @@ import Model exposing (Model, PeerData)
 import Modules.Model exposing (Module, ModuleShortInfo)
 import Palette exposing (classes)
 import Service.Model exposing (Service)
+import SpinnerView exposing (spinner)
 import Utils.Utils exposing (instancesText)
 
 
 getModuleShortInfo : Model -> List ModuleShortInfo
 getModuleShortInfo model =
     let
-        all = getAllModules model.blueprints model.modules model.modulesByHash model.discoveredPeers
-        res = all
-                    |> Dict.toList
-                    |> List.map (\( _, ( moduleInfo, services ) ) -> { moduleInfo = moduleInfo, instanceNumber = List.length services })
+        all =
+            getAllModules model.blueprints model.modules model.modulesByHash model.discoveredPeers
 
+        res =
+            all
+                |> Dict.toList
+                |> List.map (\( _, ( moduleInfo, services ) ) -> { moduleInfo = moduleInfo, instanceNumber = List.length services })
     in
-        res
-
+    res
 
 
 getAllModules : Dict String Blueprint -> Dict String Module -> Dict String Module -> Dict String PeerData -> Dict String ( Module, List Service )
@@ -77,6 +79,7 @@ filterByModuleName bps moduleName =
                     |> List.map (\d -> String.split ":" d)
                     |> List.map (\p -> Maybe.withDefault [] (List.tail p))
                     |> List.map (\p -> Maybe.withDefault "" (List.head p))
+
         check =
             Maybe.map (\bp -> names bp |> List.member moduleName)
 
@@ -106,15 +109,22 @@ filterByModuleHash bps moduleHash =
 
 
 view : Model -> Html msg
-view modules =
+view model =
     let
         info =
-            getModuleShortInfo modules
+            getModuleShortInfo model
 
         modulesView =
             List.map viewService info
+
+        finalView =
+            if List.length modulesView == 0 then
+                spinner model
+
+            else
+                modulesView
     in
-    div [ classes "cf" ] modulesView
+    div [ classes "cf" ] finalView
 
 
 viewService : ModuleShortInfo -> Html msg

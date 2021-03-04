@@ -7,6 +7,7 @@ import Html.Attributes exposing (attribute)
 import Model exposing (Model, PeerData)
 import Palette exposing (classes)
 import Service.Model exposing (Service)
+import SpinnerView exposing (spinner)
 import Utils.Utils exposing (servicesText)
 
 
@@ -33,8 +34,15 @@ view model =
 
         servicesView =
             List.map viewService info
+
+        finalView =
+            if List.length servicesView == 0 then
+                spinner model
+
+            else
+                servicesView
     in
-    div [ classes "cf" ] servicesView
+    div [ classes "cf" ] finalView
 
 
 viewService : BlueprintInfo -> Html msg

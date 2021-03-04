@@ -22,6 +22,7 @@ import Dict exposing (Dict)
 import Modules.Model exposing (Module)
 import Nodes.Model exposing (Identify, emptyIdentify)
 import Service.Model exposing (Service)
+import Spinner
 import Url
 
 
@@ -58,4 +59,5 @@ type alias Model =
     , toggledInterface : Maybe String
     , knownPeers : List String
     , isInitialized : Bool
+    , spinner : Spinner.Model
     }

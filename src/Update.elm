@@ -29,6 +29,7 @@ import Nodes.Model exposing (Identify)
 import Port exposing (sendAir)
 import Route exposing (getAllCmd)
 import Service.Model exposing (Service)
+import Spinner
 import Url
 
 
@@ -106,6 +107,15 @@ update msg model =
 
         Reload ->
             ( model, sendAir (GetAll.air model.peerId model.relayId model.knownPeers) )
+
+        SpinnerMsg spinnerMsg ->
+            let
+                spinnerModel =
+                    Spinner.update spinnerMsg model.spinner
+            in
+            ( { model | spinner = spinnerModel }
+            , Cmd.none
+            )
 
 
 updateModel : Model -> String -> Identify -> List Service -> List Module -> List Blueprint -> Model
