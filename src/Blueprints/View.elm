@@ -17,10 +17,6 @@ view model =
         allBps =
             getBlueprintsToServices model.blueprints model.discoveredPeers
 
-        -- TODO HACK: this is a hack to filter bloat blueprints until we have a predefined list of good ones
-        filteredBps =
-            Dict.values allBps |> List.filter (\( _, services ) -> List.length services > 3)
-
         info =
             List.map
                 (\( bp, servicesByPeers ) ->
@@ -30,10 +26,13 @@ view model =
                     , instanceNumber = List.length (servicesByPeers |> List.map (\( _, s ) -> s) |> List.concat)
                     }
                 )
-                filteredBps
+                (Dict.values allBps)
+
+        -- TODO HACK: this is a hack to filter bloat blueprints until we have a predefined list of good ones
+        filtered = List.filter (\service -> service.instanceNumber > 3) info
 
         servicesView =
-            List.map viewService info
+            List.map viewService filtered
 
         finalView =
             if List.length servicesView == 0 then
