@@ -5,6 +5,7 @@ import Html exposing (Html, div, p, table, tbody, td, text, th, thead, tr)
 import Html.Attributes exposing (attribute)
 import Model exposing (Model)
 import Palette exposing (classes, redFont)
+import SpinnerView exposing (spinner)
 
 
 type alias Node =
@@ -19,13 +20,21 @@ view model =
     let
         nodes =
             modelToNodes model
+
+        finalView =
+            if List.isEmpty nodes then
+                spinner model
+
+            else
+                [ div [ classes "fl w-100 cf ph2-ns" ]
+                    [ div [ classes "fl w-100 mb2 pt4 pb4" ]
+                        [ div [ redFont, classes "f1 fw4 pt3" ] [ text "Network Nodes" ]
+                        ]
+                    , div [ classes "fl w-100 mt2 mb4 bg-white br3" ] [ nodesView nodes ]
+                    ]
+                ]
     in
-    div [ classes "fl w-100 cf ph2-ns" ]
-        [ div [ classes "fl w-100 mb2 pt4 pb4" ]
-            [ div [ redFont, classes "f1 fw4 pt3" ] [ text "Network Nodes" ]
-            ]
-        , div [ classes "fl w-100 mt2 mb4 bg-white br3" ] [ nodesView nodes ]
-        ]
+    div [] finalView
 
 
 modelToNodes : Model -> List Node

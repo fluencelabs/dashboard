@@ -118,7 +118,7 @@ view model =
             List.map viewService info
 
         finalView =
-            if List.length modulesView == 0 then
+            if List.isEmpty modulesView then
                 spinner model
 
             else

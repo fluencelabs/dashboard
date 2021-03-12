@@ -35,7 +35,7 @@ view model =
             List.map viewService filtered
 
         finalView =
-            if List.length servicesView == 0 then
+            if List.isEmpty servicesView then
                 spinner model
 
             else

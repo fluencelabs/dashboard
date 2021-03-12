@@ -8,13 +8,13 @@ import Html.Attributes exposing (attribute)
 import Html.Events exposing (onClick)
 import Info exposing (getBlueprintDescription)
 import Instances.View
-import Interface.View exposing (interfaceView)
 import List.Unique exposing (..)
 import Model exposing (Model)
 import Modules.Model exposing (Module)
 import Msg exposing (Msg(..))
 import Palette exposing (classes, darkRed, redFont)
 import Service.Model exposing (Interface)
+import SpinnerView exposing (spinner)
 
 
 view : Model -> String -> Html Msg
@@ -41,8 +41,8 @@ view model id =
                 ]
 
         Nothing ->
-            div [ classes "cf ph2-ns" ]
-                []
+            div [ classes "cf ph2-ns mt6" ]
+                (spinner model)
 
 
 blueprintToInfo : Model -> String -> Maybe BlueprintViewInfo

@@ -11,6 +11,7 @@ import Model exposing (Model)
 import ModulePage.Model exposing (ModuleViewInfo)
 import Modules.Model exposing (Module)
 import Palette exposing (classes, redFont)
+import SpinnerView exposing (spinner)
 
 
 view : Model -> String -> Html msg
@@ -41,8 +42,8 @@ view model id =
                 ]
 
         Nothing ->
-            div [ classes "cf ph2-ns" ]
-                []
+            div [ classes "cf ph2-ns mt6" ]
+                (spinner model)
 
 
 moduleToInfo : Dict String Module -> String -> Maybe ModuleViewInfo

@@ -48,7 +48,7 @@ view model filter =
                 |> List.concat
 
         finalView =
-            if List.length instances == 0 then
+            if List.isEmpty instances then
                 Html.div [] (spinner model)
 
             else
