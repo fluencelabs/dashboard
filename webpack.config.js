@@ -121,6 +121,11 @@ if (MODE === 'development') {
                 });
             },
         },
+        plugins: [
+            new CopyWebpackPlugin({
+                patterns: [{ from: './images/*.*' }],
+            }),
+        ],
     });
 }
 

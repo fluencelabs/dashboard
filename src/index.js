@@ -59,7 +59,7 @@ function event(name, peer, peers, identify, services, modules, blueprints) {
 /* eslint-enable */
 
 (async () => {
-    log.setLevel('silent');
+    // log.setLevel('silent');
     const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String());
     console.log(`connect with client: ${pid.toB58String()}`);
