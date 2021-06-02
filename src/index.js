@@ -22,6 +22,7 @@ import { dev, testNet } from '@fluencelabs/fluence-network-environment';
 import { createClient, generatePeerId, Particle, sendParticle, subscribeToEvent } from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
+import { eventType } from './types';
 
 const relayIdx = 3;
 
