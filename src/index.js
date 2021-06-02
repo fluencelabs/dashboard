@@ -19,7 +19,14 @@ import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
 import { dev, testNet } from '@fluencelabs/fluence-network-environment';
-import { createClient, generatePeerId, Particle, sendParticle, subscribeToEvent } from '@fluencelabs/fluence';
+import {
+    createClient,
+    generatePeerId,
+    Particle,
+    sendParticle,
+    subscribeToEvent,
+    setLogLevel,
+} from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { eventType } from './types';
@@ -60,7 +67,8 @@ function event(name, peer, peers, identify, services, modules, blueprints) {
 /* eslint-enable */
 
 (async () => {
-    // log.setLevel('silent');
+    setLogLevel('silent');
+
     const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String());
     console.log(`connect with client: ${pid.toB58String()}`);
@@ -97,6 +105,8 @@ function event(name, peer, peers, identify, services, modules, blueprints) {
             };
 
             const inputEvent = eventType.cast(eventRaw);
+
+            console.log(eventRaw);
 
             app.ports.eventReceiver.send(
                 event(
