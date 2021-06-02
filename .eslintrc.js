@@ -16,14 +16,40 @@ module.exports = {
         'plugin:prettier/recommended',
     ],
     plugins: ['@typescript-eslint', 'prettier'],
-    rules: {},
+    rules: {
+        'func-names': ['error', 'as-needed'],
+        'prefer-destructuring': 'off',
+        'object-shorthand': ['error', 'consistent-as-needed'],
+        'no-restricted-syntax': ['error', 'ForInStatement', 'LabeledStatement', 'WithStatement'],
+
+        'import/prefer-default-export': 'off',
+        'import/extensions': [
+            'error',
+            'ignorePackages',
+            {
+                js: 'never',
+                mjs: 'never',
+                jsx: 'never',
+                ts: 'never',
+                tsx: 'never',
+            },
+        ],
+        'no-unused-vars': 'off',
+        '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_', argsIgnorePattern: '^_' }],
+        '@typescript-eslint/no-explicit-any': 'off',
+
+        // should be overriden for current project only
+        'no-param-reassign': ['error', { props: false }],
+        'no-console': 'off',
+        '@typescript-eslint/explicit-module-boundary-types': 'off',
+    },
     settings: {
-        // 'import/resolver': {
-        // browser: {
-        // extensions: ['.js', '.js', '.ts', '.ts', '.css', '.elm'],
-        // paths: ['src'],
-        // },
-        // },
-        'import/extensions': ['.js', '.ts'],
+        'import/extensions': ['.js', '.ts', '.jsx', '.tsx'],
+        'import/resolver': {
+            typescript: {},
+            node: {
+                paths: ['src'],
+            },
+        },
     },
 };
