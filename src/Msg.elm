@@ -2,7 +2,6 @@ module Msg exposing (..)
 
 import Browser exposing (UrlRequest)
 import Port
-import Spinner
 import Url
 
 
@@ -13,5 +12,4 @@ type Msg
     | AquamarineEvent Port.ReceiveEvent
     | RelayChanged String
     | ToggleInterface String
-    | SpinnerMsg Spinner.Msg
     | Reload

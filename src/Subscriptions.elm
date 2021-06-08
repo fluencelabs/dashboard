@@ -19,12 +19,10 @@ limitations under the License.
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Port exposing (eventReceiver)
-import Spinner
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ eventReceiver AquamarineEvent
-        , Sub.map SpinnerMsg Spinner.subscription
         ]

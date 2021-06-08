@@ -15,6 +15,7 @@
  */
 
 import 'tachyons/css/tachyons.min.css';
+import 'css-spinners/dist/all.min.css';
 import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
