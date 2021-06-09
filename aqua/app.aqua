@@ -1,0 +1,3 @@
+func helloWorld(arg: string, fn: string -> string) -> string:
+    res <- fn(arg)
+    <- res
