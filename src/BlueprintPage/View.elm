@@ -3,7 +3,7 @@ module BlueprintPage.View exposing (..)
 import BlueprintPage.Model exposing (BlueprintViewInfo)
 import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
-import Html exposing (Html, a, article, div, img, span, text)
+import Html exposing (Html, a, article, div, img, span, strong, text)
 import Html.Attributes exposing (attribute)
 import Html.Events exposing (onClick)
 import Info exposing (getBlueprintDescription)
@@ -81,6 +81,19 @@ blueprintToInfo model id =
             Nothing
 
 
+
+-- TODO:: do this for all possible places which could be empty
+
+
+textOrBsp : String -> String
+textOrBsp text =
+    if text == "" then
+        String.fromChar (Char.fromCode 0xA0)
+
+    else
+        text
+
+
 viewInfo : BlueprintViewInfo -> Html Msg
 viewInfo blueprintInfo =
     let
@@ -88,14 +101,19 @@ viewInfo blueprintInfo =
             \id -> blueprintInfo.openedModule |> Maybe.map (\om -> om == id) |> Maybe.withDefault False
     in
     article [ classes "cf" ]
-        [ div [ classes "fl w-100 w-20-ns gray-font mv3" ] [ text "AUTHOR" ]
-        , div [ classes "fl w-100 w-80-ns mv3 lucida" ]
-            [ span [ classes "fl w-100 black b" ] [ text blueprintInfo.author ] ]
-        , div [ classes "fl w-100 w-20-ns gray-font mv3" ] [ text "DESCRIPTION" ]
-        , div [ classes "fl w-100 w-80-ns mv3" ] [ span [ classes "fl w-100 black lucida pv1" ] [ text blueprintInfo.description ] ]
-        , div [ classes "fl w-100 w-20-ns gray-font mv3" ] [ text "MODULES" ]
-        , div [ classes "fl w-100 w-80-ns mv3" ]
-            [ text (String.join ", " (blueprintInfo.modules |> List.map (\m -> m.name))) ]
+        [ div [ classes "fl w-20-ns gray-font mv3" ] [ text "AUTHOR" ]
+        , div [ classes "fl w-80-ns mv3 lucida" ]
+            [ span [ classes "fl black b" ] [ text (textOrBsp blueprintInfo.author) ] ]
+        , div [ classes "fl w-20-ns gray-font mv3" ] [ text "DESCRIPTION" ]
+        , div [ classes "fl w-80-ns mv3 cf" ]
+            [ span [ classes "fl black lucida pv1" ] [ text (textOrBsp blueprintInfo.description) ] ]
+        , div [ classes "fl w-20-ns gray-font mv3" ] [ text "MODULES" ]
+        , div [ classes "fl w-80-ns mv3" ]
+            [ text
+                (textOrBsp
+                    (String.join ", " (blueprintInfo.modules |> List.map (\m -> m.name)))
+                )
+            ]
 
         --(blueprintInfo.modules
         --    |> List.map (\m -> viewToggledInterface (checkToggle m.name) m.name)

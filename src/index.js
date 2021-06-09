@@ -15,21 +15,29 @@
  */
 
 import 'tachyons/css/tachyons.min.css';
+import 'css-spinners/dist/all.min.css';
 import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
-import { Node, dev, testNet } from '@fluencelabs/fluence-network-environment';
-import { createClient, generatePeerId, Particle, sendParticle, subscribeToEvent } from '@fluencelabs/fluence';
+import { dev, testNet } from '@fluencelabs/fluence-network-environment';
+import {
+    createClient,
+    generatePeerId,
+    Particle,
+    sendParticle,
+    subscribeToEvent,
+    setLogLevel,
+} from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
-import {EventType, eventType} from "./types";
+import { eventType } from './types';
 
 const relayIdx = 3;
 
-const relays: Node[] = testNet;
-// const relays: Node[] = dev;
+const relays = testNet;
+// const relays = dev;
 
-function genFlags(peerId: string): any {
+function genFlags(peerId) {
     return {
         peerId,
         relayId: relays[relayIdx].peerId,
@@ -38,15 +46,7 @@ function genFlags(peerId: string): any {
 }
 
 /* eslint-disable */
-function event(
-    name: string,
-    peer: string,
-    peers?: string[],
-    identify?: any,
-    services?: any[],
-    modules?: any[],
-    blueprints?: any[],
-) {
+function event(name, peer, peers, identify, services, modules, blueprints) {
     if (!peers) {
         peers = null;
     }
@@ -68,7 +68,8 @@ function event(
 /* eslint-enable */
 
 (async () => {
-    log.setLevel('silent');
+    setLogLevel('SILENT');
+
     const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String());
     console.log(`connect with client: ${pid.toB58String()}`);
@@ -78,7 +79,7 @@ function event(
 
     const app = Elm.Main.init({
         node: document.getElementById('root'),
-        flags,
+        flags: flags,
     });
 
     subscribeToEvent(client, 'event', 'peers_discovered', (args, _tetraplets) => {
@@ -91,29 +92,38 @@ function event(
 
     subscribeToEvent(client, 'event', 'all_info', (args, _tetraplets) => {
         try {
-            let peerId = args[0];
-            let identify = args[1];
-            let services = args[2];
-            let blueprints = args[3];
-            let modules = args[4];
-            let eventRaw = {
-                peerId: peerId,
-                identify: identify,
-                services: services,
-                blueprints: blueprints,
-                modules: modules,
-            }
+            const peerId = args[0];
+            const identify = args[1];
+            const services = args[2];
+            const blueprints = args[3];
+            const modules = args[4];
+            const eventRaw = {
+                peerId,
+                identify,
+                services,
+                blueprints,
+                modules,
+            };
 
-            const inputEventRaw: any = eventType.cast(eventRaw);
-            const inputEvent = inputEventRaw as EventType;
+            const inputEvent = eventType.cast(eventRaw);
 
-            app.ports.eventReceiver.send(event('all_info', inputEvent.peerId, undefined, inputEvent.identify, inputEvent.services, inputEvent.modules, inputEvent.blueprints));
+            app.ports.eventReceiver.send(
+                event(
+                    'all_info',
+                    inputEvent.peerId,
+                    undefined,
+                    inputEvent.identify,
+                    inputEvent.services,
+                    inputEvent.modules,
+                    inputEvent.blueprints,
+                ),
+            );
         } catch (err) {
             log.error('Elm eventreceiver failed: ', err);
         }
     });
 
-    app.ports.sendParticle.subscribe(async (part: { script: string; data: any }) => {
+    app.ports.sendParticle.subscribe(async (part) => {
         const particle = new Particle(part.script, part.data, 45000);
         await sendParticle(client, particle);
     });
@@ -123,16 +133,3 @@ function event(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
-
-function setLogLevel(level: any) {
-    log.setLevel(level);
-}
-
-declare global {
-    interface Window {
-        test: any;
-        setLogLevel: any;
-    }
-}
-
-window.setLogLevel = setLogLevel;

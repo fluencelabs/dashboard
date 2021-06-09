@@ -3,6 +3,11 @@ module Utils.Utils exposing (..)
 import Html exposing (Html)
 
 
+hashValueFromString : String -> String
+hashValueFromString x =
+    x |> String.split ":" |> List.tail |> Maybe.andThen List.head |> Maybe.withDefault ""
+
+
 instancesText : Int -> Html msg
 instancesText num =
     let
