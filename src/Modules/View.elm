@@ -76,9 +76,7 @@ filterByModuleName bps moduleName =
         names =
             \bp ->
                 bp.dependencies
-                    |> List.map (\d -> String.split ":" d)
-                    |> List.map (\p -> Maybe.withDefault [] (List.tail p))
-                    |> List.map (\p -> Maybe.withDefault "" (List.head p))
+                    |> List.map Utils.Utils.hashValueFromString
 
         check =
             Maybe.map (\bp -> names bp |> List.member moduleName)
@@ -95,9 +93,7 @@ filterByModuleHash bps moduleHash =
         hashes =
             \bp ->
                 bp.dependencies
-                    |> List.map (\d -> String.split ":" d)
-                    |> List.map (\p -> Maybe.withDefault [] (List.tail p))
-                    |> List.map (\p -> Maybe.withDefault "" (List.head p))
+                    |> List.map Utils.Utils.hashValueFromString
 
         check =
             Maybe.map (\bp -> hashes bp |> List.member moduleHash)

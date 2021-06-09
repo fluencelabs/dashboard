@@ -1,5 +1,6 @@
 module ModulePage.View exposing (..)
 
+import Debug exposing (toString)
 import Dict exposing (Dict)
 import Html exposing (Html, a, article, div, span, text)
 import Html.Attributes exposing (attribute, property)
@@ -12,6 +13,7 @@ import ModulePage.Model exposing (ModuleViewInfo)
 import Modules.Model exposing (Module)
 import Palette exposing (classes, redFont)
 import SpinnerView exposing (spinner)
+import Utils.Utils exposing (hashValueFromString)
 
 
 view : Model -> String -> Html msg
@@ -23,8 +25,11 @@ view model id =
     case moduleInfo of
         Just mi ->
             let
+                hash =
+                    mi.moduleInfo.hash
+
                 check =
-                    Maybe.map (\bp -> bp.dependencies |> List.member id)
+                    Maybe.map (\bp -> bp.dependencies |> List.map hashValueFromString |> List.member hash)
 
                 filter =
                     \s -> model.blueprints |> Dict.get s.blueprint_id |> check |> Maybe.withDefault False

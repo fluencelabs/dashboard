@@ -68,7 +68,7 @@ function event(name, peer, peers, identify, services, modules, blueprints) {
 /* eslint-enable */
 
 (async () => {
-    setLogLevel('silent');
+    setLogLevel('SILENT');
 
     const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String());
@@ -106,8 +106,6 @@ function event(name, peer, peers, identify, services, modules, blueprints) {
             };
 
             const inputEvent = eventType.cast(eventRaw);
-
-            console.log(eventRaw);
 
             app.ports.eventReceiver.send(
                 event(
