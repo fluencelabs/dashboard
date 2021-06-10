@@ -1,6 +1,5 @@
 module Route exposing (..)
 
-import AirScripts.GetAll as GetAll
 import BlueprintPage.View as BlueprintPage
 import Html exposing (Html, text)
 import HubPage.View as HubPage
@@ -8,7 +7,7 @@ import Model exposing (Model, Route(..))
 import ModulePage.View as ModulePage
 import Msg exposing (Msg)
 import NodePage.View as NodePage
-import Port exposing (sendAir)
+import Port exposing (getAll)
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
 
 
@@ -56,7 +55,7 @@ routeView model route =
 getAllCmd : String -> String -> List String -> Cmd msg
 getAllCmd peerId relayId knownPeers =
     Cmd.batch
-        [ sendAir (GetAll.air peerId relayId knownPeers)
+        [ getAll { relayPeerId = relayId, knownPeers = knownPeers }
         ]
 
 

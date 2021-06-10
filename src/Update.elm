@@ -16,7 +16,6 @@ limitations under the License.
 
 -}
 
-import AirScripts.GetAll as GetAll
 import Blueprints.Model exposing (Blueprint)
 import Browser
 import Browser.Navigation as Nav
@@ -26,7 +25,7 @@ import Model exposing (Model, PeerData, emptyPeerData)
 import Modules.Model exposing (Module)
 import Msg exposing (..)
 import Nodes.Model exposing (Identify)
-import Port exposing (sendAir)
+import Port exposing (getAll)
 import Route exposing (getAllCmd)
 import Service.Model exposing (Service)
 import Url
@@ -105,7 +104,7 @@ update msg model =
             ( { model | relayId = relayId }, Cmd.none )
 
         Reload ->
-            ( model, sendAir (GetAll.air model.peerId model.relayId model.knownPeers) )
+            ( model, getAll { relayPeerId = model.relayId, knownPeers = model.knownPeers } )
 
 
 updateModel : Model -> String -> Identify -> List Service -> List Module -> List Blueprint -> Model
