@@ -26,6 +26,15 @@ port eventReceiver : (ReceiveEvent -> msg) -> Sub msg
 port relayChanged : (String -> msg) -> Sub msg
 
 
+type alias GetAll =
+    { relayPeerId : String
+    , knownPeers : List String
+    }
+
+
+port getAll : GetAll -> Cmd msg
+
+
 sendAir : Air -> Cmd msg
 sendAir (Air dataDict script) =
     let

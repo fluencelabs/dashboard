@@ -31,6 +31,7 @@ import {
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { eventType } from './types';
+import { getAll } from './_aqua/app';
 
 const relayIdx = 3;
 
@@ -123,9 +124,8 @@ function event(name, peer, peers, identify, services, modules, blueprints) {
         }
     });
 
-    app.ports.sendParticle.subscribe(async (part) => {
-        const particle = new Particle(part.script, part.data, 45000);
-        await sendParticle(client, particle);
+    app.ports.getAll.subscribe(async (data) => {
+        await getAll(client, data.relayPeerId, data.knownPeers);
     });
 })();
 
