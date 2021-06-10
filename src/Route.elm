@@ -1,6 +1,5 @@
 module Route exposing (..)
 
-import AirScripts.GetAll as GetAll
 import BlueprintPage.View as BlueprintPage
 import Html exposing (Html, text)
 import HubPage.View as HubPage
@@ -8,7 +7,7 @@ import Model exposing (Model, Route(..))
 import ModulePage.View as ModulePage
 import Msg exposing (Msg)
 import NodePage.View as NodePage
-import Port exposing (getAll, sendAir)
+import Port exposing (getAll)
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
 
 

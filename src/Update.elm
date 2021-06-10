@@ -16,7 +16,6 @@ limitations under the License.
 
 -}
 
-import AirScripts.GetAll as GetAll
 import Blueprints.Model exposing (Blueprint)
 import Browser
 import Browser.Navigation as Nav
@@ -26,7 +25,7 @@ import Model exposing (Model, PeerData, emptyPeerData)
 import Modules.Model exposing (Module)
 import Msg exposing (..)
 import Nodes.Model exposing (Identify)
-import Port exposing (getAll, sendAir)
+import Port exposing (getAll)
 import Route exposing (getAllCmd)
 import Service.Model exposing (Service)
 import Url
