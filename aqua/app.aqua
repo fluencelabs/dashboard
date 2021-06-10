@@ -1,3 +1,31 @@
-func helloWorld(arg: string, fn: string -> string) -> string:
-    res <- fn(arg)
-    <- res
+import "@fluencelabs/aqua-lib/builtin.aqua"
+
+service DashboardEvent("event"):
+	peers_discovered()
+	all_info(peer: PeerId, ident: Info, services: []Service, blueprints: []Blueprint, modules: []Module)
+
+func askAllAndSend(peer: PeerId):
+	on peer:
+		ident <- Peer.identify()
+		blueprints <- Dist.list_blueprints()
+		modules <- Dist.list_modules()
+		services <- Srv.list()
+	DashboardEvent.all_info(peer, ident, services, blueprints, modules)
+
+func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId):
+	on relayPeerId:
+		neighbors <- Kademlia.neighborhood(clientId, false)
+		for n <- neighbors par:
+			on n:
+				neighbors2 <- Kademlia.neighborhood(clientId, false)
+				for n2 <- neighbors2:
+					askAllAndSend(n2)
+
+func getAll(relayPeerId: PeerId, knownPeers: []PeerId):
+	askAllAndSend(relayPeerId)
+	
+	par for peer <- knownPeers par:
+		askAllAndSend(peer)
+
+	par findAndAskNeighboursSchema(relayPeerId, %init_peer_id%)
+

@@ -10,7 +10,14 @@
         "build": "webpack",
         "prod": "webpack -p",
         "analyse": "elm-analyse -s -p 3001 -o",
-        "compile-aqua": "aqua-cli --js -i ./aqua/ -o ./src/_aqua"
+        "compile-aqua": "aqua-cli --js -i ./aqua/ -o ./src/_aqua",
+        "watch-aqua": "chokidar \"**/*.aqua\" -c \"npm run compile-aqua\""
+    },
+    "nodemonConfig": {
+        "watch": [
+            "aqua"
+        ],
+        "ext": "aqua"
     },
     "repository": {
         "type": "git",
@@ -33,8 +40,10 @@
         "@babel/core": "^7.11.6",
         "@babel/preset-env": "^7.11.5",
         "@fluencelabs/aqua-cli": "^0.1.5-142",
+        "@fluencelabs/aqua-lib": "^0.1.5",
         "@types/yup": "^0.29.11",
         "babel-loader": "^8.1.0",
+        "chokidar-cli": "^2.1.0",
         "clean-webpack-plugin": "^3.0.0",
         "closure-webpack-plugin": "^2.3.0",
         "copy-webpack-plugin": "^6.4.1",
