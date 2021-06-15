@@ -165,7 +165,7 @@ if (MODE === 'production') {
             new CopyWebpackPlugin({
                 patterns: [
                     {
-                        from: 'src/assets',
+                        from: './images/*.*',
                     },
                 ],
             }),
@@ -187,16 +187,16 @@ if (MODE === 'production') {
                         },
                     },
                 },
-                {
-                    test: /\.css$/,
-                    exclude: [/elm-stuff/, /node_modules/],
-                    use: [MiniCssExtractPlugin.loader, 'css-loader?url=false'],
-                },
-                {
-                    test: /\.scss$/,
-                    exclude: [/elm-stuff/, /node_modules/],
-                    use: [MiniCssExtractPlugin.loader, 'css-loader?url=false', 'sass-loader'],
-                },
+                // {
+                //     test: /\.css$/,
+                //     exclude: [/elm-stuff/, /node_modules/],
+                //     use: [MiniCssExtractPlugin.loader, 'css-loader?url=false'],
+                // },
+                // {
+                //     test: /\.scss$/,
+                //     exclude: [/elm-stuff/, /node_modules/],
+                //     use: [MiniCssExtractPlugin.loader, 'css-loader?url=false', 'sass-loader'],
+                // },
             ],
         },
     });
