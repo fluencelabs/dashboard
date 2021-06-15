@@ -19,7 +19,7 @@ import 'css-spinners/dist/all.min.css';
 import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
-import { dev, testNet } from '@fluencelabs/fluence-network-environment';
+import { dev, krasnodar } from '@fluencelabs/fluence-network-environment';
 import {
     createClient,
     generatePeerId,
@@ -35,7 +35,7 @@ import { getAll } from './_aqua/app';
 
 const relayIdx = 3;
 
-const relays = testNet;
+const relays = krasnodar;
 // const relays = dev;
 
 function genFlags(peerId) {
