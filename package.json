@@ -1,6 +1,6 @@
 {
     "name": "fluence-admin",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "description": "",
     "main": "index.js",
     "scripts": {
@@ -8,7 +8,7 @@
         "start": "npm run dev",
         "dev": "webpack-dev-server --hot --colors --port 3000",
         "build": "webpack",
-        "prod": "webpack -p",
+        "prod": "webpack -p --mode production",
         "analyse": "elm-analyse -s -p 3001 -o",
         "compile-aqua": "aqua-cli --js -i ./aqua/ -o ./src/_aqua",
         "watch-aqua": "chokidar \"**/*.aqua\" -c \"npm run compile-aqua\""

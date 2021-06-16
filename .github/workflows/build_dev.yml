@@ -1,8 +1,9 @@
-name: container
+name: build dev
+
 on:
   push:
-    # branches:
-    #   - master
+    branches-ignore:
+      - master
   workflow_dispatch:
 
 jobs:
@@ -53,11 +54,10 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    ### Set container tag to 'latest' if branch is master, and to $BRANCH_NAME otherwise
-      - if: ${{ env.BRANCH_NAME }} != 'master'
-        run: echo "CONTAINER_TAG=${{ env.BRANCH_NAME }}" >> $GITHUB_ENV
-      - if: ${{ env.BRANCH_NAME }} == 'master'
-        run: echo "CONTAINER_TAG=latest" >> $GITHUB_ENV
+    ### Set version
+      - run: echo "VERSION=0.1.${{github.run_number}}" >> $GITHUB_ENV
+
+      - run: echo "CONTAINER_TAG=fluencelabs/dashboard:${{ env.VERSION }}${{ env.BRANCH_NAME }}" >> $GITHUB_ENV
 
     ### Build and push docker image
       - name: Build and push
@@ -67,8 +67,6 @@ jobs:
           context: .
           file: ./caddy.Dockerfile
           push: true
-          tags: fluencelabs/dashboard:${{ env.CONTAINER_TAG }}
+          tags: ${{ env.CONTAINER_TAG }}
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
-
-# docker commit --change='ENTRYPOINT ["caddy", "file-server", "--root", "/build", "--browse"]' caddy fluencelabs/fluence:demo

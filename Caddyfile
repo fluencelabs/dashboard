@@ -1,5 +1,4 @@
 :8080, dash.fluence.dev {
-
     log {
         output stderr
         format console
@@ -8,6 +7,6 @@
     tls alexey@fluence.one
     encode zstd gzip
     file_server
-    root * /bundle
-    try_files {path} /index.html
+    root * /dist
+    # try_files {path} /index.html
 }

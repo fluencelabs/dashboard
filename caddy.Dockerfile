@@ -1,6 +1,6 @@
 FROM caddy
 WORKDIR /
-COPY ./dist /bundle
+COPY ./dist /dist
 COPY Caddyfile /Caddyfile
 
 #RUN printf '\n\
