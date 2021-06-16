@@ -54,7 +54,7 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
     ### Set container tag to 'latest' if branch is master, and to $BRANCH_NAME otherwise
-      - run: echo "VERSION=0.1.${{github.run_id}}" >> $GITHUB_ENV
+      - run: echo "VERSION=0.1.${{github.run_number}}" >> $GITHUB_ENV
       - if: ${{ env.BRANCH_NAME }} != 'master'
         run: echo "CONTAINER_TAG=fluencelabs/dashboard:${{ env.BRANCH_NAME }}${{ env.VERSION }}" >> $GITHUB_ENV
       - if: ${{ env.BRANCH_NAME }} == 'master'

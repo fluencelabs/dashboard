@@ -6,7 +6,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "TAG=fluencelabs/dashboard:0.1.${{github.run_id}}" >> $GITHUB_ENV
+      - run: echo "TAG=fluencelabs/dashboard:0.1.${{github.run_number}}" >> $GITHUB_ENV
 
       - name: Deploy dashboard@master to DigitalOcean via SSH
         uses: appleboy/ssh-action@v0.1.3
