@@ -32,16 +32,6 @@ var common = {
             // inject details of output file at end of body
             inject: 'body',
         }),
-        new CopyWebpackPlugin({
-            patterns: [
-                {
-                    from: './images/*.*',
-                },
-                {
-                    from: 'favicon.ico',
-                },
-            ],
-        }),
     ],
     resolve: {
         modules: [path.join(__dirname, 'src'), 'node_modules'],
@@ -136,7 +126,11 @@ if (MODE === 'development') {
                 });
             },
         },
-        plugins: [],
+        plugins: [
+            new CopyWebpackPlugin({
+                patterns: [{ from: './images/*.*' }],
+            }),
+        ],
     });
 }
 
@@ -162,6 +156,14 @@ if (MODE === 'production') {
                 verbose: true,
                 dry: false,
             }),
+            // Copy static assets
+            new CopyWebpackPlugin({
+                patterns: [
+                    {
+                        from: 'src/assets',
+                    },
+                ],
+            }),
             new MiniCssExtractPlugin({
                 // Options similar to the same options in webpackOptions.output
                 // both options are optional
@@ -179,6 +181,16 @@ if (MODE === 'production') {
                             optimize: true,
                         },
                     },
+                },
+                {
+                    test: /\.css$/,
+                    exclude: [/elm-stuff/, /node_modules/],
+                    use: [MiniCssExtractPlugin.loader, 'css-loader?url=false'],
+                },
+                {
+                    test: /\.scss$/,
+                    exclude: [/elm-stuff/, /node_modules/],
+                    use: [MiniCssExtractPlugin.loader, 'css-loader?url=false', 'sass-loader'],
                 },
             ],
         },
