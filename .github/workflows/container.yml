@@ -28,7 +28,7 @@ jobs:
           node-version: 14
       
       - run: npm install
-      - run: npm run prod
+      - run: npm run build
         env:
           CI: true
       
