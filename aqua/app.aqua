@@ -4,11 +4,12 @@ service DashboardEvent("event"):
 	collectPeerInfo(peer: PeerId, ident: Info, services: []Service, blueprints: []Blueprint, modules: []Module)
 	collectServiceInterface(peer: PeerId, serviceId: string, interface: Interface)
 
--- func collectServiceInterfaces(peer: Peer, services: []Service):
--- 	on peer:
--- 		for srv <- services par:
--- 			info <- Srv.get_interface(srv.id)
--- 			DashboardEvent.collectServiceInterface(peer, service.id, info.Interface)
+func collectServiceInterfaces(peer: PeerId, services: []Service):
+	on peer:
+		for srv <- services par:
+			info <- Srv.get_interface(srv.id)
+			on %init_peer_id%:
+				DashboardEvent.collectServiceInterface(peer, srv.id, info.interface)
 
 func askAllAndSend(peer: PeerId):
 	on peer:
@@ -17,7 +18,7 @@ func askAllAndSend(peer: PeerId):
 		modules <- Dist.list_modules()
 		services <- Srv.list()
 	DashboardEvent.collectPeerInfo(peer, ident, services, blueprints, modules)
-	-- collectServiceInterfaces(peer, services)
+	collectServiceInterfaces(peer, services)
 
 
 func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId):

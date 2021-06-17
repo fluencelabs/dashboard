@@ -5,13 +5,20 @@ import Dict exposing (Dict)
 import Json.Encode exposing (Value)
 import Modules.Model exposing (Module)
 import Nodes.Model exposing (Identify)
-import Service.Model exposing (Service)
+import Service.Model exposing (Interface, Service)
+
+
+type alias ServiceInfo =
+    { id : String
+    , blueprint_id : String
+    , owner_id : String
+    }
 
 
 type alias CollectPeerInfo =
     { peerId : String
     , identify : Maybe Identify
-    , services : Maybe (List Service)
+    , services : Maybe (List ServiceInfo)
     , modules : Maybe (List Module)
     , blueprints : Maybe (List Blueprint)
     }
@@ -20,30 +27,10 @@ type alias CollectPeerInfo =
 port collectPeerInfo : (CollectPeerInfo -> msg) -> Sub msg
 
 
-type alias FunctionSignature =
-    { arguments : List String
-    , name : String
-    , output_types : List String
-    }
-
-
-type alias RecordType =
-    { fields : List String
-    , id : Int
-    , name : String
-    }
-
-
-type alias ServiceInterface =
-    { function_signatures : List FunctionSignature
-    , record_types : List RecordType
-    }
-
-
 type alias CollectServiceInterface =
-    { blueprint_id : String
+    { peer_id : String
     , service_id : String
-    , interface : ServiceInterface
+    , interface : Interface
     }
 
 

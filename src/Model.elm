@@ -55,6 +55,7 @@ type alias Model =
     , modules : Dict String Module
     , modulesByHash : Dict String Module
     , blueprints : Dict String Blueprint
+    , services : Dict String Service
     , toggledInterface : Maybe String
     , knownPeers : List String
     , isInitialized : Bool

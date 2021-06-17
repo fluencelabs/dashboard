@@ -27,7 +27,7 @@ import Msg exposing (..)
 import Nodes.Model exposing (Identify)
 import Port exposing (getAll)
 import Route exposing (getAllCmd)
-import Service.Model exposing (Service)
+import Service.Model exposing (Service, setInterface)
 import Url
 
 
@@ -55,13 +55,34 @@ update msg model =
                 Browser.External href ->
                     ( model, Nav.load href )
 
-        CollectServiceInterface { blueprint_id, service_id, interface } ->
-            ( model, Cmd.none )
+        CollectServiceInterface { peer_id, service_id, interface } ->
+            let
+                service =
+                    Dict.get service_id model.services
+
+                updatedServices =
+                    Dict.update service_id (Maybe.map (setInterface interface)) model.services
+
+                newModel =
+                    { model | services = updatedServices }
+            in
+            ( newModel, Cmd.none )
 
         CollectPeerInfo { peerId, identify, services, modules, blueprints } ->
             let
+                fromServiceInfo =
+                    \si ->
+                        { id = si.id
+                        , blueprint_id = si.blueprint_id
+                        , owner_id = si.owner_id
+                        , interface = Nothing
+                        }
+
+                servicesCorrectType =
+                    services |> Maybe.map (List.map fromServiceInfo)
+
                 updated =
-                    Maybe.map4 (updateModel model peerId) identify services modules blueprints
+                    Maybe.map4 (updateModel model peerId) identify servicesCorrectType modules blueprints
 
                 updatedModel =
                     withDefault model updated
@@ -98,6 +119,9 @@ updateModel model peer identify services modules blueprints =
         data =
             Maybe.withDefault emptyPeerData (Dict.get peer model.discoveredPeers)
 
+        servicesDict =
+            services |> List.map (\m -> ( m.id, m )) |> Dict.fromList
+
         moduleDict =
             modules |> List.map (\m -> ( m.name, m )) |> Dict.fromList
 
@@ -117,9 +141,15 @@ updateModel model peer identify services modules blueprints =
             Dict.union blueprintDict model.blueprints
 
         newData =
-            { data | identify = identify, services = services, modules = Dict.keys moduleDict, blueprints = Dict.keys blueprintDict }
+            { data | identify = identify, modules = Dict.keys moduleDict, blueprints = Dict.keys blueprintDict }
 
         updated =
             Dict.insert peer newData model.discoveredPeers
     in
-    { model | discoveredPeers = updated, modules = updatedModules, modulesByHash = updatedModulesByHash, blueprints = updatedBlueprints }
+    { model
+        | discoveredPeers = updated
+        , services = servicesDict
+        , modules = updatedModules
+        , modulesByHash = updatedModulesByHash
+        , blueprints = updatedBlueprints
+    }

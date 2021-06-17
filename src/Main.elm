@@ -19,7 +19,7 @@ limitations under the License.
 import Browser exposing (Document)
 import Browser.Navigation as Navigation
 import Config exposing (Flags)
-import Dict
+import Dict exposing (Dict)
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Route
@@ -56,6 +56,7 @@ init flags url key =
             , modules = Dict.empty
             , modulesByHash = Dict.empty
             , blueprints = Dict.empty
+            , services = Dict.empty
             , toggledInterface = Nothing
             , knownPeers = flags.knownPeers
             , isInitialized = False

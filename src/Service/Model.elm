@@ -25,4 +25,10 @@ type alias Service =
     { id : String
     , blueprint_id : String
     , owner_id : String
+    , interface : Maybe Interface
     }
+
+
+setInterface : Interface -> Service -> Service
+setInterface interface service =
+    { service | interface = Just interface }
