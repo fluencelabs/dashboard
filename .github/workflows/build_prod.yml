@@ -63,6 +63,6 @@ jobs:
       - name: Invoke deployment workflow
         uses: benc-uk/workflow-dispatch@v1
         with:
-          workflow: Some Workflow
+          workflow: deploy prod
           token: ${{ secrets.PERSONAL_TOKEN }}
           inputs: '{ "version": "${{ env.VERSION }}" }'
