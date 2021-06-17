@@ -65,4 +65,4 @@ jobs:
         with:
           workflow: Some Workflow
           token: ${{ secrets.PERSONAL_TOKEN }}
-          inputs: '{ "version": ${{ env.VERSION }} }'
+          inputs: '{ "version": "${{ env.VERSION }}" }'
