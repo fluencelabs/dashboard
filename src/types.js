@@ -37,7 +37,7 @@ export const module = object({
     name: string().required(),
 });
 
-export const eventType = object({
+export const peerInfo = object({
     peerId: string().required(),
     identify: identify.required(),
     services: array(service).required(),

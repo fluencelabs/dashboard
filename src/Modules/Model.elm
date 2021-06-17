@@ -6,8 +6,6 @@ import Service.Model exposing (Interface)
 type alias Module =
     { name : String
     , hash : String
-
-    --, interface : Interface
     }
 
 

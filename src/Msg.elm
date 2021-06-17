@@ -9,7 +9,8 @@ type Msg
     = NoOp
     | UrlChanged Url.Url
     | LinkClicked UrlRequest
-    | AquamarineEvent Port.ReceiveEvent
+    | CollectPeerInfo Port.CollectPeerInfo
+    | CollectServiceInterface Port.CollectServiceInterface
     | RelayChanged String
     | ToggleInterface String
     | Reload

@@ -1,8 +1,14 @@
 import "@fluencelabs/aqua-lib/builtin.aqua"
 
 service DashboardEvent("event"):
-	peers_discovered()
-	all_info(peer: PeerId, ident: Info, services: []Service, blueprints: []Blueprint, modules: []Module)
+	collectPeerInfo(peer: PeerId, ident: Info, services: []Service, blueprints: []Blueprint, modules: []Module)
+	collectServiceInterface(peer: PeerId, serviceId: string, interface: Interface)
+
+-- func collectServiceInterfaces(peer: Peer, services: []Service):
+-- 	on peer:
+-- 		for srv <- services par:
+-- 			info <- Srv.get_interface(srv.id)
+-- 			DashboardEvent.collectServiceInterface(peer, service.id, info.Interface)
 
 func askAllAndSend(peer: PeerId):
 	on peer:
@@ -10,7 +16,9 @@ func askAllAndSend(peer: PeerId):
 		blueprints <- Dist.list_blueprints()
 		modules <- Dist.list_modules()
 		services <- Srv.list()
-	DashboardEvent.all_info(peer, ident, services, blueprints, modules)
+	DashboardEvent.collectPeerInfo(peer, ident, services, blueprints, modules)
+	-- collectServiceInterfaces(peer, services)
+
 
 func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId):
 	on relayPeerId:

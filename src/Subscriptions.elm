@@ -18,11 +18,13 @@ limitations under the License.
 
 import Model exposing (Model)
 import Msg exposing (Msg(..))
-import Port exposing (eventReceiver)
+import Port exposing (collectPeerInfo, collectServiceInterface, relayChanged)
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ eventReceiver AquamarineEvent
+        [ collectServiceInterface CollectServiceInterface
+        , collectPeerInfo CollectPeerInfo
+        , relayChanged RelayChanged
         ]

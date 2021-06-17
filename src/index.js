@@ -30,7 +30,7 @@ import {
 } from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
-import { eventType } from './types';
+import { peerInfo } from './types';
 import { getAll } from './_aqua/app';
 
 const relayIdx = 3;
@@ -46,30 +46,8 @@ function genFlags(peerId) {
     };
 }
 
-/* eslint-disable */
-function event(name, peer, peers, identify, services, modules, blueprints) {
-    if (!peers) {
-        peers = null;
-    }
-    if (!services) {
-        services = null;
-    }
-    if (!modules) {
-        modules = null;
-    }
-    if (!identify) {
-        identify = null;
-    }
-    if (!blueprints) {
-        blueprints = null;
-    }
-
-    return { name, peer, peers, identify, services, modules, blueprints };
-}
-/* eslint-enable */
-
 (async () => {
-    setLogLevel('DEBUG');
+    setLogLevel('ERROR');
 
     const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String());
@@ -83,15 +61,7 @@ function event(name, peer, peers, identify, services, modules, blueprints) {
         flags: flags,
     });
 
-    subscribeToEvent(client, 'event', 'peers_discovered', (args, _tetraplets) => {
-        try {
-            app.ports.eventReceiver.send(event('peers_discovered', args[0], args[1]));
-        } catch (err) {
-            log.error('Elm eventreceiver failed: ', err);
-        }
-    });
-
-    subscribeToEvent(client, 'event', 'all_info', (args, _tetraplets) => {
+    subscribeToEvent(client, 'event', 'collectPeerInfo', (args, _tetraplets) => {
         try {
             const peerId = args[0];
             const identify = args[1];
@@ -106,19 +76,7 @@ function event(name, peer, peers, identify, services, modules, blueprints) {
                 modules,
             };
 
-            const inputEvent = eventType.cast(eventRaw);
-
-            app.ports.eventReceiver.send(
-                event(
-                    'all_info',
-                    inputEvent.peerId,
-                    undefined,
-                    inputEvent.identify,
-                    inputEvent.services,
-                    inputEvent.modules,
-                    inputEvent.blueprints,
-                ),
-            );
+            app.ports.collectPeerInfo.send(peerInfo.cast(eventRaw));
         } catch (err) {
             log.error('Elm eventreceiver failed: ', err);
         }

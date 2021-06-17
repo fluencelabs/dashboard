@@ -55,33 +55,18 @@ update msg model =
                 Browser.External href ->
                     ( model, Nav.load href )
 
-        AquamarineEvent { name, peer, peers, identify, services, modules, blueprints } ->
-            case name of
-                "peers_discovered" ->
-                    let
-                        peersMap =
-                            List.map (\p -> Tuple.pair p emptyPeerData) (withDefault [] peers)
+        CollectServiceInterface { blueprint_id, service_id, interface } ->
+            ( model, Cmd.none )
 
-                        newDict =
-                            Dict.fromList peersMap
+        CollectPeerInfo { peerId, identify, services, modules, blueprints } ->
+            let
+                updated =
+                    Maybe.map4 (updateModel model peerId) identify services modules blueprints
 
-                        updatedDict =
-                            Dict.union model.discoveredPeers newDict
-                    in
-                    ( { model | discoveredPeers = updatedDict }, getAllCmd model.peerId model.relayId [] )
-
-                "all_info" ->
-                    let
-                        updated =
-                            Maybe.map4 (updateModel model peer) identify services modules blueprints
-
-                        updatedModel =
-                            withDefault model updated
-                    in
-                    ( updatedModel, Cmd.none )
-
-                _ ->
-                    ( model, Cmd.none )
+                updatedModel =
+                    withDefault model updated
+            in
+            ( updatedModel, Cmd.none )
 
         ToggleInterface id ->
             case model.toggledInterface of
