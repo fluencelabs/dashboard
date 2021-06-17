@@ -2,14 +2,16 @@ import "@fluencelabs/aqua-lib/builtin.aqua"
 
 service DashboardEvent("event"):
 	collectPeerInfo(peer: PeerId, ident: Info, services: []Service, blueprints: []Blueprint, modules: []Module)
-	collectServiceInterface(peer: PeerId, serviceId: string, interface: Interface)
+	collectServiceInterface(peer: PeerId, serviceId: string, iface: Interface)
+
+func dashboardEvent_collectServiceInterface(peer: PeerId, serviceId: string, iface: Interface):
+	DashboardEvent.collectServiceInterface(peer, serviceId, iface)
 
 func collectServiceInterfaces(peer: PeerId, services: []Service):
 	on peer:
 		for srv <- services par:
 			info <- Srv.get_interface(srv.id)
-			on %init_peer_id%:
-				DashboardEvent.collectServiceInterface(peer, srv.id, info.interface)
+			dashboardEvent_collectServiceInterface(peer, srv.id, info.interface)
 
 func askAllAndSend(peer: PeerId):
 	on peer:

@@ -44,3 +44,9 @@ export const peerInfo = object({
     blueprints: array(blueprint).required(),
     modules: array(module).required(),
 });
+
+export const interfaceInfo = object({
+    peer_id: string().required(),
+    service_id: string().required(),
+    interface: object().required(),
+});

@@ -30,7 +30,7 @@ import {
 } from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
-import { peerInfo } from './types';
+import { interfaceInfo, peerInfo } from './types';
 import { getAll } from './_aqua/app';
 
 const relayIdx = 3;
@@ -77,6 +77,22 @@ function genFlags(peerId) {
             };
 
             app.ports.collectPeerInfo.send(peerInfo.cast(eventRaw));
+        } catch (err) {
+            log.error('Elm eventreceiver failed: ', err);
+        }
+    });
+
+    subscribeToEvent(client, 'event', 'collectServiceInterface', (args, _tetraplets) => {
+        try {
+            const eventRaw = {
+                peer_id: args[0],
+                service_id: args[1],
+                interface: args[2],
+            };
+
+            console.log(eventRaw);
+
+            app.ports.collectServiceInterface.send(interfaceInfo.cast(eventRaw));
         } catch (err) {
             log.error('Elm eventreceiver failed: ', err);
         }
