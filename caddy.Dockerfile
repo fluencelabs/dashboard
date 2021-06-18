@@ -1,4 +1,4 @@
-FROM caddy
+FROM caddy:2.4.0
 WORKDIR /
 COPY ./dist /dist
 COPY Caddyfile /Caddyfile
