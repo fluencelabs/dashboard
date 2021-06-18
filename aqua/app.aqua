@@ -17,7 +17,7 @@ func askAllAndSend(peer: PeerId):
 		modules <- Dist.list_modules()
 		services <- Srv.list()
 	collectServiceInterfaces(peer, services)
-	DashboardEvent.collectPeerInfo(peer, ident, services, blueprints, modules)
+	-- DashboardEvent.collectPeerInfo(peer, ident, services, blueprints, modules)
 
 
 func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId):
