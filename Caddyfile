@@ -1,12 +1,17 @@
-:8080, dash.fluence.dev {
+{
+    auto_https off
+}
+
+:8080 {
     log {
-        output stderr
-        format console
+        # output stdout
+        # format console
+        level debug
     }
 
-    tls alexey@fluence.one
-    encode zstd gzip
-    file_server
     root * /dist
-    # try_files {path} /index.html
+    try_files {path} /index.html
+    file_server
+    # tls alexey@fluence.one
+    encode zstd gzip
 }
