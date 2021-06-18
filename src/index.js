@@ -90,9 +90,7 @@ function genFlags(peerId) {
                 interface: args[2],
             };
 
-            console.log(eventRaw);
-
-            app.ports.collectServiceInterface.send(interfaceInfo.cast(eventRaw));
+            app.ports.collectServiceInterface.send(eventRaw);
         } catch (err) {
             log.error('Elm eventreceiver failed: ', err);
         }

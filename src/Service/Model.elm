@@ -8,8 +8,14 @@ type alias Signature =
     }
 
 
+type alias Field =
+    { name : String
+    , ty : String
+    }
+
+
 type alias Record =
-    { fields : List (List String)
+    { fields : List Field
     , id : Int
     , name : String
     }

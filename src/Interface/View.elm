@@ -2,7 +2,7 @@ module Interface.View exposing (..)
 
 import Html exposing (Html, div, span, text)
 import Palette exposing (classes)
-import Service.Model exposing (Interface, Record, Signature)
+import Service.Model exposing (Field, Interface, Record, Signature)
 import String.Interpolate exposing (interpolate)
 
 
@@ -25,9 +25,9 @@ recordView record =
         )
 
 
-fieldsView : List (List String) -> List (Html msg)
+fieldsView : List Field -> List (Html msg)
 fieldsView fields =
-    fields |> List.map (\f -> span [ classes "fl w-100 ml2" ] [ text (String.join ": " f) ])
+    fields |> List.map (\f -> span [ classes "fl w-100 ml2" ] [ text (String.join ": " [ f.name, f.ty ]) ])
 
 
 signaturesView : List Signature -> List (Html msg)

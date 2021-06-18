@@ -7,8 +7,8 @@ service DashboardEvent("event"):
 func collectServiceInterfaces(peer: PeerId, services: []Service):
 	for srv <- services par:
 		on peer:
-			info <- Srv.get_interface(srv.id)
-		DashboardEvent.collectServiceInterface(peer, srv.id, info.interface)
+			iface <- Srv.get_interface(srv.id)
+		DashboardEvent.collectServiceInterface(peer, srv.id, iface)
 
 func askAllAndSend(peer: PeerId):
 	on peer:
@@ -16,8 +16,8 @@ func askAllAndSend(peer: PeerId):
 		blueprints <- Dist.list_blueprints()
 		modules <- Dist.list_modules()
 		services <- Srv.list()
-	collectServiceInterfaces(peer, services)
 	-- DashboardEvent.collectPeerInfo(peer, ident, services, blueprints, modules)
+	collectServiceInterfaces(peer, services)
 
 
 func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId):
@@ -26,7 +26,7 @@ func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId):
 		for n <- neighbors par:
 			on n:
 				neighbors2 <- Kademlia.neighborhood(clientId, false)
-				for n2 <- neighbors2:
+				for n2 <- neighbors2 par:
 					askAllAndSend(n2)
 
 func getAll(relayPeerId: PeerId, knownPeers: []PeerId):
