@@ -34,11 +34,33 @@ import { eventType } from './types';
 import { getAll } from './_aqua/app';
 
 const relayIdx = 3;
+const defaultRelays = krasnodar;
+const defaultNetworkName = 'krasnodar';
 
-const relays = krasnodar;
-// const relays = dev;
+function initRelays() {
+    try {
+        const script = document.getElementById('env');
+        if (!script) {
+            console.log("Couldn't load environment, falling back to default (${defaultNetworkName})");
+            return defaultRelays;
+        }
 
-function genFlags(peerId) {
+        const data = JSON.parse(script.textContent);
+        console.log(script);
+        if (data.length === 0) {
+            console.log(`Environment is empty, falling back to default (${defaultNetworkName})`);
+            return defaultRelays;
+        }
+
+        return data;
+    } catch (error) {
+        console.error("Couldn't parse environment, error: ", error);
+    }
+
+    return defaultRelays;
+}
+
+function genFlags(peerId, relays) {
     return {
         peerId,
         relayId: relays[relayIdx].peerId,
@@ -69,10 +91,11 @@ function event(name, peer, peers, identify, services, modules, blueprints) {
 /* eslint-enable */
 
 (async () => {
-    setLogLevel('DEBUG');
+    setLogLevel('ERROR');
 
+    const relays = initRelays();
     const pid = await generatePeerId();
-    const flags = genFlags(pid.toB58String());
+    const flags = genFlags(pid.toB58String(), relays);
     console.log(`connect with client: ${pid.toB58String()}`);
 
     // If the relay is ever changed, an event shall be sent to elm
