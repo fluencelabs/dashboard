@@ -33,9 +33,13 @@ import * as serviceWorker from './serviceWorker';
 import { eventType } from './types';
 import { getAll } from './_aqua/app';
 
-const defaultRelaysIndex = 3;
-const defaultRelays = krasnodar;
 const defaultNetworkName = 'krasnodar';
+
+const defaultEnv = {
+    relays: krasnodar,
+    relayIdx: 3,
+    logLevel: 'error',
+};
 
 async function loadScript(script) {
     return new Promise((resolve, reject) => {
@@ -52,28 +56,37 @@ async function loadScript(script) {
     });
 }
 
-async function initRelays() {
+async function initEnvironment() {
     try {
         const script = document.getElementById('env');
         if (!script) {
             console.log("Couldn't load environment, falling back to default (${defaultNetworkName})");
-            return [defaultRelays, defaultRelaysIndex];
+            return defaultEnv;
         }
 
         const scriptContent = await loadScript(script);
-        const wrapper = JSON.parse(scriptContent);
-        const data = wrapper ? wrapper.nodes : [];
+        const envWrapper = JSON.parse(scriptContent);
+
+        const res = { ...defaultEnv };
+
+        const data = envWrapper ? envWrapper.nodes : [];
         if (data.length === 0) {
             console.log(`Environment is empty, falling back to default (${defaultNetworkName})`);
-            return [defaultRelays, defaultRelaysIndex];
+        } else {
+            res.relays = data;
+            res.relayIdx = 0;
         }
 
-        return [data, 0];
+        if (envWrapper.logLevel !== undefined) {
+            res.logLevel = envWrapper.logLevel;
+        }
+
+        return res;
     } catch (error) {
         console.error("Couldn't parse environment, error: ", error);
     }
 
-    return [defaultRelays, defaultRelaysIndex];
+    return defaultEnv;
 }
 
 function genFlags(peerId, relays, relayIdx) {
@@ -107,9 +120,8 @@ function event(name, peer, peers, identify, services, modules, blueprints) {
 /* eslint-enable */
 
 (async () => {
-    setLogLevel('ERROR');
-
-    const [relays, relayIdx] = await initRelays();
+    const { relays, relayIdx, logLevel } = await initEnvironment();
+    setLogLevel(logLevel);
     const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String(), relays, relayIdx);
     console.log(`connect with client: ${pid.toB58String()}`);
