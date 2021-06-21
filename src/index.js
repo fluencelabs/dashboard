@@ -37,7 +37,22 @@ const defaultRelaysIndex = 3;
 const defaultRelays = krasnodar;
 const defaultNetworkName = 'krasnodar';
 
-function initRelays() {
+async function loadScript(script) {
+    return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', script.src);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                resolve(xhr.responseText);
+            }
+        };
+        xhr.onerror = reject;
+        xhr.onabort = reject;
+        xhr.send();
+    });
+}
+
+async function initRelays() {
     try {
         const script = document.getElementById('env');
         if (!script) {
@@ -45,9 +60,9 @@ function initRelays() {
             return [defaultRelays, defaultRelaysIndex];
         }
 
-        const wrapper = JSON.parse(script.textContent);
+        const scriptContent = await loadScript(script);
+        const wrapper = JSON.parse(scriptContent);
         const data = wrapper ? wrapper.nodes : [];
-        console.log(data);
         if (data.length === 0) {
             console.log(`Environment is empty, falling back to default (${defaultNetworkName})`);
             return [defaultRelays, defaultRelaysIndex];
@@ -94,7 +109,7 @@ function event(name, peer, peers, identify, services, modules, blueprints) {
 (async () => {
     setLogLevel('ERROR');
 
-    const [relays, relayIdx] = initRelays();
+    const [relays, relayIdx] = await initRelays();
     const pid = await generatePeerId();
     const flags = genFlags(pid.toB58String(), relays, relayIdx);
     console.log(`connect with client: ${pid.toB58String()}`);
