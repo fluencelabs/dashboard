@@ -40,6 +40,9 @@ var common = {
                 {
                     from: 'favicon.ico',
                 },
+                {
+                    from: './env/*.*',
+                },
             ],
         }),
     ],

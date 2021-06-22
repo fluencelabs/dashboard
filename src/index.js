@@ -19,6 +19,7 @@ import 'css-spinners/dist/all.min.css';
 import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
+import Multiaddr from 'multiaddr';
 import { dev, krasnodar } from '@fluencelabs/fluence-network-environment';
 import {
     createClient,
@@ -33,12 +34,83 @@ import * as serviceWorker from './serviceWorker';
 import { eventType } from './types';
 import { getAll } from './_aqua/app';
 
-const relayIdx = 3;
+const defaultNetworkName = 'krasnodar';
 
-const relays = krasnodar;
-// const relays = dev;
+const defaultEnv = {
+    relays: krasnodar,
+    relayIdx: 3,
+    logLevel: 'error',
+};
 
-function genFlags(peerId) {
+async function loadScript(script) {
+    return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', script.src);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                resolve(xhr.responseText);
+            }
+        };
+        xhr.onerror = reject;
+        xhr.onabort = reject;
+        xhr.send();
+    });
+}
+
+function isMultiaddr(multiaddr) {
+    try {
+        Multiaddr(multiaddr);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
+async function initEnvironment() {
+    try {
+        const script = document.getElementById('env');
+        if (!script) {
+            console.log("Couldn't load environment, falling back to default (${defaultNetworkName})");
+            return defaultEnv;
+        }
+
+        const scriptContent = await loadScript(script);
+        const envWrapper = JSON.parse(scriptContent);
+
+        const res = { ...defaultEnv };
+
+        const data = envWrapper ? envWrapper.nodes : [];
+        if (data.length === 0) {
+            console.log(`Environment is empty, falling back to default (${defaultNetworkName})`);
+        } else {
+            data.forEach((element) => {
+                if (!element.multiaddr) {
+                    console.error('multiaddr field is missing for ', element);
+                }
+                if (!element.peerId) {
+                    console.error('peerId field is missing for ', element);
+                }
+                if (!isMultiaddr(element.multiaddr)) {
+                    console.error(`Value ${element.multiaddr} is not a correct multiaddr`);
+                }
+            });
+            res.relays = data;
+            res.relayIdx = 0;
+        }
+
+        if (envWrapper.logLevel !== undefined) {
+            res.logLevel = envWrapper.logLevel;
+        }
+
+        return res;
+    } catch (error) {
+        console.error("Couldn't parse environment, error: ", error);
+    }
+
+    return defaultEnv;
+}
+
+function genFlags(peerId, relays, relayIdx) {
     return {
         peerId,
         relayId: relays[relayIdx].peerId,
@@ -69,10 +141,10 @@ function event(name, peer, peers, identify, services, modules, blueprints) {
 /* eslint-enable */
 
 (async () => {
-    setLogLevel('INFO');
-
+    const { relays, relayIdx, logLevel } = await initEnvironment();
+    setLogLevel(logLevel);
     const pid = await generatePeerId();
-    const flags = genFlags(pid.toB58String());
+    const flags = genFlags(pid.toB58String(), relays, relayIdx);
     console.log(`connect with client: ${pid.toB58String()}`);
 
     // If the relay is ever changed, an event shall be sent to elm
