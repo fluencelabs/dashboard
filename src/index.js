@@ -19,6 +19,7 @@ import 'css-spinners/dist/all.min.css';
 import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
+import Multiaddr from 'multiaddr';
 import { dev, krasnodar } from '@fluencelabs/fluence-network-environment';
 import {
     createClient,
@@ -56,6 +57,15 @@ async function loadScript(script) {
     });
 }
 
+function isMultiaddr(multiaddr) {
+    try {
+        Multiaddr(multiaddr);
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
+
 async function initEnvironment() {
     try {
         const script = document.getElementById('env');
@@ -73,6 +83,17 @@ async function initEnvironment() {
         if (data.length === 0) {
             console.log(`Environment is empty, falling back to default (${defaultNetworkName})`);
         } else {
+            data.forEach((element) => {
+                if (!element.multiaddr) {
+                    console.error('multiaddr field is missing for ', element);
+                }
+                if (!element.peerId) {
+                    console.error('peerId field is missing for ', element);
+                }
+                if (!isMultiaddr(element.multiaddr)) {
+                    console.error(`Value ${element.multiaddr} is not a correct multiaddr`);
+                }
+            });
             res.relays = data;
             res.relayIdx = 0;
         }
