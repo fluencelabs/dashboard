@@ -16,7 +16,7 @@ func askAllAndSend(peer: PeerId):
 		blueprints <- Dist.list_blueprints()
 		modules <- Dist.list_modules()
 		services <- Srv.list()
-	-- DashboardEvent.collectPeerInfo(peer, ident, services, blueprints, modules)
+	DashboardEvent.collectPeerInfo(peer, ident, services, blueprints, modules)
 	collectServiceInterfaces(peer, services)
 
 
