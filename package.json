@@ -11,7 +11,8 @@
         "prod": "webpack -p --mode production",
         "analyse": "elm-analyse -s -p 3001 -o",
         "compile-aqua": "aqua-cli --js -i ./aqua/ -o ./src/_aqua",
-        "watch-aqua": "chokidar \"**/*.aqua\" -c \"npm run compile-aqua\""
+        "watch-aqua": "chokidar \"**/*.aqua\" -c \"npm run compile-aqua\"",
+        "uie": "elm-live src_storybook/Explorer.elm --open --dir=.storybook --start-page=index.html -- --output=.storybook/explorer.js --debug"
     },
     "nodemonConfig": {
         "watch": [
@@ -37,6 +38,7 @@
         "yup": "^0.32.9"
     },
     "devDependencies": {
+        "elm-live": "^4.0.2",
         "@babel/core": "^7.11.6",
         "@babel/preset-env": "^7.11.5",
         "@fluencelabs/aqua-cli": "^0.1.7-153",
