@@ -1,6 +1,7 @@
 module Instances.View exposing (..)
 
 import Blueprints.Model exposing (Blueprint)
+import Components.Spinner
 import Dict exposing (Dict)
 import Html exposing (Html, a, div, p, table, tbody, td, text, th, thead, tr)
 import Html.Attributes exposing (attribute)
@@ -9,7 +10,6 @@ import Model exposing (Model)
 import Nodes.Model exposing (Identify)
 import Palette exposing (classes, shortHashRaw)
 import Service.Model exposing (Service)
-import SpinnerView exposing (spinner)
 
 
 toInstance : String -> Identify -> Dict String Blueprint -> Service -> Instance
@@ -49,7 +49,7 @@ view model filter =
 
         finalView =
             if List.isEmpty instances then
-                Html.div [] (spinner model)
+                Html.div [] Components.Spinner.view
 
             else
                 viewTable instances

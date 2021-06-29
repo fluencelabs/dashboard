@@ -1,6 +1,7 @@
 module Route exposing (..)
 
 import BlueprintPage.View as BlueprintPage
+import Dict exposing (Dict)
 import Html exposing (Html, text)
 import HubPage.View as HubPage
 import Model exposing (Model, Route(..))
@@ -29,18 +30,34 @@ routeView : Model -> Route -> Html Msg
 routeView model route =
     case route of
         Page page ->
-            case page of
-                "" ->
-                    HubPage.view model
+            let
+                bpModel =
+                    model.cache.blueprints
+                        |> Dict.values
+                        |> List.map
+                            (\x ->
+                                { name = x.name
+                                , author = "Fluence Labs"
+                                , numberOfInstances = 0
+                                , id = x.id
+                                }
+                            )
 
-                "hub" ->
-                    HubPage.view model
+                res =
+                    case page of
+                        "" ->
+                            HubPage.view model bpModel
 
-                "nodes" ->
-                    NodePage.view model
+                        "hub" ->
+                            HubPage.view model bpModel
 
-                _ ->
-                    text ("undefined page: " ++ page)
+                        "nodes" ->
+                            NodePage.view model
+
+                        _ ->
+                            text ("undefined page: " ++ page)
+            in
+            res
 
         Peer peer ->
             text peer

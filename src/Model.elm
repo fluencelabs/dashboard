@@ -18,6 +18,7 @@ limitations under the License.
 
 import Blueprints.Model exposing (Blueprint)
 import Browser.Navigation as Nav
+import Cache
 import Dict exposing (Dict)
 import Modules.Model exposing (Module)
 import Nodes.Model exposing (Identify, emptyIdentify)
@@ -51,6 +52,7 @@ type alias Model =
     , key : Nav.Key
     , url : Url.Url
     , page : Route
+    , cache : Cache.Model
     , discoveredPeers : Dict String PeerData
     , modules : Dict String Module
     , modulesByHash : Dict String Module

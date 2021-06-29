@@ -4,8 +4,12 @@ import Html exposing (Html, div)
 import Palette exposing (classes)
 
 
-spinner : List (Html msg)
-spinner =
+
+-- view
+
+
+view : List (Html msg)
+view =
     [ div [ classes "p3 relative" ]
         [ div [ classes "spin" ] [] ]
     ]

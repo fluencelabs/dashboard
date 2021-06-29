@@ -1,6 +1,7 @@
 module Modules.View exposing (..)
 
 import Blueprints.Model exposing (Blueprint)
+import Components.Spinner
 import Dict exposing (Dict)
 import Html exposing (Html, a, div, p, text)
 import Html.Attributes exposing (attribute)
@@ -9,7 +10,6 @@ import Model exposing (Model, PeerData)
 import Modules.Model exposing (Module, ModuleShortInfo)
 import Palette exposing (classes)
 import Service.Model exposing (Service)
-import SpinnerView exposing (spinner)
 import Utils.Utils exposing (instancesText)
 
 
@@ -115,7 +115,7 @@ view model =
 
         finalView =
             if List.isEmpty modulesView then
-                spinner model
+                Components.Spinner.view
 
             else
                 modulesView

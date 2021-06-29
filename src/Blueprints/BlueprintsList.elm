@@ -22,13 +22,16 @@ view : Model -> Html msg
 view model =
     let
         -- TODO HACK: this is a hack to filter bloat blueprints until we have a predefined list of good ones
+        -- res =
+        --     List.filter (\bp -> bp.numberOfInstances > 3) model
+        --         |> List.map Blueprints.BlueprintTile.view
         res =
-            List.filter (\bp -> bp.numberOfInstances > 3) model
+            model
                 |> List.map Blueprints.BlueprintTile.view
 
         finalView =
             if List.isEmpty res then
-                Components.Spinner.spinner
+                Components.Spinner.view
 
             else
                 res

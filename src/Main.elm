@@ -18,6 +18,7 @@ limitations under the License.
 
 import Browser exposing (Document)
 import Browser.Navigation as Navigation
+import Cache
 import Config exposing (Flags)
 import Dict exposing (Dict)
 import Model exposing (Model)
@@ -52,6 +53,7 @@ init flags url key =
             , url = url
             , key = key
             , page = r
+            , cache = Cache.init
             , discoveredPeers = Dict.empty
             , modules = Dict.empty
             , modulesByHash = Dict.empty

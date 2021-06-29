@@ -1,5 +1,6 @@
 module HubPage.View exposing (..)
 
+import Blueprints.BlueprintsList
 import Blueprints.View
 import Html exposing (Html, a, div, span, text)
 import Html.Attributes exposing (attribute)
@@ -9,13 +10,13 @@ import Modules.View
 import Palette exposing (classes, redFont)
 
 
-view : Model -> Html msg
-view model =
+view : Model -> Blueprints.BlueprintsList.Model -> Html msg
+view model bpModel =
     div [ classes "fl w-100 pt4" ]
         [ div [ redFont, classes "f1 fw4 pt3 pb3" ] [ text "Developer Hub" ]
         , welcomeText
         , div [ classes "pt4 f3 fw5 pb4" ] [ text "Featured Service Blueprints" ]
-        , Blueprints.View.view model
+        , Blueprints.BlueprintsList.view bpModel
         , div [ classes "pt4 f3 fw5 pb4" ] [ text "Featured Modules" ]
         , Modules.View.view model
         , div [ classes "pt4 f3 fw5 pb4" ] [ text "Services" ]

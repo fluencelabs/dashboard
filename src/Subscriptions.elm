@@ -16,15 +16,18 @@ limitations under the License.
 
 -}
 
+import AquaPorts.CollectPeerInfo exposing (PeerInfo, collectPeerInfo)
+import AquaPorts.CollectServiceInterface exposing (ServiceInterface, collectServiceInterface)
+import Cache
 import Model exposing (Model)
 import Msg exposing (Msg(..))
-import Port exposing (collectPeerInfo, collectServiceInterface, relayChanged)
+import Port exposing (relayChanged)
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
-        [ collectServiceInterface CollectServiceInterface
-        , collectPeerInfo CollectPeerInfo
+        [ collectServiceInterface (\si -> si |> Cache.CollectServiceInterface |> Cache)
+        , collectPeerInfo (\si -> si |> Cache.CollectPeerInfo |> Cache)
         , relayChanged RelayChanged
         ]

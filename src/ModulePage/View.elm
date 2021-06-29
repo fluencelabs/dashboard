@@ -1,5 +1,6 @@
 module ModulePage.View exposing (..)
 
+import Components.Spinner
 import Debug exposing (toString)
 import Dict exposing (Dict)
 import Html exposing (Html, a, article, div, span, text)
@@ -12,7 +13,6 @@ import Model exposing (Model)
 import ModulePage.Model exposing (ModuleViewInfo)
 import Modules.Model exposing (Module)
 import Palette exposing (classes, redFont)
-import SpinnerView exposing (spinner)
 import Utils.Utils exposing (hashValueFromString)
 
 
@@ -48,7 +48,7 @@ view model id =
 
         Nothing ->
             div [ classes "cf ph2-ns mt6" ]
-                (spinner model)
+                Components.Spinner.view
 
 
 moduleToInfo : Dict String Module -> String -> Maybe ModuleViewInfo

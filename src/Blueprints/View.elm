@@ -1,13 +1,13 @@
 module Blueprints.View exposing (..)
 
 import Blueprints.Model exposing (Blueprint, BlueprintInfo)
+import Components.Spinner
 import Dict exposing (Dict)
 import Html exposing (Html, a, div, span, text)
 import Html.Attributes exposing (attribute)
 import Model exposing (Model, PeerData)
 import Palette exposing (classes)
 import Service.Model exposing (Service)
-import SpinnerView exposing (spinner)
 import Utils.Utils exposing (servicesText)
 
 
@@ -29,14 +29,15 @@ view model =
                 (Dict.values allBps)
 
         -- TODO HACK: this is a hack to filter bloat blueprints until we have a predefined list of good ones
-        filtered = List.filter (\service -> service.instanceNumber > 3) info
+        filtered =
+            List.filter (\service -> service.instanceNumber > 3) info
 
         servicesView =
             List.map viewService filtered
 
         finalView =
             if List.isEmpty servicesView then
-                spinner model
+                Components.Spinner.view
 
             else
                 servicesView

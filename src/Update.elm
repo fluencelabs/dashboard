@@ -19,6 +19,7 @@ limitations under the License.
 import Blueprints.Model exposing (Blueprint)
 import Browser
 import Browser.Navigation as Nav
+import Cache
 import Dict exposing (Dict)
 import Maybe exposing (withDefault)
 import Model exposing (Model, PeerData, emptyPeerData)
@@ -55,39 +56,12 @@ update msg model =
                 Browser.External href ->
                     ( model, Nav.load href )
 
-        CollectServiceInterface { peer_id, service_id, interface } ->
+        Cache cacheMsg ->
             let
-                service =
-                    Dict.get service_id model.services
-
-                updatedServices =
-                    Dict.update service_id (Maybe.map (setInterface interface)) model.services
-
-                newModel =
-                    { model | services = updatedServices }
+                newCache =
+                    Cache.update model.cache cacheMsg
             in
-            ( newModel, Cmd.none )
-
-        CollectPeerInfo { peerId, identify, services, modules, blueprints } ->
-            let
-                fromServiceInfo =
-                    \si ->
-                        { id = si.id
-                        , blueprint_id = si.blueprint_id
-                        , owner_id = si.owner_id
-                        , interface = Nothing
-                        }
-
-                servicesCorrectType =
-                    services |> Maybe.map (List.map fromServiceInfo)
-
-                updated =
-                    Maybe.map4 (updateModel model peerId) identify servicesCorrectType modules blueprints
-
-                updatedModel =
-                    withDefault model updated
-            in
-            ( updatedModel, Cmd.none )
+            ( { model | cache = newCache }, Cmd.none )
 
         ToggleInterface id ->
             case model.toggledInterface of

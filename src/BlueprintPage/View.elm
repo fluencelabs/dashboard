@@ -2,6 +2,7 @@ module BlueprintPage.View exposing (..)
 
 import BlueprintPage.Model exposing (BlueprintViewInfo)
 import Blueprints.Model exposing (Blueprint)
+import Components.Spinner
 import Dict exposing (Dict)
 import Html exposing (Html, a, article, div, img, span, strong, text)
 import Html.Attributes exposing (attribute)
@@ -14,7 +15,6 @@ import Modules.Model exposing (Module)
 import Msg exposing (Msg(..))
 import Palette exposing (classes, darkRed, redFont)
 import Service.Model exposing (Interface)
-import SpinnerView exposing (spinner)
 
 
 view : Model -> String -> Html Msg
@@ -42,7 +42,7 @@ view model id =
 
         Nothing ->
             div [ classes "cf ph2-ns mt6" ]
-                (spinner model)
+                Components.Spinner.view
 
 
 blueprintToInfo : Model -> String -> Maybe BlueprintViewInfo

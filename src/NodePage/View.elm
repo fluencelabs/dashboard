@@ -1,11 +1,11 @@
 module NodePage.View exposing (..)
 
+import Components.Spinner
 import Dict exposing (Dict)
 import Html exposing (Html, div, p, table, tbody, td, text, th, thead, tr)
 import Html.Attributes exposing (attribute)
 import Model exposing (Model)
 import Palette exposing (classes, redFont)
-import SpinnerView exposing (spinner)
 
 
 type alias Node =
@@ -23,7 +23,7 @@ view model =
 
         finalView =
             if List.isEmpty nodes then
-                spinner model
+                Components.Spinner.view
 
             else
                 [ div [ classes "fl w-100 cf ph2-ns" ]

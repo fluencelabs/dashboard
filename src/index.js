@@ -142,13 +142,13 @@ function genFlags(peerId, relays, relayIdx) {
             const modules = args[4];
             const eventRaw = {
                 peerId,
-                identify,
-                services,
+                //identify,
+                //services,
                 blueprints,
-                modules,
+                //modules,
             };
 
-            app.ports.collectPeerInfo.send(peerInfo.cast(eventRaw));
+            app.ports.collectPeerInfo.send(eventRaw);
         } catch (err) {
             log.error('Elm eventreceiver failed: ', err);
         }

@@ -24,17 +24,11 @@ type alias CollectPeerInfo =
     }
 
 
-port collectPeerInfo : (CollectPeerInfo -> msg) -> Sub msg
-
-
 type alias CollectServiceInterface =
     { peer_id : String
     , service_id : String
     , interface : Interface
     }
-
-
-port collectServiceInterface : (CollectServiceInterface -> msg) -> Sub msg
 
 
 port relayChanged : (String -> msg) -> Sub msg
