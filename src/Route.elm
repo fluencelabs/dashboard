@@ -1,12 +1,13 @@
 module Route exposing (..)
 
-import BlueprintPage.View as BlueprintPage
+import Components.Spinner
 import Dict exposing (Dict)
-import Html exposing (Html, text)
+import Html exposing (Html, div, text)
 import Model exposing (Model, Route(..))
 import ModulePage.View as ModulePage
 import Msg exposing (Msg)
 import NodePage.View as NodePage
+import Pages.BlueprintPage
 import Pages.Hub as HubPage
 import Port exposing (getAll)
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
@@ -51,7 +52,13 @@ routeView model route =
             text peer
 
         Blueprint id ->
-            BlueprintPage.view model id
+            case Pages.BlueprintPage.fromCache model.cache id of
+                Just m ->
+                    Pages.BlueprintPage.view m
+
+                Nothing ->
+                    div []
+                        Components.Spinner.view
 
         Module moduleName ->
             ModulePage.view model moduleName

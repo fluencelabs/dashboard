@@ -22,6 +22,7 @@ import Cache
 import Dict exposing (Dict)
 import Modules.Model exposing (Module)
 import Nodes.Model exposing (Identify, emptyIdentify)
+import Pages.BlueprintPage
 import Pages.Hub
 import Service.Model exposing (Service)
 import Url
@@ -35,7 +36,8 @@ type Route
 
 
 type alias PageModel =
-    { hub : Pages.Hub.Model }
+    { hub : Pages.Hub.Model
+    }
 
 
 type alias PeerData =
