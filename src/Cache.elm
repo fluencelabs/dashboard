@@ -1,6 +1,6 @@
 module Cache exposing (..)
 
-import AquaPorts.CollectPeerInfo exposing (Blueprint, PeerInfo)
+import AquaPorts.CollectPeerInfo exposing (Blueprint, PeerInfo, Service)
 import AquaPorts.CollectServiceInterface exposing (ServiceInterface)
 import Dict exposing (Dict)
 
@@ -10,12 +10,16 @@ import Dict exposing (Dict)
 
 
 type alias Model =
-    { blueprints : Dict String Blueprint }
+    { blueprints : Dict String Blueprint
+    , services : Dict String Service
+    }
 
 
 init : Model
 init =
-    { blueprints = Dict.empty }
+    { blueprints = Dict.empty
+    , services = Dict.empty
+    }
 
 
 
@@ -34,12 +38,18 @@ type Msg
 update : Model -> Msg -> Model
 update model msg =
     case msg of
-        CollectPeerInfo { peerId, blueprints } ->
+        CollectPeerInfo { peerId, blueprints, services } ->
             let
                 newBlueprints =
                     blueprints |> Maybe.withDefault [] |> List.map (\b -> ( b.id, b )) |> Dict.fromList
+
+                newServices =
+                    services |> Maybe.withDefault [] |> List.map (\s -> ( s.id, s )) |> Dict.fromList
             in
-            { model | blueprints = Dict.union model.blueprints newBlueprints }
+            { model
+                | blueprints = Dict.union model.blueprints newBlueprints
+                , services = Dict.union model.services newServices
+            }
 
         CollectServiceInterface _ ->
             model

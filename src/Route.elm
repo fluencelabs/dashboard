@@ -3,11 +3,11 @@ module Route exposing (..)
 import BlueprintPage.View as BlueprintPage
 import Dict exposing (Dict)
 import Html exposing (Html, text)
-import HubPage.View as HubPage
 import Model exposing (Model, Route(..))
 import ModulePage.View as ModulePage
 import Msg exposing (Msg)
 import NodePage.View as NodePage
+import Pages.Hub as HubPage
 import Port exposing (getAll)
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
 
@@ -31,25 +31,13 @@ routeView model route =
     case route of
         Page page ->
             let
-                bpModel =
-                    model.cache.blueprints
-                        |> Dict.values
-                        |> List.map
-                            (\x ->
-                                { name = x.name
-                                , author = "Fluence Labs"
-                                , numberOfInstances = 0
-                                , id = x.id
-                                }
-                            )
-
                 res =
                     case page of
                         "" ->
-                            HubPage.view model bpModel
+                            HubPage.view model.pageModel.hub
 
                         "hub" ->
-                            HubPage.view model bpModel
+                            HubPage.view model.pageModel.hub
 
                         "nodes" ->
                             NodePage.view model

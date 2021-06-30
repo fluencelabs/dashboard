@@ -35,7 +35,8 @@ type alias PeerInfo =
     { peerId : String
 
     --, identify : Maybe Identify
-    --, services : Maybe (List Service)
+    , services : Maybe (List Service)
+
     --, modules : Maybe (List Module)
     , blueprints : Maybe (List Blueprint)
     }

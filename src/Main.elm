@@ -23,6 +23,7 @@ import Config exposing (Flags)
 import Dict exposing (Dict)
 import Model exposing (Model)
 import Msg exposing (Msg(..))
+import Pages.Hub
 import Route
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
@@ -53,6 +54,9 @@ init flags url key =
             , url = url
             , key = key
             , page = r
+            , pageModel =
+                { hub = Pages.Hub.init
+                }
             , cache = Cache.init
             , discoveredPeers = Dict.empty
             , modules = Dict.empty

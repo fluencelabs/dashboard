@@ -16,16 +16,18 @@ limitations under the License.
 
 -}
 
+import Blueprints.BlueprintTile
 import Blueprints.Model exposing (Blueprint)
 import Browser
 import Browser.Navigation as Nav
 import Cache
 import Dict exposing (Dict)
 import Maybe exposing (withDefault)
-import Model exposing (Model, PeerData, emptyPeerData)
+import Model exposing (Model, PageModel, PeerData, emptyPeerData)
 import Modules.Model exposing (Module)
 import Msg exposing (..)
 import Nodes.Model exposing (Identify)
+import Pages.Hub
 import Port exposing (getAll)
 import Route exposing (getAllCmd)
 import Service.Model exposing (Service, setInterface)
@@ -60,8 +62,16 @@ update msg model =
             let
                 newCache =
                     Cache.update model.cache cacheMsg
+
+                newPagesModel =
+                    { hub = Pages.Hub.fromCache newCache }
             in
-            ( { model | cache = newCache }, Cmd.none )
+            ( { model
+                | cache = newCache
+                , pageModel = newPagesModel
+              }
+            , Cmd.none
+            )
 
         ToggleInterface id ->
             case model.toggledInterface of

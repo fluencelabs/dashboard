@@ -3,7 +3,7 @@ module Explorer exposing (main)
 import Blueprints.BlueprintTile
 import Html exposing (div)
 import Html.Attributes exposing (attribute, style)
-import HubPage.View exposing (welcomeText)
+import Pages.Hub exposing (welcomeText)
 import UIExplorer
     exposing
         ( UIExplorerProgram

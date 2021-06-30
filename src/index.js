@@ -143,7 +143,7 @@ function genFlags(peerId, relays, relayIdx) {
             const eventRaw = {
                 peerId,
                 //identify,
-                //services,
+                services,
                 blueprints,
                 //modules,
             };

@@ -22,6 +22,7 @@ import Cache
 import Dict exposing (Dict)
 import Modules.Model exposing (Module)
 import Nodes.Model exposing (Identify, emptyIdentify)
+import Pages.Hub
 import Service.Model exposing (Service)
 import Url
 
@@ -31,6 +32,10 @@ type Route
     | Blueprint String
     | Module String
     | Peer String
+
+
+type alias PageModel =
+    { hub : Pages.Hub.Model }
 
 
 type alias PeerData =
@@ -52,13 +57,14 @@ type alias Model =
     , key : Nav.Key
     , url : Url.Url
     , page : Route
+    , pageModel : PageModel
     , cache : Cache.Model
+    , toggledInterface : Maybe String
+    , knownPeers : List String
+    , isInitialized : Bool
     , discoveredPeers : Dict String PeerData
     , modules : Dict String Module
     , modulesByHash : Dict String Module
     , blueprints : Dict String Blueprint
     , services : Dict String Service
-    , toggledInterface : Maybe String
-    , knownPeers : List String
-    , isInitialized : Bool
     }
