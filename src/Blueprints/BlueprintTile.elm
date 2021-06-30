@@ -1,5 +1,6 @@
 module Blueprints.BlueprintTile exposing (Model, view)
 
+import Cache exposing (BlueprintId)
 import Html exposing (Html, a, div, span, text)
 import Html.Attributes exposing (attribute)
 import Palette exposing (classes)
@@ -13,7 +14,7 @@ type alias Model =
     { name : String
     , author : String
     , numberOfInstances : Int
-    , id : String
+    , id : BlueprintId
     }
 
 

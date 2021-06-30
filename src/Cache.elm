@@ -1,24 +1,80 @@
 module Cache exposing (..)
 
-import AquaPorts.CollectPeerInfo exposing (Blueprint, PeerInfo, Service)
-import AquaPorts.CollectServiceInterface exposing (ServiceInterface)
+import AquaPorts.CollectPeerInfo exposing (BlueprintDto, PeerDto, ServiceDto)
+import AquaPorts.CollectServiceInterface exposing (ServiceInterfaceDto)
+import Array exposing (Array)
+import Blueprints.Model exposing (Blueprint)
 import Dict exposing (Dict)
+import Dict.Extra as Dict
 
 
 
 -- model
 
 
+type alias BlueprintId =
+    String
+
+
+type alias ServiceId =
+    String
+
+
+type alias Hash =
+    String
+
+
+extractHash : String -> Hash
+extractHash str =
+    str
+        |> String.split ":"
+        |> Array.fromList
+        |> Array.get 1
+        |> Maybe.withDefault ""
+
+
+type alias Blueprint =
+    { id : BlueprintId
+    , name : String
+    , dependencies : Array Hash
+    }
+
+
+blueprintFromDto : BlueprintDto -> Blueprint
+blueprintFromDto bp =
+    { id = bp.id
+    , dependencies = bp.dependencies |> List.map extractHash |> Array.fromList
+    , name = bp.name
+    }
+
+
+type alias Service =
+    { id : String
+    , blueprintId : BlueprintId
+    , ownerId : String
+    }
+
+
+serviceFromDto : ServiceDto -> Service
+serviceFromDto s =
+    { id = s.id
+    , blueprintId = s.blueprint_id
+    , ownerId = s.owner_id
+    }
+
+
 type alias Model =
-    { blueprints : Dict String Blueprint
-    , services : Dict String Service
+    { blueprintsById : Dict BlueprintId Blueprint
+    , servicesById : Dict ServiceId Service
+    , servicesByBlueprintId : Dict BlueprintId (Array ServiceId)
     }
 
 
 init : Model
 init =
-    { blueprints = Dict.empty
-    , services = Dict.empty
+    { blueprintsById = Dict.empty
+    , servicesById = Dict.empty
+    , servicesByBlueprintId = Dict.empty
     }
 
 
@@ -27,8 +83,8 @@ init =
 
 
 type Msg
-    = CollectPeerInfo PeerInfo
-    | CollectServiceInterface ServiceInterface
+    = CollectPeerInfo PeerDto
+    | CollectServiceInterface ServiceInterfaceDto
 
 
 
@@ -41,14 +97,27 @@ update model msg =
         CollectPeerInfo { peerId, blueprints, services } ->
             let
                 newBlueprints =
-                    blueprints |> Maybe.withDefault [] |> List.map (\b -> ( b.id, b )) |> Dict.fromList
+                    blueprints |> Maybe.withDefault [] |> List.map blueprintFromDto |> Dict.fromListBy (\x -> x.id)
 
                 newServices =
-                    services |> Maybe.withDefault [] |> List.map (\s -> ( s.id, s )) |> Dict.fromList
+                    services |> Maybe.withDefault [] |> List.map serviceFromDto |> Dict.fromListBy (\x -> x.id)
+
+                resultBlueprints =
+                    Dict.union newBlueprints model.blueprintsById
+
+                resultServices =
+                    Dict.union newServices model.servicesById
+
+                resultServicesByBlueprintId =
+                    resultServices
+                        |> Dict.values
+                        |> Dict.groupBy (\x -> x.blueprintId)
+                        |> Dict.map (\k -> \v -> v |> List.map (\listVal -> listVal.id) |> Array.fromList)
             in
             { model
-                | blueprints = Dict.union model.blueprints newBlueprints
-                , services = Dict.union model.services newServices
+                | blueprintsById = resultBlueprints
+                , servicesById = resultServices
+                , servicesByBlueprintId = resultServicesByBlueprintId
             }
 
         CollectServiceInterface _ ->

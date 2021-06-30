@@ -1,5 +1,6 @@
 module Blueprints.BlueprintsList exposing (Model, fromCache, view)
 
+import Array exposing (Array)
 import Blueprints.BlueprintTile
 import Cache
 import Components.Spinner
@@ -18,20 +19,13 @@ type alias Model =
 
 fromCache : Cache.Model -> Model
 fromCache cache =
-    let
-        getRelatedBps id =
-            cache.services
-                |> Dict.toList
-                |> List.map Tuple.second
-                |> List.filter (\x -> x.blueprint_id == id)
-    in
-    cache.blueprints
+    cache.blueprintsById
         |> Dict.values
         |> List.map
             (\x ->
                 { name = x.name
                 , author = "Fluence Labs"
-                , numberOfInstances = getRelatedBps x.id |> List.length
+                , numberOfInstances = cache.servicesByBlueprintId |> Dict.get x.id |> Maybe.withDefault Array.empty |> Array.length
                 , id = x.id
                 }
             )

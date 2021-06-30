@@ -1,37 +1,37 @@
 port module AquaPorts.CollectServiceInterface exposing (..)
 
 
-type alias Signature =
+type alias SignatureDto =
     { arguments : List (List String)
     , name : String
     , output_types : List String
     }
 
 
-type alias Field =
+type alias FieldDto =
     { name : String
     , ty : String
     }
 
 
-type alias Record =
-    { fields : List Field
+type alias RecordDto =
+    { fields : List FieldDto
     , id : Int
     , name : String
     }
 
 
-type alias Interface =
-    { function_signatures : List Signature
-    , record_types : List Record
+type alias InterfaceDto =
+    { function_signatures : List SignatureDto
+    , record_types : List RecordDto
     }
 
 
-type alias ServiceInterface =
+type alias ServiceInterfaceDto =
     { peer_id : String
     , service_id : String
-    , interface : Interface
+    , interface : InterfaceDto
     }
 
 
-port collectServiceInterface : (ServiceInterface -> msg) -> Sub msg
+port collectServiceInterface : (ServiceInterfaceDto -> msg) -> Sub msg
