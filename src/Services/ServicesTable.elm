@@ -1,8 +1,10 @@
-module Services.ServicesTable exposing (Model, view)
+module Services.ServicesTable exposing (Model, fromCache, view)
 
 import Cache exposing (ServiceId)
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Maybe.Extra as Maybe
+import Msg exposing (Msg(..))
 import Palette exposing (classes)
 import Services.ServiceRow
 
@@ -13,6 +15,17 @@ import Services.ServiceRow
 
 type alias Model =
     List Services.ServiceRow.Model
+
+
+fromCache : Cache.Model -> List ServiceId -> Model
+fromCache cache services =
+    services
+        |> List.map (Services.ServiceRow.fromCache cache)
+        |> Maybe.values
+
+
+
+-- view
 
 
 view : Model -> Html msg

@@ -1,6 +1,7 @@
-module Services.ServiceRow exposing (Model, view)
+module Services.ServiceRow exposing (Model, fromCache, view)
 
-import Cache exposing (BlueprintId)
+import Cache exposing (BlueprintId, ServiceId)
+import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Palette exposing (classes, shortHashRaw)
@@ -17,6 +18,30 @@ type alias Model =
     , peerId : String
     , ip : String
     }
+
+
+fromCache : Cache.Model -> ServiceId -> Maybe Model
+fromCache cache id =
+    let
+        srv =
+            Dict.get id cache.servicesById
+
+        bp =
+            srv |> Maybe.andThen (\x -> Dict.get x.blueprintId cache.blueprintsById)
+
+        res =
+            srv
+                |> Maybe.map
+                    (\x ->
+                        { blueprintName = bp |> Maybe.map .name |> Maybe.withDefault ""
+                        , blueprintId = bp |> Maybe.map .id |> Maybe.withDefault ""
+                        , serviceId = id
+                        , peerId = "peerId"
+                        , ip = "id"
+                        }
+                    )
+    in
+    res
 
 
 

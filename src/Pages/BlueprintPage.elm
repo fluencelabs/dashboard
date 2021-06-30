@@ -10,6 +10,7 @@ import List.Unique exposing (..)
 import Maybe.Extra as Maybe
 import Msg exposing (Msg(..))
 import Palette exposing (classes, darkRed, redFont)
+import Services.ServiceRow
 import Services.ServicesTable
 import Utils.Html exposing (..)
 
@@ -43,21 +44,7 @@ fromCache cache id =
             Dict.get id cache.servicesByBlueprintId
                 |> Maybe.withDefault Array.empty
                 |> Array.toList
-                |> List.map
-                    (\mbSrvId ->
-                        Dict.get mbSrvId cache.servicesById
-                            |> Maybe.map
-                                (\srv ->
-                                    { -- name = "srv.name"
-                                      blueprintName = bp |> Maybe.map .name |> Maybe.withDefault ""
-                                    , blueprintId = id
-                                    , serviceId = srv.id
-                                    , peerId = "peerId"
-                                    , ip = "id"
-                                    }
-                                )
-                    )
-                |> Maybe.values
+                |> Services.ServicesTable.fromCache cache
 
         res =
             Maybe.map

@@ -2,9 +2,13 @@ module Pages.Hub exposing (Model, fromCache, init, view)
 
 import Blueprints.BlueprintsList
 import Cache
+import Dict
 import Html exposing (Html, a, div, span, text)
 import Html.Attributes exposing (attribute)
+import Maybe.Extra as Maybe
 import Palette exposing (classes, redFont)
+import Services.ServiceRow
+import Services.ServicesTable
 
 
 
@@ -15,14 +19,10 @@ type alias FmModel =
     {}
 
 
-type alias ServicesModel =
-    {}
-
-
 type alias Model =
     { featuredBlueprints : Blueprints.BlueprintsList.Model
     , featuredModules : FmModel
-    , services : ServicesModel
+    , services : Services.ServicesTable.Model
     }
 
 
@@ -30,7 +30,7 @@ init : Model
 init =
     { featuredBlueprints = []
     , featuredModules = {}
-    , services = {}
+    , services = []
     }
 
 
@@ -38,7 +38,10 @@ fromCache : Cache.Model -> Model
 fromCache cache =
     { featuredBlueprints = Blueprints.BlueprintsList.fromCache cache
     , featuredModules = {}
-    , services = {}
+    , services =
+        cache.servicesById
+            |> Dict.keys
+            |> Services.ServicesTable.fromCache cache
     }
 
 
@@ -56,9 +59,9 @@ view model =
         , div [ classes "pt4 f3 fw5 pb4" ] [ text "Featured Modules" ]
 
         --, Modules.View.view model
-        , div [ classes "pt4 f3 fw5 pb4" ] [ text "Services" ]
-
-        --, Tuple.second (Instances.View.view model (\_ -> True))
+        , div [ classes "pt4 f3 fw5 pb4" ]
+            [ text "Services" ]
+        , Services.ServicesTable.view model.services
         ]
 
 
