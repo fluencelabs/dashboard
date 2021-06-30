@@ -64,24 +64,42 @@ fromCache cache id =
 
 view : Model -> Html Msg
 view model =
-    article [ classes "cf" ]
-        [ div [ classes "fl w-20-ns gray-font mv3" ] [ text "AUTHOR" ]
-        , div [ classes "fl w-80-ns mv3 lucida" ]
-            [ span [ classes "fl black b" ] [ text (textOrBsp model.author) ] ]
-        , div [ classes "fl w-20-ns gray-font mv3" ] [ text "DESCRIPTION" ]
-        , div [ classes "fl w-80-ns mv3 cf" ]
-            [ span [ classes "fl black lucida pv1" ] [ text (textOrBsp model.description) ] ]
-        , div [ classes "fl w-20-ns gray-font mv3" ] [ text "MODULES" ]
-        , div [ classes "fl w-80-ns mv3" ]
+    div [ classes "fl w-100" ]
+        [ div [ classes "fl w-100 pb4 pt4" ]
+            [ div [ redFont, classes "f1 fw4 pt3 pb2" ] [ text ("Blueprint: " ++ model.name) ]
+            , span [ classes "fl w-100", darkRed ] [ text ("ID: " ++ model.id) ]
+            ]
+        , div [ classes "fl w-100 bg-white mt2 ph4 pt3 mb5 pb3 br3" ]
+            [ article [ classes "cf" ]
+                [ div [ classes "fl w-20-ns gray-font mv3" ] [ text "AUTHOR" ]
+                , div [ classes "fl w-80-ns mv3 lucida" ]
+                    [ span [ classes "fl black b" ] [ text (textOrBsp model.author) ] ]
+                , div [ classes "fl w-20-ns gray-font mv3" ] [ text "DESCRIPTION" ]
+                , div [ classes "fl w-80-ns mv3 cf" ]
+                    [ span [ classes "fl black lucida pv1" ] [ text (textOrBsp model.description) ] ]
+                , div [ classes "fl w-20-ns gray-font mv3" ] [ text "MODULES" ]
+                , div [ classes "fl w-80-ns mv3" ]
+                    [ text
+                        (textOrBsp
+                            (String.join ", " model.moduleNames)
+                        )
+                    ]
+
+                --(blueprintInfo.modules
+                --    |> List.map (\m -> viewToggledInterface (checkToggle m.name) m.name)
+                --)
+                ]
+            ]
+        , div [ classes "pt4 fw5 f3 pb4" ]
             [ text
-                (textOrBsp
-                    (String.join ", " model.moduleNames)
+                ("Services ("
+                    ++ -- String.fromInt instanceNum ++
+                       ")"
                 )
             ]
-
-        --(blueprintInfo.modules
-        --    |> List.map (\m -> viewToggledInterface (checkToggle m.name) m.name)
-        --)
+        , div [ classes "fl w-100 mt2 mb4 bg-white br3" ]
+            [--instanceView
+            ]
         ]
 
 
