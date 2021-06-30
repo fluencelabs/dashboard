@@ -1,16 +1,16 @@
 module Pages.BlueprintPage exposing (Model, fromCache, view)
 
+import Array exposing (Array)
 import Cache exposing (BlueprintId)
 import Dict exposing (Dict)
-import Html exposing (Html, a, article, div, img, span, strong, text)
-import Html.Attributes exposing (attribute)
+import Html exposing (Html, article, div, span, text)
 import Html.Events exposing (onClick)
 import Info exposing (..)
 import List.Unique exposing (..)
-import Modules.Model exposing (Module)
+import Maybe.Extra as Maybe
 import Msg exposing (Msg(..))
 import Palette exposing (classes, darkRed, redFont)
-import Service.Model exposing (Interface)
+import Services.ServicesTable
 import Utils.Html exposing (..)
 
 
@@ -28,6 +28,7 @@ type alias Model =
 
     -- , blueprint : Blueprint
     , moduleNames : List String
+    , services : Services.ServicesTable.Model
     , openedModule : Maybe String
     }
 
@@ -37,6 +38,26 @@ fromCache cache id =
     let
         bp =
             Dict.get id cache.blueprintsById
+
+        services =
+            Dict.get id cache.servicesByBlueprintId
+                |> Maybe.withDefault Array.empty
+                |> Array.toList
+                |> List.map
+                    (\mbSrvId ->
+                        Dict.get mbSrvId cache.servicesById
+                            |> Maybe.map
+                                (\srv ->
+                                    { -- name = "srv.name"
+                                      blueprintName = bp |> Maybe.map .name |> Maybe.withDefault ""
+                                    , blueprintId = id
+                                    , serviceId = srv.id
+                                    , peerId = "peerId"
+                                    , ip = "id"
+                                    }
+                                )
+                    )
+                |> Maybe.values
 
         res =
             Maybe.map
@@ -50,6 +71,7 @@ fromCache cache id =
 
                     -- , blueprint = "Blueprint"
                     , moduleNames = []
+                    , services = services
                     , openedModule = Nothing
                     }
                 )
@@ -64,6 +86,12 @@ fromCache cache id =
 
 view : Model -> Html Msg
 view model =
+    let
+        instancesCount =
+            model.services
+                |> List.length
+                |> String.fromInt
+    in
     div [ classes "fl w-100" ]
         [ div [ classes "fl w-100 pb4 pt4" ]
             [ div [ redFont, classes "f1 fw4 pt3 pb2" ] [ text ("Blueprint: " ++ model.name) ]
@@ -92,13 +120,10 @@ view model =
             ]
         , div [ classes "pt4 fw5 f3 pb4" ]
             [ text
-                ("Services ("
-                    ++ -- String.fromInt instanceNum ++
-                       ")"
-                )
+                ("Services (" ++ instancesCount ++ ")")
             ]
         , div [ classes "fl w-100 mt2 mb4 bg-white br3" ]
-            [--instanceView
+            [ Services.ServicesTable.view model.services
             ]
         ]
 
