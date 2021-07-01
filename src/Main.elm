@@ -24,6 +24,7 @@ import Dict exposing (Dict)
 import Model exposing (Model)
 import Msg exposing (Msg(..))
 import Pages.Hub
+import Pages.NodesPage
 import Route
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
@@ -56,6 +57,7 @@ init flags url key =
             , page = r
             , pageModel =
                 { hub = Pages.Hub.init
+                , nodes = Pages.NodesPage.init
                 }
             , cache = Cache.init
             , discoveredPeers = Dict.empty

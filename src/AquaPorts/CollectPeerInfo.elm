@@ -33,11 +33,10 @@ type alias BlueprintDto =
 
 type alias PeerDto =
     { peerId : String
-
-    --, identify : Maybe Identify
+    , identify : Maybe IdentifyDto
     , services : Maybe (List ServiceDto)
 
-    --, modules : Maybe (List Module)
+    --, modules : Maybe (List ModuleDto)
     , blueprints : Maybe (List BlueprintDto)
     }
 

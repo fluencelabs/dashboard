@@ -6,9 +6,9 @@ import Html exposing (Html, div, text)
 import Model exposing (Model, Route(..))
 import ModulePage.View as ModulePage
 import Msg exposing (Msg)
-import NodePage.View as NodePage
 import Pages.BlueprintPage
-import Pages.Hub as HubPage
+import Pages.Hub
+import Pages.NodesPage
 import Port exposing (getAll)
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
 
@@ -35,13 +35,13 @@ routeView model route =
                 res =
                     case page of
                         "" ->
-                            HubPage.view model.pageModel.hub
+                            Pages.Hub.view model.pageModel.hub
 
                         "hub" ->
-                            HubPage.view model.pageModel.hub
+                            Pages.Hub.view model.pageModel.hub
 
                         "nodes" ->
-                            NodePage.view model
+                            Pages.NodesPage.view model.pageModel.nodes
 
                         _ ->
                             text ("undefined page: " ++ page)

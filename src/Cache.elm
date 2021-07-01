@@ -63,10 +63,34 @@ serviceFromDto s =
     }
 
 
+type alias PeerId =
+    String
+
+
+type alias Multiaddress =
+    String
+
+
+type alias Node =
+    { peerId : PeerId
+    , externalAddresses : Array Multiaddress
+    , services : Array ServiceId
+    , blueprints : Array BlueprintId
+    }
+
+
+firstExternalAddress : Node -> Maybe Multiaddress
+firstExternalAddress node =
+    Array.get 0 node.externalAddresses
+
+
 type alias Model =
     { blueprintsById : Dict BlueprintId Blueprint
     , servicesById : Dict ServiceId Service
     , servicesByBlueprintId : Dict BlueprintId (Array ServiceId)
+    , nodeByServiceId : Dict ServiceId PeerId
+    , nodeByBlueprintId : Dict BlueprintId PeerId
+    , nodes : Dict PeerId Node
     }
 
 
@@ -75,6 +99,9 @@ init =
     { blueprintsById = Dict.empty
     , servicesById = Dict.empty
     , servicesByBlueprintId = Dict.empty
+    , nodeByServiceId = Dict.empty
+    , nodeByBlueprintId = Dict.empty
+    , nodes = Dict.empty
     }
 
 
@@ -94,7 +121,7 @@ type Msg
 update : Model -> Msg -> Model
 update model msg =
     case msg of
-        CollectPeerInfo { peerId, blueprints, services } ->
+        CollectPeerInfo { peerId, blueprints, services, identify } ->
             let
                 newBlueprints =
                     blueprints |> Maybe.withDefault [] |> List.map blueprintFromDto |> Dict.fromListBy (\x -> x.id)
@@ -113,11 +140,27 @@ update model msg =
                         |> Dict.values
                         |> Dict.groupBy (\x -> x.blueprintId)
                         |> Dict.map (\k -> \v -> v |> List.map (\listVal -> listVal.id) |> Array.fromList)
+
+                externalAddresses =
+                    identify
+                        |> Maybe.map (\x -> x.external_addresses)
+                        |> Maybe.withDefault []
+                        |> Array.fromList
+
+                newNode =
+                    { peerId = peerId
+                    , externalAddresses = externalAddresses
+                    , services = Dict.keys newServices |> Array.fromList
+                    , blueprints = Dict.keys newBlueprints |> Array.fromList
+                    }
             in
             { model
                 | blueprintsById = resultBlueprints
                 , servicesById = resultServices
                 , servicesByBlueprintId = resultServicesByBlueprintId
+                , nodes = Dict.insert newNode.peerId newNode model.nodes
+                , nodeByServiceId = Dict.union model.nodeByServiceId (Dict.map (\x -> \_ -> peerId) newServices)
+                , nodeByBlueprintId = Dict.union model.nodeByBlueprintId (Dict.map (\x -> \_ -> peerId) newBlueprints)
             }
 
         CollectServiceInterface _ ->

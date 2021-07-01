@@ -24,6 +24,7 @@ import Modules.Model exposing (Module)
 import Nodes.Model exposing (Identify, emptyIdentify)
 import Pages.BlueprintPage
 import Pages.Hub
+import Pages.NodesPage
 import Service.Model exposing (Service)
 import Url
 
@@ -37,6 +38,7 @@ type Route
 
 type alias PageModel =
     { hub : Pages.Hub.Model
+    , nodes : Pages.NodesPage.Model
     }
 
 

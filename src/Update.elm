@@ -28,6 +28,7 @@ import Modules.Model exposing (Module)
 import Msg exposing (..)
 import Nodes.Model exposing (Identify)
 import Pages.Hub
+import Pages.NodesPage
 import Port exposing (getAll)
 import Route exposing (getAllCmd)
 import Service.Model exposing (Service, setInterface)
@@ -64,7 +65,9 @@ update msg model =
                     Cache.update model.cache cacheMsg
 
                 newPagesModel =
-                    { hub = Pages.Hub.fromCache newCache }
+                    { hub = Pages.Hub.fromCache newCache
+                    , nodes = Pages.NodesPage.fromCache newCache
+                    }
             in
             ( { model
                 | cache = newCache

@@ -1,9 +1,11 @@
 module Services.ServiceRow exposing (Model, fromCache, view)
 
+import Array exposing (Array)
 import Cache exposing (BlueprintId, ServiceId)
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
+import Msg exposing (Msg(..))
 import Palette exposing (classes, shortHashRaw)
 
 
@@ -29,15 +31,22 @@ fromCache cache id =
         bp =
             srv |> Maybe.andThen (\x -> Dict.get x.blueprintId cache.blueprintsById)
 
+        node =
+            Dict.get id cache.nodeByServiceId
+                |> Maybe.andThen (\x -> Dict.get x cache.nodes)
+
         res =
             srv
                 |> Maybe.map
                     (\x ->
-                        { blueprintName = bp |> Maybe.map .name |> Maybe.withDefault ""
-                        , blueprintId = bp |> Maybe.map .id |> Maybe.withDefault ""
+                        { blueprintName = bp |> Maybe.map .name |> Maybe.withDefault "unkown"
+                        , blueprintId = bp |> Maybe.map .id |> Maybe.withDefault "unkown"
                         , serviceId = id
-                        , peerId = "peerId"
-                        , ip = "id"
+                        , peerId = node |> Maybe.map .peerId |> Maybe.withDefault "unkown"
+                        , ip =
+                            node
+                                |> Maybe.andThen Cache.firstExternalAddress
+                                |> Maybe.withDefault "unkown"
                         }
                     )
     in

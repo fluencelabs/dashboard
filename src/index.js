@@ -142,10 +142,10 @@ function genFlags(peerId, relays, relayIdx) {
             const modules = args[4];
             const eventRaw = {
                 peerId,
-                //identify,
+                identify,
                 services,
                 blueprints,
-                //modules,
+                modules,
             };
 
             app.ports.collectPeerInfo.send(eventRaw);
