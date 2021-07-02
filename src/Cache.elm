@@ -105,6 +105,7 @@ type alias Model =
     { blueprintsById : Dict BlueprintId Blueprint
     , servicesById : Dict ServiceId Service
     , modulesByHash : Dict Hash Module
+    , modulesByName : Dict String Hash
     , blueprintsByModuleHash : Dict Hash (Array BlueprintId)
     , servicesByBlueprintId : Dict BlueprintId (Array ServiceId)
     , nodeByServiceId : Dict ServiceId PeerId
@@ -118,6 +119,7 @@ init =
     { blueprintsById = Dict.empty
     , servicesById = Dict.empty
     , modulesByHash = Dict.empty
+    , modulesByName = Dict.empty
     , blueprintsByModuleHash = Dict.empty
     , servicesByBlueprintId = Dict.empty
     , nodeByServiceId = Dict.empty
@@ -192,12 +194,16 @@ update model msg =
                             )
                             Dict.empty
                         |> Dict.map (\k -> \v -> Array.fromList v)
+
+                newModulesByName =
+                    newModules |> Dict.map (\k -> \x -> x.name) |> Dict.invert
             in
             { model
                 | blueprintsById = resultBlueprints
                 , servicesById = resultServices
                 , servicesByBlueprintId = resultServicesByBlueprintId
                 , modulesByHash = Dict.union model.modulesByHash newModules
+                , modulesByName = Dict.union newModulesByName model.modulesByName
                 , blueprintsByModuleHash = bpMyModuleHash
                 , nodes = Dict.insert newNode.peerId newNode model.nodes
                 , nodeByServiceId = Dict.union model.nodeByServiceId (Dict.map (\x -> \_ -> peerId) newServices)

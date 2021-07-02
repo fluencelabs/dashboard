@@ -8,9 +8,11 @@ import ModulePage.View as ModulePage
 import Msg exposing (Msg)
 import Pages.BlueprintPage
 import Pages.Hub
+import Pages.ModulePage
 import Pages.NodesPage
 import Port exposing (getAll)
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
+import Utils.Utils exposing (hashValueFromString)
 
 
 routeParser : Parser (Route -> a) a
@@ -61,7 +63,20 @@ routeView model route =
                         Components.Spinner.view
 
         Module moduleName ->
-            ModulePage.view model moduleName
+            let
+                hash =
+                    Dict.get moduleName model.cache.modulesByName
+
+                m =
+                    Maybe.andThen (Pages.ModulePage.fromCache model.cache) hash
+            in
+            case m of
+                Just m1 ->
+                    Pages.ModulePage.view m1
+
+                Nothing ->
+                    div []
+                        Components.Spinner.view
 
 
 getAllCmd : String -> String -> List String -> Cmd msg
