@@ -6,6 +6,7 @@ import Dict
 import Html exposing (Html, a, div, span, text)
 import Html.Attributes exposing (attribute)
 import Maybe.Extra as Maybe
+import Modules.ModulesList
 import Palette exposing (classes, redFont)
 import Services.ServiceRow
 import Services.ServicesTable
@@ -21,7 +22,7 @@ type alias FmModel =
 
 type alias Model =
     { featuredBlueprints : Blueprints.BlueprintsList.Model
-    , featuredModules : FmModel
+    , featuredModules : Modules.ModulesList.Model
     , services : Services.ServicesTable.Model
     }
 
@@ -29,7 +30,7 @@ type alias Model =
 init : Model
 init =
     { featuredBlueprints = []
-    , featuredModules = {}
+    , featuredModules = []
     , services = []
     }
 
@@ -37,7 +38,7 @@ init =
 fromCache : Cache.Model -> Model
 fromCache cache =
     { featuredBlueprints = Blueprints.BlueprintsList.fromCache cache
-    , featuredModules = {}
+    , featuredModules = Modules.ModulesList.fromCache cache
     , services =
         cache.servicesById
             |> Dict.keys
@@ -57,8 +58,7 @@ view model =
         , div [ classes "pt4 f3 fw5 pb4" ] [ text "Featured Service Blueprints" ]
         , Blueprints.BlueprintsList.view model.featuredBlueprints
         , div [ classes "pt4 f3 fw5 pb4" ] [ text "Featured Modules" ]
-
-        --, Modules.View.view model
+        , Modules.ModulesList.view model.featuredModules
         , div [ classes "pt4 f3 fw5 pb4" ]
             [ text "Services" ]
         , Services.ServicesTable.view model.services

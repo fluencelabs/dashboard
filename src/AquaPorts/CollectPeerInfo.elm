@@ -12,11 +12,9 @@ type alias ModuleConfigDto =
     { name : String
     }
 
-
 type alias ModuleDto =
     { name : String
     , hash : String
-    , config : ModuleConfigDto
     }
 
 
@@ -35,8 +33,7 @@ type alias PeerDto =
     { peerId : String
     , identify : Maybe IdentifyDto
     , services : Maybe (List ServiceDto)
-
-    --, modules : Maybe (List ModuleDto)
+    , modules : Maybe (List ModuleDto)
     , blueprints : Maybe (List BlueprintDto)
     }
 
