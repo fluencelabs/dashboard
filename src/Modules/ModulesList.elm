@@ -7,7 +7,6 @@ import Dict
 import Html exposing (Html, div)
 import Modules.ModuleTile
 import Palette exposing (classes)
-import Set
 
 
 
@@ -20,17 +19,13 @@ type alias Model =
 
 fromCache : Cache.Model -> Model
 fromCache cache =
-    let
-        numberOfUsages id =
-            Dict.get id cache.blueprintsByModuleHash |> Maybe.withDefault Array.empty |> Array.length
-    in
     cache.modulesByHash
         |> Dict.values
         |> List.map
             (\x ->
                 { hash = x.hash
                 , name = x.name
-                , numberOfUsages = numberOfUsages x.hash
+                , numberOfUsages = Cache.getServicesThatUseModule cache x.hash |> List.length
                 }
             )
 

@@ -101,6 +101,19 @@ firstExternalAddress node =
     Array.get 0 node.externalAddresses
 
 
+getServicesThatUseModule : Model -> Hash -> List ServiceId
+getServicesThatUseModule model hash =
+    Dict.get hash model.blueprintsByModuleHash
+        |> Maybe.map Array.toList
+        |> Maybe.withDefault []
+        |> List.concatMap
+            (\x ->
+                Dict.get x model.servicesByBlueprintId
+                    |> Maybe.withDefault Array.empty
+                    |> Array.toList
+            )
+
+
 type alias Model =
     { blueprintsById : Dict BlueprintId Blueprint
     , servicesById : Dict ServiceId Service

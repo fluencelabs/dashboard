@@ -24,7 +24,7 @@ view : Model -> Html msg
 view model =
     let
         usages =
-            [ text <| "in " ++ String.fromInt model.numberOfUsages ++ " blueprints" ]
+            [ text <| String.fromInt model.numberOfUsages ++ " instance(s)" ]
     in
     div [ classes "fl w-100 w-third-ns pr3" ]
         [ a

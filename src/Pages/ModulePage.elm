@@ -6,6 +6,7 @@ import Html exposing (Html, a, article, div, span, text)
 import Html.Attributes exposing (attribute)
 import Info exposing (getModuleDescription)
 import Palette exposing (classes, redFont)
+import Services.ServicesTable
 import Utils.Html exposing (textOrBsp)
 
 
@@ -20,6 +21,7 @@ type alias Model =
     , authorPeerId : String
     , description : String
     , website : String
+    , services : Services.ServicesTable.Model
     }
 
 
@@ -29,11 +31,9 @@ fromCache cache hash =
         m =
             Dict.get hash cache.modulesByHash
 
-        -- services =
-        --     Dict.get id cache.servicesByBlueprintId
-        --         |> Maybe.withDefault Array.empty
-        --         |> Array.toList
-        --         |> Services.ServicesTable.fromCache cache
+        services =
+            Cache.getServicesThatUseModule cache hash
+
         res =
             Maybe.map
                 (\x ->
@@ -43,8 +43,7 @@ fromCache cache hash =
                     , authorPeerId = "fluence_labs_peer_id"
                     , description = getModuleDescription x.name
                     , website = "https://github.com/fluencelabs/"
-
-                    -- , services = services
+                    , services = Services.ServicesTable.fromCache cache services
                     }
                 )
                 m
@@ -59,8 +58,8 @@ fromCache cache hash =
 view : Model -> Html msg
 view model =
     let
-        instanceNum =
-            0
+        numberOfInstances =
+            List.length model.services
     in
     div [ classes "fl w-100 cf ph2-ns" ]
         [ div [ classes "fl w-100 mb2 pt4 pb4" ]
@@ -87,7 +86,6 @@ view model =
                     ]
                 ]
             ]
-        , div [ classes "pt4 fw5 f3 pb4" ] [ text ("Services (" ++ String.fromInt instanceNum ++ ")") ]
-
-        -- , div [ classes "fl w-100 mt2 mb4 bg-white br3" ] [ instanceView ]
+        , div [ classes "pt4 fw5 f3 pb4" ] [ text ("Services (" ++ String.fromInt numberOfInstances ++ ")") ]
+        , div [ classes "fl w-100 mt2 mb4 bg-white br3" ] [ Services.ServicesTable.view model.services ]
         ]
