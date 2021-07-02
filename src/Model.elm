@@ -16,16 +16,10 @@ limitations under the License.
 
 -}
 
-import Blueprints.Model exposing (Blueprint)
 import Browser.Navigation as Nav
 import Cache
-import Dict exposing (Dict)
-import Modules.Model exposing (Module)
-import Nodes.Model exposing (Identify, emptyIdentify)
-import Pages.BlueprintPage
 import Pages.Hub
 import Pages.NodesPage
-import Service.Model exposing (Service)
 import Url
 
 
@@ -42,19 +36,6 @@ type alias PageModel =
     }
 
 
-type alias PeerData =
-    { identify : Identify
-    , services : List Service
-    , modules : List String
-    , blueprints : List String
-    }
-
-
-emptyPeerData : PeerData
-emptyPeerData =
-    { identify = emptyIdentify, services = [], modules = [], blueprints = [] }
-
-
 type alias Model =
     { peerId : String
     , relayId : String
@@ -66,9 +47,4 @@ type alias Model =
     , toggledInterface : Maybe String
     , knownPeers : List String
     , isInitialized : Bool
-    , discoveredPeers : Dict String PeerData
-    , modules : Dict String Module
-    , modulesByHash : Dict String Module
-    , blueprints : Dict String Blueprint
-    , services : Dict String Service
     }

@@ -5,6 +5,7 @@ import Dict
 import Html exposing (Html, a, article, div, span, text)
 import Html.Attributes exposing (attribute)
 import Info exposing (getModuleDescription)
+import Modules.Interface exposing (interfaceView)
 import Palette exposing (classes, redFont)
 import Services.ServicesTable
 import Utils.Html exposing (textOrBsp)
@@ -82,7 +83,7 @@ view model =
                     [ span [ classes "fl w-100 black" ]
                         []
 
-                    -- (interfaceView moduleInfo.moduleInfo.interface)
+                    --(interfaceView TODO)
                     ]
                 ]
             ]

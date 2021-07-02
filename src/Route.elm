@@ -1,10 +1,9 @@
 module Route exposing (..)
 
 import Components.Spinner
-import Dict exposing (Dict)
+import Dict
 import Html exposing (Html, div, text)
 import Model exposing (Model, Route(..))
-import ModulePage.View as ModulePage
 import Msg exposing (Msg)
 import Pages.BlueprintPage
 import Pages.Hub
@@ -12,7 +11,6 @@ import Pages.ModulePage
 import Pages.NodesPage
 import Port exposing (getAll)
 import Url.Parser exposing ((</>), Parser, map, oneOf, s, string)
-import Utils.Utils exposing (hashValueFromString)
 
 
 routeParser : Parser (Route -> a) a

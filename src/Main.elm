@@ -60,11 +60,6 @@ init flags url key =
                 , nodes = Pages.NodesPage.init
                 }
             , cache = Cache.init
-            , discoveredPeers = Dict.empty
-            , modules = Dict.empty
-            , modulesByHash = Dict.empty
-            , blueprints = Dict.empty
-            , services = Dict.empty
             , toggledInterface = Nothing
             , knownPeers = flags.knownPeers
             , isInitialized = False

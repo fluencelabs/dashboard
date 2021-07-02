@@ -16,8 +16,8 @@ limitations under the License.
 
 -}
 
-import AquaPorts.CollectPeerInfo exposing (PeerDto, collectPeerInfo)
-import AquaPorts.CollectServiceInterface exposing (ServiceInterfaceDto, collectServiceInterface)
+import AquaPorts.CollectPeerInfo exposing (collectPeerInfo)
+import AquaPorts.CollectServiceInterface exposing (collectServiceInterface)
 import Cache
 import Model exposing (Model)
 import Msg exposing (Msg(..))

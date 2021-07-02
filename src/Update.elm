@@ -16,22 +16,17 @@ limitations under the License.
 
 -}
 
-import Blueprints.BlueprintTile
-import Blueprints.Model exposing (Blueprint)
 import Browser
 import Browser.Navigation as Nav
 import Cache
-import Dict exposing (Dict)
+import Dict
 import Maybe exposing (withDefault)
-import Model exposing (Model, PageModel, PeerData, emptyPeerData)
-import Modules.Model exposing (Module)
+import Model exposing (Model)
 import Msg exposing (..)
-import Nodes.Model exposing (Identify)
 import Pages.Hub
 import Pages.NodesPage
 import Port exposing (getAll)
-import Route exposing (getAllCmd)
-import Service.Model exposing (Service, setInterface)
+import Route
 import Url
 
 
@@ -98,45 +93,3 @@ update msg model =
 
         Reload ->
             ( model, getAll { relayPeerId = model.relayId, knownPeers = model.knownPeers } )
-
-
-updateModel : Model -> String -> Identify -> List Service -> List Module -> List Blueprint -> Model
-updateModel model peer identify services modules blueprints =
-    let
-        data =
-            Maybe.withDefault emptyPeerData (Dict.get peer model.discoveredPeers)
-
-        servicesDict =
-            services |> List.map (\m -> ( m.id, m )) |> Dict.fromList
-
-        moduleDict =
-            modules |> List.map (\m -> ( m.name, m )) |> Dict.fromList
-
-        moduleDictByHash =
-            modules |> List.map (\m -> ( m.hash, m )) |> Dict.fromList
-
-        blueprintDict =
-            blueprints |> List.map (\b -> ( b.id, b )) |> Dict.fromList
-
-        updatedModules =
-            Dict.union moduleDict model.modules
-
-        updatedModulesByHash =
-            Dict.union moduleDictByHash model.modulesByHash
-
-        updatedBlueprints =
-            Dict.union blueprintDict model.blueprints
-
-        newData =
-            { data | identify = identify, modules = Dict.keys moduleDict, blueprints = Dict.keys blueprintDict }
-
-        updated =
-            Dict.insert peer newData model.discoveredPeers
-    in
-    { model
-        | discoveredPeers = updated
-        , services = servicesDict
-        , modules = updatedModules
-        , modulesByHash = updatedModulesByHash
-        , blueprints = updatedBlueprints
-    }

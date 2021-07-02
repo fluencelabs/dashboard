@@ -3,10 +3,9 @@ module Cache exposing (..)
 import AquaPorts.CollectPeerInfo exposing (BlueprintDto, ModuleDto, PeerDto, ServiceDto)
 import AquaPorts.CollectServiceInterface exposing (ServiceInterfaceDto)
 import Array exposing (Array)
-import Blueprints.Model exposing (Blueprint)
-import Dict exposing (Dict, values)
+import Dict exposing (Dict)
 import Dict.Extra as Dict
-import Html exposing (b)
+import Html
 import Set exposing (Set)
 
 
