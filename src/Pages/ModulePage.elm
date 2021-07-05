@@ -1,11 +1,12 @@
 module Pages.ModulePage exposing (Model, fromCache, view)
 
+import AquaPorts.CollectServiceInterface exposing (InterfaceDto)
 import Cache exposing (Hash)
 import Dict
 import Html exposing (Html, a, article, div, span, text)
 import Html.Attributes exposing (attribute)
 import Info exposing (getModuleDescription)
-import Modules.Interface exposing (interfaceView)
+import Modules.Interface
 import Palette exposing (classes, redFont)
 import Services.ServicesTable
 import Utils.Html exposing (textOrBsp)
@@ -23,6 +24,7 @@ type alias Model =
     , description : String
     , website : String
     , services : Services.ServicesTable.Model
+    , interface : Maybe InterfaceDto
     }
 
 
@@ -45,6 +47,7 @@ fromCache cache hash =
                     , description = getModuleDescription x.name
                     , website = "https://github.com/fluencelabs/"
                     , services = Services.ServicesTable.fromCache cache services
+                    , interface = Nothing
                     }
                 )
                 m
@@ -78,13 +81,12 @@ view model =
                 , div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "DESCRIPTION" ]
                 , div [ classes "fl w-100 w-80-ns mv3 lucida" ]
                     [ span [ classes "fl w-100 black" ] [ text (textOrBsp model.description) ] ]
-                , div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "INTERFACE" ]
-                , div [ classes "fl w-100 w-80-ns mv3" ]
-                    [ span [ classes "fl w-100 black" ]
-                        []
 
-                    --(interfaceView TODO)
-                    ]
+                -- , div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "INTERFACE" ]
+                -- , div [ classes "fl w-100 w-80-ns mv3" ]
+                --     [ span [ classes "fl w-100 black" ]
+                --         (Modules.Interface.view model.interface)
+                --     ]
                 ]
             ]
         , div [ classes "pt4 fw5 f3 pb4" ] [ text ("Services (" ++ String.fromInt numberOfInstances ++ ")") ]

@@ -1,4 +1,4 @@
-module Modules.Interface exposing (..)
+module Modules.Interface exposing (view)
 
 import Html exposing (Html, div, span, text)
 import Palette exposing (classes)
@@ -31,17 +31,14 @@ type alias Interface =
     }
 
 
-type alias Service =
-    { id : String
-    , blueprint_id : String
-    , owner_id : String
-    , interface : Maybe Interface
-    }
+view : Maybe Interface -> List (Html msg)
+view model =
+    case model of
+        Just m ->
+            interfaceView m
 
-
-setInterface : Interface -> Service -> Service
-setInterface interface service =
-    { service | interface = Just interface }
+        Nothing ->
+            []
 
 
 interfaceView : Interface -> List (Html msg)

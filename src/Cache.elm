@@ -1,7 +1,7 @@
 module Cache exposing (..)
 
 import AquaPorts.CollectPeerInfo exposing (BlueprintDto, ModuleDto, PeerDto, ServiceDto)
-import AquaPorts.CollectServiceInterface exposing (ServiceInterfaceDto)
+import AquaPorts.CollectServiceInterface exposing (InterfaceDto, ServiceInterfaceDto)
 import Array exposing (Array)
 import Dict exposing (Dict)
 import Dict.Extra as Dict
@@ -37,7 +37,6 @@ extractHash str =
 type alias Module =
     { hash : Hash
     , name : String
-    , interfaces : Maybe (List Never)
     }
 
 
@@ -45,7 +44,6 @@ moduleFromDto : ModuleDto -> Module
 moduleFromDto dto =
     { name = dto.name
     , hash = dto.hash
-    , interfaces = Nothing
     }
 
 
@@ -53,6 +51,7 @@ type alias Blueprint =
     { id : BlueprintId
     , name : String
     , dependencies : Set Hash
+    , interface : Maybe InterfaceDto
     }
 
 
@@ -61,6 +60,7 @@ blueprintFromDto bp =
     { id = bp.id
     , dependencies = bp.dependencies |> List.map extractHash |> Set.fromList
     , name = bp.name
+    , interface = Nothing
     }
 
 
@@ -222,5 +222,25 @@ update model msg =
                 , nodeByBlueprintId = Dict.union model.nodeByBlueprintId (Dict.map (\x -> \_ -> peerId) newBlueprints)
             }
 
-        CollectServiceInterface _ ->
-            model
+        CollectServiceInterface { peer_id, service_id, interface } ->
+            let
+                bp =
+                    Dict.get service_id model.servicesById
+                        |> Maybe.map .blueprintId
+                        |> Maybe.andThen (\x -> Dict.get x model.blueprintsById)
+
+                newModel =
+                    case bp of
+                        Just justBp ->
+                            { model
+                                | blueprintsById =
+                                    Dict.insert
+                                        justBp.id
+                                        { justBp | interface = Just interface }
+                                        model.blueprintsById
+                            }
+
+                        Nothing ->
+                            model
+            in
+            newModel
