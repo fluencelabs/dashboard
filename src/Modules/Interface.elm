@@ -1,8 +1,13 @@
-module Modules.Interface exposing (view)
+module Modules.Interface exposing (Model, view)
 
-import Html exposing (Html, div, span, text)
+import Html exposing (Html, div, pre, span, text)
 import Palette exposing (classes)
+import String.Extra as String
 import String.Interpolate exposing (interpolate)
+
+
+
+-- model
 
 
 type alias Signature =
@@ -25,58 +30,63 @@ type alias Record =
     }
 
 
-type alias Interface =
+type alias Model =
     { function_signatures : List Signature
     , record_types : List Record
+    , name : String
     }
 
 
-view : Maybe Interface -> List (Html msg)
+
+-- view
+
+
+view : Model -> Html msg
 view model =
-    case model of
-        Just m ->
-            interfaceView m
-
-        Nothing ->
-            []
+    pre [ classes "i f6 ma0" ] [ text <| interfaceView model ]
 
 
-interfaceView : Interface -> List (Html msg)
-interfaceView interface =
-    recordsView interface.record_types ++ signaturesView interface.function_signatures
+tab : String
+tab =
+    "    "
 
 
-recordsView : List Record -> List (Html msg)
-recordsView record =
-    record |> List.sortBy .name |> List.map recordView
+interfaceView : Model -> String
+interfaceView model =
+    recordsView model.record_types ++ "\n\n" ++ signaturesView model
 
 
-recordView : Record -> Html msg
+recordsView : List Record -> String
+recordsView records =
+    String.join "\n\n" (List.map recordView records)
+
+
+recordView : Record -> String
 recordView record =
-    div [ classes "i f6" ]
-        ([ span [ classes "fl w-100 mt2" ] [ text (record.name ++ " {") ] ]
-            ++ fieldsView record.fields
-            ++ [ span [ classes "fl w-100 mb2" ] [ text "}" ] ]
-        )
+    "data "
+        ++ record.name
+        ++ ":\n"
+        ++ fieldsView record.fields
 
 
-fieldsView : List Field -> List (Html msg)
+fieldsView : List Field -> String
 fieldsView fields =
-    fields |> List.map (\f -> span [ classes "fl w-100 ml2" ] [ text (String.join ": " [ f.name, f.ty ]) ])
+    String.join "\n" (List.map (\x -> tab ++ String.join ": " [ x.name, x.ty ]) fields)
 
 
-signaturesView : List Signature -> List (Html msg)
-signaturesView signatures =
-    signatures |> List.sortBy .name |> List.map signatureView
+signaturesView : Model -> String
+signaturesView model =
+    "service "
+        ++ String.toTitleCase model.name
+        ++ ":\n"
+        ++ String.join "\n" (List.map signatureView model.function_signatures)
 
 
-signatureView : Signature -> Html msg
+signatureView : Signature -> String
 signatureView signature =
-    div [ classes "i f6 fl w-100 mv2" ]
-        [ text "fn "
-        , span [ classes "fw5" ] [ text signature.name ]
-        , text (interpolate "({0}) -> {1}" [ argumentsToString signature.arguments, outputToString signature.output_types ])
-        ]
+    tab
+        ++ signature.name
+        ++ interpolate "({0}) -> {1}" [ argumentsToString signature.arguments, outputToString signature.output_types ]
 
 
 argumentsToString : List (List String) -> String

@@ -1,10 +1,9 @@
 module Pages.BlueprintPage exposing (Model, fromCache, view)
 
-import AquaPorts.CollectServiceInterface exposing (InterfaceDto)
 import Array exposing (Array)
 import Cache exposing (BlueprintId)
 import Dict exposing (Dict)
-import Html exposing (Html, article, div, span, text)
+import Html exposing (Html, article, div, pre, span, text)
 import Html.Events exposing (onClick)
 import Info exposing (..)
 import List.Unique exposing (..)
@@ -28,7 +27,7 @@ type alias Model =
     , authorPeerId : String
     , description : String
     , website : String
-    , interface : Maybe InterfaceDto
+    , interface : Maybe Modules.Interface.Model
     , moduleNames : List String
     , services : Services.ServicesTable.Model
     , openedModule : Maybe String
@@ -47,6 +46,7 @@ fromCache cache id =
                 |> Array.toList
                 |> Services.ServicesTable.fromCache cache
 
+        res : Maybe Model
         res =
             Maybe.map
                 (\x ->
@@ -56,7 +56,15 @@ fromCache cache id =
                     , authorPeerId = "fluence_labs_peer_id"
                     , description = getBlueprintDescription x.id
                     , website = "https://github.com/fluencelabs/"
-                    , interface = x.interface
+                    , interface =
+                        x.interface
+                            |> Maybe.map
+                                (\i ->
+                                    { function_signatures = i.function_signatures
+                                    , record_types = i.record_types
+                                    , name = x.name
+                                    }
+                                )
                     , moduleNames = []
                     , services = services
                     , openedModule = Nothing
@@ -101,9 +109,13 @@ view model =
                     ]
                 , div [ classes "fl w-100 w-20-ns gray mv3" ] [ text "INTERFACE" ]
                 , div [ classes "fl w-100 w-80-ns mv3" ]
-                    [ span [ classes "fl w-100 black" ]
-                        (Modules.Interface.view model.interface)
+                    [ model.interface |> Maybe.map Modules.Interface.view |> Maybe.withDefault (text (Utils.Html.textOrBsp ""))
                     ]
+
+                --[ span [ classes "fl w-100 black" ]
+                -- [
+                --]
+                --]
                 ]
             ]
         , div [ classes "pt4 fw5 f3 pb4" ]

@@ -19,6 +19,7 @@
             "elm-community/intdict": "3.0.0",
             "elm-community/list-extra": "8.2.4",
             "elm-community/maybe-extra": "5.2.0",
+            "elm-community/string-extra": "4.0.1",
             "kalutheo/elm-ui-explorer": "9.0.0",
             "lukewestby/elm-string-interpolate": "1.0.4"
         },
