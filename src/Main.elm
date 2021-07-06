@@ -21,7 +21,7 @@ import Browser.Navigation as Navigation
 import Cache
 import Config exposing (Flags)
 import Dict exposing (Dict)
-import Model exposing (Model)
+import Model exposing (Model, PageModel)
 import Msg exposing (Msg(..))
 import Pages.Hub
 import Pages.NodesPage
@@ -49,17 +49,22 @@ init flags url key =
         r =
             Route.parse url
 
+        c =
+            Cache.init
+
+        newPagesModel =
+            { hub = Pages.Hub.fromCache c
+            , nodes = Pages.NodesPage.fromCache c
+            }
+
         emptyModel =
             { peerId = flags.peerId
             , relayId = flags.relayId
             , url = url
             , key = key
             , page = r
-            , pageModel =
-                { hub = Pages.Hub.init
-                , nodes = Pages.NodesPage.init
-                }
-            , cache = Cache.init
+            , pageModel = newPagesModel
+            , cache = c
             , toggledInterface = Nothing
             , knownPeers = flags.knownPeers
             , isInitialized = False
