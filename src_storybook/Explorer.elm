@@ -3,7 +3,6 @@ module Explorer exposing (main)
 import Blueprints.BlueprintTile
 import Html exposing (div)
 import Html.Attributes exposing (attribute, style)
-import Pages.Hub exposing (welcomeText)
 import UIExplorer
     exposing
         ( UIExplorerProgram
@@ -27,13 +26,7 @@ main =
         (createCategories
             |> category
                 "Hub"
-                [ storiesOf
-                    "Welcome"
-                    [ ( "default", \_ -> welcomeText, {} ) ]
-                , storiesOf
-                    "Modules"
-                    [ ( "1", \_ -> welcomeText, {} ) ]
-                ]
+                []
             |> category
                 "Blueprints"
                 [ storiesOf
