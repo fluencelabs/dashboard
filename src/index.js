@@ -169,8 +169,44 @@ function genFlags(peerId, relays, relayIdx) {
         }
     });
 
+    // alias ServiceInterfaceCb: PeerId, string, Interface -> ()
+    function collectServiceInterface(peer_id, service_id, iface) {
+        console.count(`service interface from ${peer_id}`);
+        try {
+            const eventRaw = {
+                peer_id,
+                service_id,
+                interface: iface,
+            };
+
+            app.ports.collectServiceInterface.send(eventRaw);
+        } catch (err) {
+            log.error('Elm eventreceiver failed: ', err);
+        }
+    }
+
+    // alias PeerInfoCb: PeerId, Info, []Service, []Blueprint, []Module -> ()
+    function collectPeerInfo(peerId, identify, services, blueprints, modules, interfaces) {
+        console.log('peer info from %s, %s services', peerId, services.length);
+        try {
+            const eventRaw = {
+                peerId,
+                identify,
+                services,
+                blueprints,
+                modules,
+            };
+
+            app.ports.collectPeerInfo.send(eventRaw);
+        } catch (err) {
+            log.error('Elm eventreceiver failed: ', err);
+        }
+    }
+
     app.ports.getAll.subscribe(async (data) => {
-        await getAll(client, data.relayPeerId, data.knownPeers, { ttl: 1000000 });
+        await getAll(client, data.relayPeerId, data.knownPeers, collectPeerInfo, collectServiceInterface, {
+            ttl: 1000000,
+        });
     });
 })();
 
