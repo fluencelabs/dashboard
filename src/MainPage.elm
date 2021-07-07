@@ -4,7 +4,7 @@ import AquaPorts.CollectPeerInfo exposing (collectPeerInfo)
 import AquaPorts.CollectServiceInterface exposing (collectServiceInterface)
 import Browser exposing (Document, UrlRequest)
 import Browser.Navigation as Nav
-import Cache
+import Cache exposing (Blueprint)
 import Components.Spinner
 import Dict
 import Html exposing (Html, a, div, header, img, p, text)
@@ -15,23 +15,52 @@ import Pages.Hub
 import Pages.ModulePage
 import Pages.NodesPage
 import Palette exposing (classes)
-import Route exposing (Route(..))
+import Route
 import Url
 
 
 
 -- model
--- type PageModel
---     = Hub Pages.Hub.Model
---     | Nodes Pages.NodesPage.Model
---     | Blueprint Pages.BlueprintPage.Model
---     | Module Pages.ModulePage.Model
 
 
-type alias PageModel =
-    { hub : Pages.Hub.Model
-    , nodes : Pages.NodesPage.Model
-    }
+type PageModel
+    = Hub Pages.Hub.Model
+    | Nodes Pages.NodesPage.Model
+    | Blueprint (Maybe Pages.BlueprintPage.Model)
+    | Module (Maybe Pages.ModulePage.Model)
+    | Unknown String
+
+
+pageModelFromCache : Route.Route -> Cache.Model -> PageModel
+pageModelFromCache route cache =
+    case route of
+        Route.Home ->
+            Hub (Pages.Hub.fromCache cache)
+
+        Route.Hub ->
+            Hub (Pages.Hub.fromCache cache)
+
+        Route.Nodes ->
+            Nodes (Pages.NodesPage.fromCache cache)
+
+        Route.Blueprint id ->
+            Blueprint (Pages.BlueprintPage.fromCache cache id)
+
+        Route.Module moduleName ->
+            let
+                hash =
+                    Dict.get moduleName cache.modulesByName
+
+                m =
+                    Maybe.andThen (Pages.ModulePage.fromCache cache) hash
+            in
+            Module m
+
+        Route.Peer peer ->
+            Unknown peer
+
+        Route.Unknown s ->
+            Unknown s
 
 
 type alias Model =
@@ -106,7 +135,7 @@ body model =
                     ]
                 ]
             ]
-        , div [ classes "mw8-ns center w-100 pa4 pt3 mt4" ] [ routeView model model.page ]
+        , div [ classes "mw8-ns center w-100 pa4 pt3 mt4" ] [ routeView model.pageModel ]
         ]
 
 
@@ -120,45 +149,32 @@ layout elms =
         ]
 
 
-routeView : Model -> Route.Route -> Html msg
-routeView model route =
-    case route of
-        Home ->
-            Pages.Hub.view model.pageModel.hub
+routeView : PageModel -> Html msg
+routeView model =
+    case model of
+        Hub m ->
+            Pages.Hub.view m
 
-        Hub ->
-            Pages.Hub.view model.pageModel.hub
+        Nodes m ->
+            Pages.NodesPage.view m
 
-        Nodes ->
-            Pages.NodesPage.view model.pageModel.nodes
-
-        Blueprint id ->
-            case Pages.BlueprintPage.fromCache model.cache id of
-                Just m ->
-                    Pages.BlueprintPage.view m
-
-                Nothing ->
-                    div []
-                        Components.Spinner.view
-
-        Module moduleName ->
-            let
-                hash =
-                    Dict.get moduleName model.cache.modulesByName
-
-                m =
-                    Maybe.andThen (Pages.ModulePage.fromCache model.cache) hash
-            in
+        Blueprint m ->
             case m of
-                Just m1 ->
-                    Pages.ModulePage.view m1
+                Just mm ->
+                    Pages.BlueprintPage.view mm
 
                 Nothing ->
                     div []
                         Components.Spinner.view
 
-        Peer peer ->
-            text peer
+        Module m ->
+            case m of
+                Just mm ->
+                    Pages.ModulePage.view mm
+
+                Nothing ->
+                    div []
+                        Components.Spinner.view
 
         Unknown s ->
             text ("Not found: " ++ s)
@@ -212,9 +228,7 @@ update msg model =
                     Cache.update model.cache cacheMsg
 
                 newPagesModel =
-                    { hub = Pages.Hub.fromCache newCache
-                    , nodes = Pages.NodesPage.fromCache newCache
-                    }
+                    pageModelFromCache model.page model.cache
             in
             ( { model
                 | cache = newCache
@@ -287,7 +301,7 @@ getAllCmd peerId relayId knownPeers =
         ]
 
 
-routeCommand : Model -> Route -> Cmd msg
+routeCommand : Model -> Route.Route -> Cmd msg
 routeCommand m _ =
     if m.isInitialized then
         Cmd.none

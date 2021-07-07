@@ -59,9 +59,7 @@ init flags url key =
             Cache.init
 
         newPagesModel =
-            { hub = Pages.Hub.fromCache c
-            , nodes = Pages.NodesPage.fromCache c
-            }
+            pageModelFromCache r c
 
         emptyModel =
             { peerId = flags.peerId
