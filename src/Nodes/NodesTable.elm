@@ -6,7 +6,6 @@ import Dict exposing (Dict)
 import Html exposing (Html, div, p, table, tbody, td, text, th, thead, tr)
 import Html.Attributes exposing (attribute)
 import List
-import Msg exposing (Msg(..))
 import Nodes.NodeRow
 import Palette exposing (..)
 

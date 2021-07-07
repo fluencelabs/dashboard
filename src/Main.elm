@@ -19,17 +19,23 @@ limitations under the License.
 import Browser exposing (Document)
 import Browser.Navigation as Navigation
 import Cache
-import Config exposing (Flags)
 import Dict exposing (Dict)
-import Model exposing (Model, PageModel)
-import Msg exposing (Msg(..))
+import MainPage exposing (..)
 import Pages.Hub
 import Pages.NodesPage
 import Route
-import Subscriptions exposing (subscriptions)
-import Update exposing (update)
 import Url
-import View exposing (view)
+
+
+type alias Config =
+    { peerId : String
+    , relayId : String
+    , knownPeers : List String
+    }
+
+
+type alias Flags =
+    Config
 
 
 main =
@@ -70,4 +76,4 @@ init flags url key =
             , isInitialized = False
             }
     in
-    ( emptyModel, Route.routeCommand emptyModel r )
+    ( emptyModel, routeCommand emptyModel r )

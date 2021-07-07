@@ -9,7 +9,6 @@ import Info exposing (..)
 import List.Unique exposing (..)
 import Maybe.Extra as Maybe
 import Modules.Interface
-import Msg exposing (Msg(..))
 import Palette exposing (classes, darkRed, redFont)
 import Services.ServiceRow
 import Services.ServicesTable
@@ -79,7 +78,7 @@ fromCache cache id =
 -- view
 
 
-view : Model -> Html Msg
+view : Model -> Html msg
 view model =
     let
         instancesCount =
@@ -128,7 +127,7 @@ view model =
         ]
 
 
-viewToggledInterface : Bool -> String -> Html Msg
+viewToggledInterface : Bool -> String -> Html msg
 viewToggledInterface isOpen name =
     let
         interfaceViewEl =
@@ -140,7 +139,9 @@ viewToggledInterface isOpen name =
                 []
     in
     div []
-        ([ div [ classes "fl w-100 light-shadow bg-near-white pa2 mv2 pointer", onClick (ToggleInterface name) ]
+        ([ div
+            [ classes "fl w-100 light-shadow bg-near-white pa2 mv2 pointer" --, onClick (ToggleInterface name)
+            ]
             [ span [ classes "fl mh2 pv1 tldib v-mid dib v-mid" ] [ text name ]
 
             --, a [ attribute "href" ("/module/" ++ name), classes "fl dib v-mid mt1" ] [ img [ attribute "src" "/images/link.svg" ] [] ]

@@ -5,7 +5,6 @@ import Cache exposing (BlueprintId, ServiceId)
 import Dict exposing (Dict)
 import Html exposing (..)
 import Html.Attributes exposing (..)
-import Msg exposing (Msg(..))
 import Palette exposing (classes, shortHashRaw)
 
 
