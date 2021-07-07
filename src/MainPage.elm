@@ -15,6 +15,7 @@ import Pages.Hub
 import Pages.ModulePage
 import Pages.NodesPage
 import Route
+import RoutePage
 import Url
 import Utils.Html exposing (classes)
 
@@ -23,53 +24,13 @@ import Utils.Html exposing (classes)
 -- model
 
 
-type PageModel
-    = Hub Pages.Hub.Model
-    | Nodes Pages.NodesPage.Model
-    | Blueprint (Maybe Pages.BlueprintPage.Model)
-    | Module (Maybe Pages.ModulePage.Model)
-    | Unknown String
-
-
-pageModelFromCache : Route.Route -> Cache.Model -> PageModel
-pageModelFromCache route cache =
-    case route of
-        Route.Home ->
-            Hub (Pages.Hub.fromCache cache)
-
-        Route.Hub ->
-            Hub (Pages.Hub.fromCache cache)
-
-        Route.Nodes ->
-            Nodes (Pages.NodesPage.fromCache cache)
-
-        Route.Blueprint id ->
-            Blueprint (Pages.BlueprintPage.fromCache cache id)
-
-        Route.Module moduleName ->
-            let
-                hash =
-                    Dict.get moduleName cache.modulesByName
-
-                m =
-                    Maybe.andThen (Pages.ModulePage.fromCache cache) hash
-            in
-            Module m
-
-        Route.Peer peer ->
-            Unknown peer
-
-        Route.Unknown s ->
-            Unknown s
-
-
 type alias Model =
     { peerId : String
     , relayId : String
     , key : Nav.Key
     , url : Url.Url
     , page : Route.Route
-    , pageModel : PageModel
+    , pageModel : RoutePage.Model
     , cache : Cache.Model
     , toggledInterface : Maybe String
     , knownPeers : List String
@@ -135,7 +96,7 @@ body model =
                     ]
                 ]
             ]
-        , div [ classes "mw8-ns center w-100 pa4 pt3 mt4" ] [ routeView model.pageModel ]
+        , div [ classes "mw8-ns center w-100 pa4 pt3 mt4" ] [ RoutePage.view model.pageModel ]
         ]
 
 
@@ -147,37 +108,6 @@ layout elms =
                 ++ elms
             )
         ]
-
-
-routeView : PageModel -> Html msg
-routeView model =
-    case model of
-        Hub m ->
-            Pages.Hub.view m
-
-        Nodes m ->
-            Pages.NodesPage.view m
-
-        Blueprint m ->
-            case m of
-                Just mm ->
-                    Pages.BlueprintPage.view mm
-
-                Nothing ->
-                    div []
-                        Components.Spinner.view
-
-        Module m ->
-            case m of
-                Just mm ->
-                    Pages.ModulePage.view mm
-
-                Nothing ->
-                    div []
-                        Components.Spinner.view
-
-        Unknown s ->
-            text ("Not found: " ++ s)
 
 
 
@@ -228,7 +158,7 @@ update msg model =
                     Cache.update model.cache cacheMsg
 
                 newPagesModel =
-                    pageModelFromCache model.page model.cache
+                    RoutePage.fromCache model.page model.cache
             in
             ( { model
                 | cache = newCache

@@ -16,14 +16,12 @@ limitations under the License.
 
 -}
 
-import Browser exposing (Document)
+import Browser
 import Browser.Navigation as Navigation
 import Cache
-import Dict exposing (Dict)
 import MainPage exposing (..)
-import Pages.Hub
-import Pages.NodesPage
 import Route
+import RoutePage
 import Url
 
 
@@ -59,7 +57,7 @@ init flags url key =
             Cache.init
 
         newPagesModel =
-            pageModelFromCache r c
+            RoutePage.fromCache r c
 
         emptyModel =
             { peerId = flags.peerId
