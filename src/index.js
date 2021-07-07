@@ -170,7 +170,7 @@ function genFlags(peerId, relays, relayIdx) {
     });
 
     app.ports.getAll.subscribe(async (data) => {
-        await getAll(client, data.relayPeerId, data.knownPeers);
+        await getAll(client, data.relayPeerId, data.knownPeers, { ttl: 1000000 });
     });
 })();
 

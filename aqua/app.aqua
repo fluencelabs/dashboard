@@ -32,8 +32,8 @@ func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId):
 func getAll(relayPeerId: PeerId, knownPeers: []PeerId):
 	askAllAndSend(relayPeerId)
 	
-	-- par for peer <- knownPeers par:
-	-- 	askAllAndSend(peer)
+	for peer <- knownPeers par:
+		askAllAndSend(peer)
 
 	-- par findAndAskNeighboursSchema(relayPeerId, %init_peer_id%)
 
