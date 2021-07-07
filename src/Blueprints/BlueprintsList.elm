@@ -1,10 +1,10 @@
 module Blueprints.BlueprintsList exposing (Model, fromCache, view)
 
-import Array exposing (Array)
+import Array
 import Blueprints.BlueprintTile
 import Cache
 import Components.Spinner
-import Dict exposing (Dict)
+import Dict
 import Html exposing (Html, div)
 import Utils.Html exposing (classes)
 

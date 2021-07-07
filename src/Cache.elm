@@ -5,7 +5,6 @@ import AquaPorts.CollectServiceInterface exposing (InterfaceDto, ServiceInterfac
 import Array exposing (Array)
 import Dict exposing (Dict)
 import Dict.Extra as Dict
-import Html
 import Set exposing (Set)
 
 
@@ -177,7 +176,7 @@ update model msg =
                     resultServices
                         |> Dict.values
                         |> Dict.groupBy (\x -> x.blueprintId)
-                        |> Dict.map (\k -> \v -> v |> List.map (\listVal -> listVal.id) |> Array.fromList)
+                        |> Dict.map (\_ -> \v -> v |> List.map (\listVal -> listVal.id) |> Array.fromList)
 
                 externalAddresses =
                     identify
@@ -205,10 +204,10 @@ update model msg =
                                             acc
                             )
                             Dict.empty
-                        |> Dict.map (\k -> \v -> Array.fromList v)
+                        |> Dict.map (\_ -> \v -> Array.fromList v)
 
                 newModulesByName =
-                    newModules |> Dict.map (\k -> \x -> x.name) |> Dict.invert
+                    newModules |> Dict.map (\_ -> \x -> x.name) |> Dict.invert
             in
             { model
                 | blueprintsById = resultBlueprints
@@ -218,11 +217,11 @@ update model msg =
                 , modulesByName = Dict.union newModulesByName model.modulesByName
                 , blueprintsByModuleHash = bpMyModuleHash
                 , nodes = Dict.insert newNode.peerId newNode model.nodes
-                , nodeByServiceId = Dict.union model.nodeByServiceId (Dict.map (\x -> \_ -> peerId) newServices)
-                , nodeByBlueprintId = Dict.union model.nodeByBlueprintId (Dict.map (\x -> \_ -> peerId) newBlueprints)
+                , nodeByServiceId = Dict.union model.nodeByServiceId (Dict.map (\_ -> \_ -> peerId) newServices)
+                , nodeByBlueprintId = Dict.union model.nodeByBlueprintId (Dict.map (\_ -> \_ -> peerId) newBlueprints)
             }
 
-        CollectServiceInterface { peer_id, service_id, interface } ->
+        CollectServiceInterface { service_id, interface } ->
             let
                 bp =
                     Dict.get service_id model.servicesById

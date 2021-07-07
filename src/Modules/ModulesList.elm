@@ -1,6 +1,5 @@
 module Modules.ModulesList exposing (..)
 
-import Array exposing (Array)
 import Cache
 import Components.Spinner
 import Dict
