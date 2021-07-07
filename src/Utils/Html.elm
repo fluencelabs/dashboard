@@ -1,5 +1,8 @@
 module Utils.Html exposing (..)
 
+import Html
+import Html.Attributes exposing (classList)
+
 
 textOrBsp : String -> String
 textOrBsp text =
@@ -8,3 +11,10 @@ textOrBsp text =
 
     else
         text
+
+
+classes : String -> Html.Attribute msg
+classes cls =
+    classList <|
+        List.map (\s -> ( s, True )) <|
+            String.split " " cls

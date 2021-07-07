@@ -1,7 +1,7 @@
 module Components.Spinner exposing (..)
 
 import Html exposing (Html, div)
-import Palette exposing (classes)
+import Utils.Html exposing (classes)
 
 
 

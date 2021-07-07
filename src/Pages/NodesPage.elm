@@ -4,6 +4,7 @@ import Cache
 import Html exposing (..)
 import Nodes.NodesTable
 import Palette exposing (..)
+import Utils.Html exposing (classes)
 
 
 

@@ -14,9 +14,9 @@ import Pages.BlueprintPage
 import Pages.Hub
 import Pages.ModulePage
 import Pages.NodesPage
-import Palette exposing (classes)
 import Route
 import Url
+import Utils.Html exposing (classes)
 
 
 

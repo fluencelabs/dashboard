@@ -3,7 +3,7 @@ module Blueprints.BlueprintTile exposing (Model, view)
 import Cache exposing (BlueprintId)
 import Html exposing (Html, a, div, span, text)
 import Html.Attributes exposing (attribute)
-import Palette exposing (classes)
+import Utils.Html exposing (classes)
 
 
 

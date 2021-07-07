@@ -7,9 +7,10 @@ import Html exposing (Html, a, div, span, text)
 import Html.Attributes exposing (attribute)
 import Maybe.Extra as Maybe
 import Modules.ModulesList
-import Palette exposing (classes, redFont)
+import Palette exposing (redFont)
 import Services.ServiceRow
 import Services.ServicesTable
+import Utils.Html exposing (classes)
 
 
 

@@ -9,7 +9,7 @@ import Info exposing (..)
 import List.Unique exposing (..)
 import Maybe.Extra as Maybe
 import Modules.Interface
-import Palette exposing (classes, darkRed, redFont)
+import Palette exposing (darkRed, redFont)
 import Services.ServiceRow
 import Services.ServicesTable
 import Utils.Html exposing (..)

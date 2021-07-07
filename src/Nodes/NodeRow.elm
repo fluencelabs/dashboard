@@ -3,6 +3,7 @@ module Nodes.NodeRow exposing (Model, view)
 import Cache exposing (PeerId)
 import Html exposing (Html, p, td, text, tr)
 import Palette exposing (..)
+import Utils.Html exposing (classes)
 
 
 

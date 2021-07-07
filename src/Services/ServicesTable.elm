@@ -4,8 +4,8 @@ import Cache exposing (ServiceId)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Maybe.Extra as Maybe
-import Palette exposing (classes)
 import Services.ServiceRow
+import Utils.Html exposing (classes)
 
 
 

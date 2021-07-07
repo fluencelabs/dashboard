@@ -6,7 +6,7 @@ import Cache
 import Components.Spinner
 import Dict exposing (Dict)
 import Html exposing (Html, div)
-import Palette exposing (classes)
+import Utils.Html exposing (classes)
 
 
 

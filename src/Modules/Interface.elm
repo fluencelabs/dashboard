@@ -1,9 +1,9 @@
 module Modules.Interface exposing (Model, view)
 
 import Html exposing (Html, div, pre, span, text)
-import Palette exposing (classes)
 import String.Extra as String
 import String.Interpolate exposing (interpolate)
+import Utils.Html exposing (classes)
 
 
 

@@ -6,7 +6,7 @@ import Components.Spinner
 import Dict
 import Html exposing (Html, div)
 import Modules.ModuleTile
-import Palette exposing (classes)
+import Utils.Html exposing (classes)
 
 
 

@@ -2,7 +2,7 @@ module Modules.ModuleTile exposing (Model, view)
 
 import Html exposing (Html, a, div, p, text)
 import Html.Attributes exposing (attribute)
-import Palette exposing (classes)
+import Utils.Html exposing (classes)
 
 
 

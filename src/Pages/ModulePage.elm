@@ -7,9 +7,9 @@ import Html exposing (Html, a, article, div, span, text)
 import Html.Attributes exposing (attribute)
 import Info exposing (getModuleDescription)
 import Modules.Interface
-import Palette exposing (classes, redFont)
+import Palette exposing (redFont)
 import Services.ServicesTable
-import Utils.Html exposing (textOrBsp)
+import Utils.Html exposing (classes, textOrBsp)
 
 
 
