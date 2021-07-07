@@ -17,7 +17,6 @@ import Pages.NodesPage
 import Palette exposing (classes)
 import Route exposing (Route(..))
 import Url
-import Url.Parser exposing ((</>), Parser, map, oneOf, s, string, top)
 
 
 
@@ -66,51 +65,49 @@ title _ =
 body : Model -> Html Msg
 body model =
     layout <|
-        List.concat
-            [ [ header [ classes "w-100" ]
-                    [ div [ classes "w-100 fl pv2 bg-white one-edge-shadow" ]
-                        [ div [ classes "mw8-ns center ph3" ]
-                            [ div [ classes "fl mv1 pl3" ]
-                                [ a [ attribute "href" "/" ]
-                                    [ img
-                                        [ classes "mw-100"
-                                        , style "height" "30px"
-                                        , attribute "src" "/images/logo_new.svg"
-                                        , style "position" "relative"
-                                        , style "top" "0.16rem"
-                                        ]
-                                        []
-                                    ]
+        [ header [ classes "w-100" ]
+            [ div [ classes "w-100 fl pv2 bg-white one-edge-shadow" ]
+                [ div [ classes "mw8-ns center ph3" ]
+                    [ div [ classes "fl mv1 pl3" ]
+                        [ a [ attribute "href" "/" ]
+                            [ img
+                                [ classes "mw-100"
+                                , style "height" "30px"
+                                , attribute "src" "/images/logo_new.svg"
+                                , style "position" "relative"
+                                , style "top" "0.16rem"
                                 ]
-                            , div [ classes "fl pl5 h-auto" ]
-                                [ p [ classes "h-100 m-auto fw4" ]
-                                    [ a [ attribute "href" "/", classes "link black" ] [ text "Developer Hub" ]
-                                    ]
+                                []
+                            ]
+                        ]
+                    , div [ classes "fl pl5 h-auto" ]
+                        [ p [ classes "h-100 m-auto fw4" ]
+                            [ a [ attribute "href" "/", classes "link black" ] [ text "Developer Hub" ]
+                            ]
+                        ]
+                    , div [ classes "fl pl5 h-auto" ]
+                        [ p [ classes "h-100 m-auto fw4" ]
+                            [ a [ attribute "href" "/nodes", classes "link black" ] [ text "Nodes" ]
+                            ]
+                        ]
+                    , div [ classes "fl fr" ]
+                        [ a [ attribute "href" "/" ]
+                            [ img
+                                [ classes "mw-100"
+                                , style "height" "20px"
+                                , attribute "src" "/images/reload.svg"
+                                , style "position" "relative"
+                                , style "top" "0.85rem"
+                                , onClick Reload
                                 ]
-                            , div [ classes "fl pl5 h-auto" ]
-                                [ p [ classes "h-100 m-auto fw4" ]
-                                    [ a [ attribute "href" "/nodes", classes "link black" ] [ text "Nodes" ]
-                                    ]
-                                ]
-                            , div [ classes "fl fr" ]
-                                [ a [ attribute "href" "/" ]
-                                    [ img
-                                        [ classes "mw-100"
-                                        , style "height" "20px"
-                                        , attribute "src" "/images/reload.svg"
-                                        , style "position" "relative"
-                                        , style "top" "0.85rem"
-                                        , onClick Reload
-                                        ]
-                                        []
-                                    ]
-                                ]
+                                []
                             ]
                         ]
                     ]
-              ]
-            , [ div [ classes "mw8-ns center w-100 pa4 pt3 mt4" ] [ routeView model model.page ] ]
+                ]
             ]
+        , div [ classes "mw8-ns center w-100 pa4 pt3 mt4" ] [ routeView model model.page ]
+        ]
 
 
 layout : List (Html Msg) -> Html Msg
