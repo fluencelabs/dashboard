@@ -108,41 +108,44 @@ export async function askAllAndSend(client, peer, collectPeerInfo, collectServic
        (seq
         (seq
          (seq
-          (seq
-           (call peer ("peer" "identify") [] ident)
-           (call peer ("dist" "list_blueprints") [] blueprints)
-          )
-          (call peer ("dist" "list_modules") [] modules)
+          (call peer ("peer" "identify") [] ident)
+          (call peer ("dist" "list_blueprints") [] blueprints)
          )
-         (call peer ("srv" "list") [] services)
+         (call peer ("dist" "list_modules") [] modules)
         )
-        (call -relay- ("op" "noop") [])
+        (call peer ("srv" "list") [] services)
        )
-       (xor
-        (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [peer ident services blueprints modules])
-        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-       )
+       (call -relay- ("op" "noop") [])
       )
-      (call -relay- ("op" "noop") [])
+      (xor
+       (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [peer ident services blueprints modules])
+       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+      )
      )
-     (call peer ("peer" "timestamp_ms") [])
+     (call -relay- ("op" "noop") [])
     )
     (fold services srv
      (par
-      (xor
-       (seq
+      (seq
+       (call -relay- ("op" "noop") [])
+       (xor
         (seq
-         (call peer ("srv" "get_interface") [srv.$.id!] iface)
-         (call -relay- ("op" "noop") [])
+         (seq
+          (call peer ("srv" "get_interface") [srv.$.id!] iface)
+          (call -relay- ("op" "noop") [])
+         )
+         (xor
+          (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [peer srv.$.id! iface])
+          (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+         )
         )
-        (xor
-         (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [peer srv.$.id! iface])
-         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
-        )
+        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
        )
-       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
       )
-      (next srv)
+      (seq
+       (call -relay- ("op" "noop") [])
+       (next srv)
+      )
      )
     )
    )
@@ -183,6 +186,141 @@ h.on('callbackSrv', 'collectServiceInterface', (args) => {collectServiceInterfac
       
 
 
+export async function findAndAskNeighboursSchema(client, relayPeerId, clientId, collectPeerInfo, collectServiceInterface, config) {
+    let request;
+    config = config || {};
+    const promise = new Promise((resolve, reject) => {
+        var r = new RequestFlowBuilder()
+            .disableInjections()
+            .withRawScript(
+                `
+(xor
+ (seq
+  (seq
+   (seq
+    (seq
+     (call %init_peer_id% ("getDataSrv" "-relay-") [] -relay-)
+     (call %init_peer_id% ("getDataSrv" "relayPeerId") [] relayPeerId)
+    )
+    (call %init_peer_id% ("getDataSrv" "clientId") [] clientId)
+   )
+   (call -relay- ("op" "noop") [])
+  )
+  (xor
+   (seq
+    (call relayPeerId ("kad" "neighborhood") [clientId false] neighbors)
+    (fold neighbors n
+     (par
+      (xor
+       (seq
+        (call n ("kad" "neighborhood") [clientId false] neighbors2)
+        (fold neighbors2 n2
+         (par
+          (xor
+           (seq
+            (seq
+             (seq
+              (seq
+               (seq
+                (seq
+                 (seq
+                  (call n2 ("peer" "identify") [] ident)
+                  (call n2 ("dist" "list_blueprints") [] blueprints)
+                 )
+                 (call n2 ("dist" "list_modules") [] modules)
+                )
+                (call n2 ("srv" "list") [] services)
+               )
+               (call -relay- ("op" "noop") [])
+              )
+              (xor
+               (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [n2 ident services blueprints modules])
+               (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+              )
+             )
+             (call -relay- ("op" "noop") [])
+            )
+            (fold services srv
+             (par
+              (seq
+               (call -relay- ("op" "noop") [])
+               (xor
+                (seq
+                 (seq
+                  (call n2 ("srv" "get_interface") [srv.$.id!] iface)
+                  (call -relay- ("op" "noop") [])
+                 )
+                 (xor
+                  (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [n2 srv.$.id! iface])
+                  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                 )
+                )
+                (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+               )
+              )
+              (seq
+               (call -relay- ("op" "noop") [])
+               (next srv)
+              )
+             )
+            )
+           )
+           (seq
+            (call -relay- ("op" "noop") [])
+            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
+           )
+          )
+          (next n2)
+         )
+        )
+       )
+       (seq
+        (call -relay- ("op" "noop") [])
+        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 5])
+       )
+      )
+      (next n)
+     )
+    )
+   )
+   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 6])
+  )
+ )
+ (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 7])
+)
+
+            `,
+            )
+            .configHandler((h) => {
+                h.on('getDataSrv', '-relay-', () => {
+                    return client.relayPeerId;
+                });
+                h.on('getDataSrv', 'relayPeerId', () => {return relayPeerId;});
+h.on('getDataSrv', 'clientId', () => {return clientId;});
+h.on('callbackSrv', 'collectPeerInfo', (args) => {collectPeerInfo(args[0], args[1], args[2], args[3], args[4]); return {};});
+h.on('callbackSrv', 'collectServiceInterface', (args) => {collectServiceInterface(args[0], args[1], args[2]); return {};});
+                
+                h.onEvent('errorHandlingSrv', 'error', (args) => {
+                    // assuming error is the single argument
+                    const [err] = args;
+                    reject(err);
+                });
+            })
+            .handleScriptError(reject)
+            .handleTimeout(() => {
+                reject('Request timed out for findAndAskNeighboursSchema');
+            })
+        if(config.ttl) {
+            r.withTTL(config.ttl)
+        }
+        request = r.build();
+    });
+    await client.initiateFlow(request);
+    return Promise.race([promise, Promise.resolve()]);
+}
+      
+
+
 export async function getAll(client, relayPeerId, knownPeers, collectPeerInfo, collectServiceInterface, config) {
     let request;
     config = config || {};
@@ -200,61 +338,62 @@ export async function getAll(client, relayPeerId, knownPeers, collectPeerInfo, c
    )
    (call %init_peer_id% ("getDataSrv" "knownPeers") [] knownPeers)
   )
-  (fold knownPeers peer
-   (par
-    (seq
-     (call -relay- ("op" "noop") [])
-     (xor
+  (par
+   (seq
+    (call -relay- ("op" "noop") [])
+    (xor
+     (seq
       (seq
        (seq
         (seq
          (seq
           (seq
            (seq
-            (seq
-             (seq
-              (call peer ("peer" "identify") [] ident)
-              (call peer ("dist" "list_blueprints") [] blueprints)
-             )
-             (call peer ("dist" "list_modules") [] modules)
-            )
-            (call peer ("srv" "list") [] services)
+            (call relayPeerId ("peer" "identify") [] ident)
+            (call relayPeerId ("dist" "list_blueprints") [] blueprints)
            )
-           (call -relay- ("op" "noop") [])
+           (call relayPeerId ("dist" "list_modules") [] modules)
           )
-          (xor
-           (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [peer ident services blueprints modules])
-           (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-          )
+          (call relayPeerId ("srv" "list") [] services)
          )
          (call -relay- ("op" "noop") [])
         )
-        (call peer ("peer" "timestamp_ms") [])
+        (xor
+         (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [relayPeerId ident services blueprints modules])
+         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+        )
        )
-       (fold services srv
-        (par
+       (call -relay- ("op" "noop") [])
+      )
+      (fold services srv
+       (par
+        (seq
+         (call -relay- ("op" "noop") [])
          (xor
           (seq
            (seq
-            (call peer ("srv" "get_interface") [srv.$.id!] iface)
+            (call relayPeerId ("srv" "get_interface") [srv.$.id!] iface)
             (call -relay- ("op" "noop") [])
            )
            (xor
-            (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [peer srv.$.id! iface])
+            (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [relayPeerId srv.$.id! iface])
             (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
            )
           )
           (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
          )
+        )
+        (seq
+         (call -relay- ("op" "noop") [])
          (next srv)
         )
        )
       )
-      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
      )
+     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
     )
-    (next peer)
    )
+   (null)
   )
  )
  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 5])

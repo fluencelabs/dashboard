@@ -16,23 +16,22 @@ func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInte
 		modules <- Dist.list_modules()
 		services <- Srv.list()
 		collectPeerInfo(peer, ident, services, blueprints, modules)
-		Peer.timestamp_ms()
 		collectServiceInterfaces(peer, services, collectServiceInterface)
 
 
--- func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId):
--- 	on relayPeerId:
--- 		neighbors <- Kademlia.neighborhood(clientId, false)
--- 		for n <- neighbors par:
--- 			on n:
--- 				neighbors2 <- Kademlia.neighborhood(clientId, false)
--- 				for n2 <- neighbors2 par:
--- 					askAllAndSend(n2)
+func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
+	on relayPeerId:
+		neighbors <- Kademlia.neighborhood(clientId, false)
+		for n <- neighbors par:
+			on n:
+				neighbors2 <- Kademlia.neighborhood(clientId, false)
+				for n2 <- neighbors2 par:
+					askAllAndSend(n2, collectPeerInfo, collectServiceInterface)
 
 func getAll(relayPeerId: PeerId, knownPeers: []PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
-	-- co askAllAndSend(relayPeerId, collectPeerInfo, collectServiceInterface)
+	co askAllAndSend(relayPeerId, collectPeerInfo, collectServiceInterface)
 	
-	for peer <- knownPeers par:
-		askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
+	--for peer <- knownPeers par:
+	--	askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
 
-	-- co findAndAskNeighboursSchema(relayPeerId, %init_peer_id%)
+	-- co findAndAskNeighboursSchema(relayPeerId, %init_peer_id%, collectPeerInfo, collectServiceInterface)

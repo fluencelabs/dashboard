@@ -139,10 +139,13 @@ update msg model =
                 route =
                     Route.parse url
 
+                page =
+                    RoutePage.fromCache route model.cache
+
                 cmd =
                     routeCommand model route
             in
-            ( { model | url = url, isInitialized = True, page = route, toggledInterface = Nothing }, cmd )
+            ( { model | url = url, isInitialized = True, page = route, pageModel = page, toggledInterface = Nothing }, cmd )
 
         LinkClicked urlRequest ->
             case urlRequest of

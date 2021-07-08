@@ -171,7 +171,7 @@ function genFlags(peerId, relays, relayIdx) {
 
     // alias ServiceInterfaceCb: PeerId, string, Interface -> ()
     function collectServiceInterface(peer_id, service_id, iface) {
-        console.count(`service interface from ${peer_id}`);
+        // console.count(`service interface from ${peer_id}`);
         try {
             const eventRaw = {
                 peer_id,
@@ -187,7 +187,7 @@ function genFlags(peerId, relays, relayIdx) {
 
     // alias PeerInfoCb: PeerId, Info, []Service, []Blueprint, []Module -> ()
     function collectPeerInfo(peerId, identify, services, blueprints, modules, interfaces) {
-        console.log('peer info from %s, %s services', peerId, services.length);
+        // console.log('peer info from %s, %s services', peerId, services.length);
         try {
             const eventRaw = {
                 peerId,
