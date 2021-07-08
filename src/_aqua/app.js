@@ -338,62 +338,64 @@ export async function getAll(client, relayPeerId, knownPeers, collectPeerInfo, c
    )
    (call %init_peer_id% ("getDataSrv" "knownPeers") [] knownPeers)
   )
-  (par
-   (seq
-    (call -relay- ("op" "noop") [])
-    (xor
-     (seq
+  (fold knownPeers peer
+   (par
+    (seq
+     (call -relay- ("op" "noop") [])
+     (xor
       (seq
        (seq
         (seq
          (seq
           (seq
            (seq
-            (call relayPeerId ("peer" "identify") [] ident)
-            (call relayPeerId ("dist" "list_blueprints") [] blueprints)
+            (seq
+             (call peer ("peer" "identify") [] ident)
+             (call peer ("dist" "list_blueprints") [] blueprints)
+            )
+            (call peer ("dist" "list_modules") [] modules)
            )
-           (call relayPeerId ("dist" "list_modules") [] modules)
+           (call peer ("srv" "list") [] services)
           )
-          (call relayPeerId ("srv" "list") [] services)
+          (call -relay- ("op" "noop") [])
          )
-         (call -relay- ("op" "noop") [])
-        )
-        (xor
-         (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [relayPeerId ident services blueprints modules])
-         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-        )
-       )
-       (call -relay- ("op" "noop") [])
-      )
-      (fold services srv
-       (par
-        (seq
-         (call -relay- ("op" "noop") [])
          (xor
-          (seq
-           (seq
-            (call relayPeerId ("srv" "get_interface") [srv.$.id!] iface)
-            (call -relay- ("op" "noop") [])
-           )
-           (xor
-            (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [relayPeerId srv.$.id! iface])
-            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
-           )
-          )
-          (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+          (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [peer ident services blueprints modules])
+          (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
          )
         )
-        (seq
-         (call -relay- ("op" "noop") [])
-         (next srv)
+        (call -relay- ("op" "noop") [])
+       )
+       (fold services srv
+        (par
+         (seq
+          (call -relay- ("op" "noop") [])
+          (xor
+           (seq
+            (seq
+             (call peer ("srv" "get_interface") [srv.$.id!] iface)
+             (call -relay- ("op" "noop") [])
+            )
+            (xor
+             (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [peer srv.$.id! iface])
+             (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+            )
+           )
+           (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+          )
+         )
+         (seq
+          (call -relay- ("op" "noop") [])
+          (next srv)
+         )
         )
        )
       )
+      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
      )
-     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
     )
+    (next peer)
    )
-   (null)
   )
  )
  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 5])
