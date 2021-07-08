@@ -16,17 +16,24 @@ limitations under the License.
 
 -}
 
-import Browser exposing (Document)
+import Browser
 import Browser.Navigation as Navigation
-import Config exposing (Flags)
-import Dict
-import Model exposing (Model)
-import Msg exposing (Msg(..))
+import Cache
+import MainPage exposing (..)
 import Route
-import Subscriptions exposing (subscriptions)
-import Update exposing (update)
+import RoutePage
 import Url
-import View exposing (view)
+
+
+type alias Config =
+    { peerId : String
+    , relayId : String
+    , knownPeers : List String
+    }
+
+
+type alias Flags =
+    Config
 
 
 main =
@@ -46,19 +53,23 @@ init flags url key =
         r =
             Route.parse url
 
+        c =
+            Cache.init
+
+        page =
+            RoutePage.fromCache r c
+
         emptyModel =
             { peerId = flags.peerId
             , relayId = flags.relayId
             , url = url
             , key = key
-            , page = r
-            , discoveredPeers = Dict.empty
-            , modules = Dict.empty
-            , modulesByHash = Dict.empty
-            , blueprints = Dict.empty
+            , route = r
+            , page = page
+            , cache = c
             , toggledInterface = Nothing
             , knownPeers = flags.knownPeers
             , isInitialized = False
             }
     in
-    ( emptyModel, Route.routeCommand emptyModel r )
+    ( emptyModel, routeCommand emptyModel r )

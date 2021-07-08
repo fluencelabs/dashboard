@@ -1,0 +1,72 @@
+/*
+  elm-hot creates an additional div wrapper around the app to make HMR possible.
+  This could break styling in development mode if you are using Elm UI.
+
+  More context in the issue:
+    https://github.com/halfzebra/create-elm-app/issues/320
+*/
+[data-elm-hot="true"] {
+  height: inherit;
+}
+
+html { font-size: 87.5%; }
+
+body {
+  font-family: 'Roboto Mono', monospace;
+  background-color: #F4F4F4;
+  font-size: 1rem;
+}
+
+h1 {
+  font-family: 'Roboto Mono', monospace;
+}
+
+.element-box {
+  border-width: 2px;
+}
+
+.element-box:hover {
+  border-color: #E11E5A;
+}
+
+.fluence-red {
+  color: #E11E5A;
+}
+
+.table-red-row:hover {
+  background-color: #FFF8F8;
+}
+
+.gray-font {
+  color: #7d7d7d;
+}
+
+.gray-font2 {
+  color: #898989;
+}
+
+.lucida {
+  font-family: 'Lucida Grande', Lucida, Tahoma, Verdana, Arial, sans-serif;
+}
+
+.lucida-in {
+  font-family: 'Lucida Grande', Lucida, Tahoma, Verdana, Arial, sans-serif;
+  color: black;
+}
+
+.welcome-text {
+  line-height: 20px;
+}
+
+.medium-roboto {
+  font-weight: 500;
+  
+}
+
+.light-shadow {
+  box-shadow: 0px 1px 3px 1px rgba( 0, 0, 0, 0.1 );
+}
+
+.one-edge-shadow {
+  box-shadow: 0px 1px 6px 1px rgba( 0, 0, 0, 0.1 );
+}

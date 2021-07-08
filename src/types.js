@@ -37,10 +37,16 @@ export const module = object({
     name: string().required(),
 });
 
-export const eventType = object({
+export const peerInfo = object({
     peerId: string().required(),
     identify: identify.required(),
     services: array(service).required(),
     blueprints: array(blueprint).required(),
     modules: array(module).required(),
+});
+
+export const interfaceInfo = object({
+    peer_id: string().required(),
+    service_id: string().required(),
+    interface: object().required(),
 });

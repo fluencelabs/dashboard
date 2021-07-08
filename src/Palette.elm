@@ -17,14 +17,7 @@ limitations under the License.
 -}
 
 import Html exposing (Html)
-import Html.Attributes exposing (classList, style)
-
-
-classes : String -> Html.Attribute msg
-classes cls =
-    classList <|
-        List.map (\s -> ( s, True )) <|
-            String.split " " cls
+import Html.Attributes exposing (style)
 
 
 shortHashRaw size hash =
