@@ -29,8 +29,8 @@ type alias Model =
     , relayId : String
     , key : Nav.Key
     , url : Url.Url
-    , page : Route.Route
-    , pageModel : RoutePage.Model
+    , route : Route.Route
+    , page : RoutePage.Model
     , cache : Cache.Model
     , toggledInterface : Maybe String
     , knownPeers : List String
@@ -96,7 +96,7 @@ body model =
                     ]
                 ]
             ]
-        , div [ classes "mw8-ns center w-100 pa4 pt3 mt4" ] [ RoutePage.view model.pageModel ]
+        , div [ classes "mw8-ns center w-100 pa4 pt3 mt4" ] [ RoutePage.view model.page ]
         ]
 
 
@@ -145,7 +145,7 @@ update msg model =
                 cmd =
                     routeCommand model route
             in
-            ( { model | url = url, isInitialized = True, page = route, pageModel = page, toggledInterface = Nothing }, cmd )
+            ( { model | url = url, isInitialized = True, route = route, page = page, toggledInterface = Nothing }, cmd )
 
         LinkClicked urlRequest ->
             case urlRequest of
@@ -161,11 +161,11 @@ update msg model =
                     Cache.update model.cache cacheMsg
 
                 newPagesModel =
-                    RoutePage.fromCache model.page model.cache
+                    RoutePage.fromCache model.route model.cache
             in
             ( { model
                 | cache = newCache
-                , pageModel = newPagesModel
+                , page = newPagesModel
               }
             , Cmd.none
             )

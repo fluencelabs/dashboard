@@ -56,7 +56,7 @@ init flags url key =
         c =
             Cache.init
 
-        newPagesModel =
+        page =
             RoutePage.fromCache r c
 
         emptyModel =
@@ -64,8 +64,8 @@ init flags url key =
             , relayId = flags.relayId
             , url = url
             , key = key
-            , page = r
-            , pageModel = newPagesModel
+            , route = r
+            , page = page
             , cache = c
             , toggledInterface = Nothing
             , knownPeers = flags.knownPeers
