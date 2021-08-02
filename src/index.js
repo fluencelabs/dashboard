@@ -38,7 +38,7 @@ const defaultNetworkName = 'krasnodar';
 
 const defaultEnv = {
     relays: krasnodar,
-    relayIdx: 0,
+    relayIdx: krasnodar.length - 1,
     logLevel: 'error',
 };
 
@@ -137,7 +137,7 @@ function genFlags(peerId, relays, relayIdx) {
 
     // alias ServiceInterfaceCb: PeerId, string, Interface -> ()
     function collectServiceInterface(peer_id, service_id, iface) {
-        console.count(`service interface from ${peer_id}`);
+        // console.count(`service interface from ${peer_id}`);
         try {
             const eventRaw = {
                 peer_id,
@@ -173,8 +173,6 @@ function genFlags(peerId, relays, relayIdx) {
     function collectNeighbors(peer_ids) {
         try {
             let newPeers = removeKnown(peer_ids);
-            console.dir(getServicesFromPeers);
-            console.dir(client);
             getServicesFromPeers(client, newPeers, collectPeerInfo, collectServiceInterface);
         } catch (e) {
             console.error('collectNieghbors failed:', e);
