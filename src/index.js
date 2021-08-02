@@ -20,7 +20,7 @@ import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
 import Multiaddr from 'multiaddr';
-import { dev, krasnodar, Node } from '@fluencelabs/fluence-network-environment';
+import { dev, krasnodar } from '@fluencelabs/fluence-network-environment';
 import {
     createClient,
     generatePeerId,
@@ -36,15 +36,8 @@ import { getAll, getServicesFromPeers } from './_aqua/app';
 
 const defaultNetworkName = 'krasnodar';
 
-const localEnv = [
-    {
-        multiaddr: '/ip4/127.0.0.1/tcp/9999/ws/p2p/12D3KooWMvFBVukxFe7dGLNBPA1kL8VdWBx7AESKPCg7KgDpCSoU',
-        peerId: '12D3KooWMvFBVukxFe7dGLNBPA1kL8VdWBx7AESKPCg7KgDpCSoU',
-    },
-];
-
 const defaultEnv = {
-    relays: localEnv,
+    relays: krasnodar,
     relayIdx: 0,
     logLevel: 'error',
 };
