@@ -3,12 +3,14 @@ import "@fluencelabs/aqua-lib/builtin.aqua"
 alias PeerInfoCb: PeerId, Info, []Service, []Blueprint, []Module -> ()
 alias ServiceInterfaceCb: PeerId, string, Interface -> ()
 
+-- send all found ServiceInterface-s to the client
 func collectServiceInterfaces(peer: PeerId, services: []Service, collectServiceInterface: ServiceInterfaceCb):
 	for srv <- services par:
 		on peer:
 			iface <- Srv.get_interface(srv.id)
 			collectServiceInterface(peer, srv.id, iface)
 
+-- retrieve PeerInfo & ServiceInterface-s from a single peer
 func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
 	on peer:
 		ident <- Peer.identify()
@@ -18,9 +20,7 @@ func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInte
 		collectPeerInfo(peer, ident, services, blueprints, modules)
 		collectServiceInterfaces(peer, services, collectServiceInterface)
 
-service MyOp("op"):
-	identity(u: u32) -> u32
-
+-- retrieve PeerInfo and ServiceInterface-s from each peer in `peers`
 func getServicesFromPeers(
 	peers: []PeerId,
 	collectPeerInfo: PeerInfoCb, 
@@ -29,6 +29,7 @@ func getServicesFromPeers(
 	for peer <- peers par:
 		askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
 
+-- discover new nodes in the network and report findings back to client
 func discoverNeighbourhood(relay: PeerId, collectNeighbors: []string -> ()):
 	on relay:
 		neighbors <- Kademlia.neighborhood(%init_peer_id%, nil, nil)
