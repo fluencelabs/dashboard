@@ -20,7 +20,7 @@ import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
 import Multiaddr from 'multiaddr';
-import { dev, krasnodar } from '@fluencelabs/fluence-network-environment';
+import { dev, krasnodar, Node } from '@fluencelabs/fluence-network-environment';
 import {
     createClient,
     generatePeerId,
@@ -32,15 +32,24 @@ import {
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { interfaceInfo, peerInfo } from './types';
-import { getAll } from './_aqua/app';
+import { getAll, getServicesFromPeers } from './_aqua/app';
 
 const defaultNetworkName = 'krasnodar';
 
+const localEnv = [
+    {
+        multiaddr: '/ip4/127.0.0.1/tcp/9999/ws/p2p/12D3KooWMvFBVukxFe7dGLNBPA1kL8VdWBx7AESKPCg7KgDpCSoU',
+        peerId: '12D3KooWMvFBVukxFe7dGLNBPA1kL8VdWBx7AESKPCg7KgDpCSoU',
+    },
+];
+
 const defaultEnv = {
-    relays: krasnodar,
-    relayIdx: 3,
+    relays: localEnv,
+    relayIdx: 0,
     logLevel: 'error',
 };
+
+var knownPeersSet = new Set();
 
 async function loadScript(script) {
     return new Promise((resolve, reject) => {
@@ -133,45 +142,9 @@ function genFlags(peerId, relays, relayIdx) {
         flags: flags,
     });
 
-    subscribeToEvent(client, 'event', 'collectPeerInfo', (args, _tetraplets) => {
-        try {
-            const peerId = args[0];
-            const identify = args[1];
-            const services = args[2];
-            const blueprints = args[3];
-            const modules = args[4];
-            const interfaces = args[5];
-            const eventRaw = {
-                peerId,
-                identify,
-                services,
-                blueprints,
-                modules,
-            };
-
-            app.ports.collectPeerInfo.send(eventRaw);
-        } catch (err) {
-            log.error('Elm eventreceiver failed: ', err);
-        }
-    });
-
-    subscribeToEvent(client, 'event', 'collectServiceInterface', (args, _tetraplets) => {
-        try {
-            const eventRaw = {
-                peer_id: args[0],
-                service_id: args[1],
-                interface: args[2],
-            };
-
-            app.ports.collectServiceInterface.send(eventRaw);
-        } catch (err) {
-            log.error('Elm eventreceiver failed: ', err);
-        }
-    });
-
     // alias ServiceInterfaceCb: PeerId, string, Interface -> ()
     function collectServiceInterface(peer_id, service_id, iface) {
-        // console.count(`service interface from ${peer_id}`);
+        console.count(`service interface from ${peer_id}`);
         try {
             const eventRaw = {
                 peer_id,
@@ -187,7 +160,7 @@ function genFlags(peerId, relays, relayIdx) {
 
     // alias PeerInfoCb: PeerId, Info, []Service, []Blueprint, []Module -> ()
     function collectPeerInfo(peerId, identify, services, blueprints, modules, interfaces) {
-        // console.log('peer info from %s, %s services', peerId, services.length);
+        console.log('peer info from %s, %s services', peerId, services.length);
         try {
             const eventRaw = {
                 peerId,
@@ -203,10 +176,56 @@ function genFlags(peerId, relays, relayIdx) {
         }
     }
 
+    // Save neighbors to knownPeersSet and return only peers that weren't observed yet
+    function collectNeighbors(peer_ids) {
+        try {
+            let newPeers = removeKnown(peer_ids);
+            console.dir(getServicesFromPeers);
+            console.dir(client);
+            getServicesFromPeers(client, newPeers, collectPeerInfo, collectServiceInterface);
+        } catch (e) {
+            console.error('collectNieghbors failed:', e);
+        }
+    }
+
+    function removeKnown(peer_ids) {
+        try {
+            let set = new Set();
+
+            for (var peer_id of peer_ids) {
+                if (!knownPeersSet.has(peer_id)) {
+                    knownPeersSet.add(peer_id);
+                    set.add(peer_id);
+                }
+            }
+
+            let result = [...set];
+            console.log('removed known peers, got array of', result.length);
+            return result;
+        } catch (e) {
+            console.error('removeKnown failed: ', e);
+        }
+    }
+
     app.ports.getAll.subscribe(async (data) => {
-        await getAll(client, data.relayPeerId, data.knownPeers, collectPeerInfo, collectServiceInterface, {
-            ttl: 1000000,
-        });
+        console.log('Running getAll');
+
+        // clear knownPeersSet to ask these peers again
+        knownPeersSet.clear();
+        knownPeersSet.add(...flags.knownPeers);
+        knownPeersSet.add(flags.relayPeerId);
+
+        await getAll(
+            client,
+            data.relayPeerId,
+            data.knownPeers,
+            collectPeerInfo,
+            collectServiceInterface,
+            collectNeighbors,
+            {
+                ttl: 1000000,
+            },
+        );
     });
 })();
 

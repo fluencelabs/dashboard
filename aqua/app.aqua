@@ -18,23 +18,36 @@ func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInte
 		collectPeerInfo(peer, ident, services, blueprints, modules)
 		collectServiceInterfaces(peer, services, collectServiceInterface)
 
+service MyOp("op"):
+	identity(u: u32) -> u32
 
-func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
-	on relayPeerId:
-		neighbors <- Kademlia.neighborhood(clientId, false)
+func getServicesFromPeers(
+	peers: []PeerId,
+	collectPeerInfo: PeerInfoCb, 
+	collectServiceInterface: ServiceInterfaceCb
+):
+	for peer <- peers par:
+		askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
+
+func discoverNeighbourhood(relay: PeerId, collectNeighbors: []string -> ()):
+	on relay:
+		neighbors <- Kademlia.neighborhood(%init_peer_id%, nil, nil)
+		co collectNeighbors(neighbors)
 		for n <- neighbors par:
 			on n:
-				neighbors2 <- Kademlia.neighborhood(clientId, false)
-				for n2 <- neighbors2 par:
-					askAllAndSend(n2, collectPeerInfo, collectServiceInterface)
+				neighbors2 <- Kademlia.neighborhood(%init_peer_id%, nil, nil)
+				collectNeighbors(neighbors2)
 
-func getAll(relayPeerId: PeerId, knownPeers: []PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
-	-- co askAllAndSend(relayPeerId, collectPeerInfo, collectServiceInterface)
+func getAll(
+	relay: PeerId, 
+	knownPeers: []PeerId, 
+	collectPeerInfo: PeerInfoCb, 
+	collectServiceInterface: ServiceInterfaceCb,
+	collectNeighbors: []string -> ()
+):
+	co askAllAndSend(relay, collectPeerInfo, collectServiceInterface)
 	
-	-- in order to temporarily reduce the number of particles sent to client 
-	-- we gather data from the known peers only. 
-	-- Known peers are explicitly represent the whole network atm
 	for peer <- knownPeers par:
 		askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
 
-	-- co findAndAskNeighboursSchema(relayPeerId, %init_peer_id%, collectPeerInfo, collectServiceInterface)
+	co discoverNeighbourhood(relay, collectNeighbors)
