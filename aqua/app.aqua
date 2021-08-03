@@ -18,7 +18,7 @@ func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInte
 		modules <- Dist.list_modules()
 		services <- Srv.list()
 		collectPeerInfo(peer, ident, services, blueprints, modules)
-		collectServiceInterfaces(peer, services, collectServiceInterface)
+		-- collectServiceInterfaces(peer, services, collectServiceInterface)
 
 -- retrieve PeerInfo and ServiceInterface-s from each peer in `peers`
 func getServicesFromPeers(
@@ -39,16 +39,12 @@ func discoverNeighbourhood(relay: PeerId, collectNeighbors: []string -> ()):
 				neighbors2 <- Kademlia.neighborhood(%init_peer_id%, nil, nil)
 				collectNeighbors(neighbors2)
 
-func getAll(
-	relay: PeerId, 
-	knownPeers: []PeerId, 
-	collectPeerInfo: PeerInfoCb, 
-	collectServiceInterface: ServiceInterfaceCb,
-	collectNeighbors: []string -> ()
-):
-	co askAllAndSend(relay, collectPeerInfo, collectServiceInterface)
-	
-	for peer <- knownPeers par:
-		askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
-
-	co discoverNeighbourhood(relay, collectNeighbors)
+func discoverNeighbourhoodFull(relay: PeerId, knownPeers: []PeerId, collectNeighbors: []string -> ()):
+	for node <- knownPeers par:
+		on node via relay:
+			neighbors <- Kademlia.neighborhood(%init_peer_id%, nil, nil)
+			co collectNeighbors(neighbors)
+			for n <- neighbors par:
+				on n:
+					neighbors2 <- Kademlia.neighborhood(%init_peer_id%, nil, nil)
+					collectNeighbors(neighbors2)

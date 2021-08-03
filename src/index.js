@@ -32,7 +32,7 @@ import {
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { interfaceInfo, peerInfo } from './types';
-import { getAll, getServicesFromPeers } from './_aqua/app';
+import { discoverNeighbourhoodFull, getAll, getServicesFromPeers } from './_aqua/app';
 
 const defaultNetworkName = 'krasnodar';
 
@@ -203,20 +203,17 @@ function genFlags(peerId, relays, relayIdx) {
 
         // clear knownPeersSet to ask these peers again
         knownPeersSet.clear();
-        knownPeersSet.add(...flags.knownPeers);
-        knownPeersSet.add(flags.relayPeerId);
-
-        await getAll(
+        await getServicesFromPeers(
             client,
-            data.relayPeerId,
-            data.knownPeers,
+            [data.relayPeerId, ...data.knownPeers],
             collectPeerInfo,
             collectServiceInterface,
-            collectNeighbors,
-            {
-                ttl: 1000000,
-            },
+            { ttl: 1000000 },
         );
+        knownPeersSet.add(...data.knownPeers);
+        knownPeersSet.add(data.relayPeerId);
+
+        await discoverNeighbourhoodFull(client, data.relayPeerId, data.knownPeers, collectNeighbors, { ttl: 1000000 });
     });
 })();
 
