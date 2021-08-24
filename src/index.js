@@ -37,7 +37,7 @@ import { getAll } from './_aqua/app';
 const defaultNetworkName = 'krasnodar';
 
 const defaultEnv = {
-    relays: stage,
+    relays: krasnodar,
     relayIdx: 3,
     logLevel: 'error',
 };
