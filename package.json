@@ -31,7 +31,7 @@
     },
     "homepage": "https://github.com/fluencelabs/fluence-admin#readme",
     "dependencies": {
-        "@fluencelabs/fluence": "0.9.14-crdt-interpreter.6",
+        "@fluencelabs/fluence": "0.10.0",
         "@fluencelabs/fluence-network-environment": "1.0.10",
         "css-spinners": "^1.0.1",
         "tachyons": "^4.12.0",
@@ -40,8 +40,8 @@
     "devDependencies": {
         "@babel/core": "^7.11.6",
         "@babel/preset-env": "^7.11.5",
-        "@fluencelabs/aqua-cli": "0.0.3-ap",
-        "@fluencelabs/aqua-lib": "0.1.6",
+        "@fluencelabs/aqua-cli": "0.2.0-208",
+        "@fluencelabs/aqua-lib": "0.1.14",
         "@types/yup": "^0.29.11",
         "babel-loader": "^8.1.0",
         "chokidar-cli": "^2.1.0",
