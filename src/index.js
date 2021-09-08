@@ -21,14 +21,7 @@ import './main.css';
 import log from 'loglevel';
 import Multiaddr from 'multiaddr';
 import { stage, krasnodar } from '@fluencelabs/fluence-network-environment';
-import {
-    createClient,
-    generatePeerId,
-    Particle,
-    sendParticle,
-    subscribeToEvent,
-    setLogLevel,
-} from '@fluencelabs/fluence';
+import { FluencePeer, KeyPair, setLogLevel } from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { interfaceInfo, peerInfo } from './types';
@@ -121,52 +114,17 @@ function genFlags(peerId, relays, relayIdx) {
 (async () => {
     const { relays, relayIdx, logLevel } = await initEnvironment();
     setLogLevel(logLevel);
-    const pid = await generatePeerId();
-    const flags = genFlags(pid.toB58String(), relays, relayIdx);
-    console.log(`connect with client: ${pid.toB58String()}`);
+    const keyPair = await KeyPair.randomEd25519();
+    await FluencePeer.default.init({ connectTo: relays[relayIdx].multiaddr });
+    const pid = FluencePeer.default.connectionInfo.selfPeerId;
+    const flags = genFlags(pid, relays, relayIdx);
+    console.log(`Own peer id: ${pid}`);
 
     // If the relay is ever changed, an event shall be sent to elm
-    const client = await createClient(relays[relayIdx].multiaddr, pid);
 
     const app = Elm.Main.init({
         node: document.getElementById('root'),
         flags: flags,
-    });
-
-    subscribeToEvent(client, 'event', 'collectPeerInfo', (args, _tetraplets) => {
-        try {
-            const peerId = args[0];
-            const identify = args[1];
-            const services = args[2];
-            const blueprints = args[3];
-            const modules = args[4];
-            const interfaces = args[5];
-            const eventRaw = {
-                peerId,
-                identify,
-                services,
-                blueprints,
-                modules,
-            };
-
-            app.ports.collectPeerInfo.send(eventRaw);
-        } catch (err) {
-            log.error('Elm eventreceiver failed: ', err);
-        }
-    });
-
-    subscribeToEvent(client, 'event', 'collectServiceInterface', (args, _tetraplets) => {
-        try {
-            const eventRaw = {
-                peer_id: args[0],
-                service_id: args[1],
-                interface: args[2],
-            };
-
-            app.ports.collectServiceInterface.send(eventRaw);
-        } catch (err) {
-            log.error('Elm eventreceiver failed: ', err);
-        }
     });
 
     // alias ServiceInterfaceCb: PeerId, string, Interface -> ()
@@ -204,7 +162,7 @@ function genFlags(peerId, relays, relayIdx) {
     }
 
     app.ports.getAll.subscribe(async (data) => {
-        await getAll(client, data.relayPeerId, data.knownPeers, collectPeerInfo, collectServiceInterface, {
+        await getAll(data.relayPeerId, data.knownPeers, collectPeerInfo, collectServiceInterface, {
             ttl: 1000000,
         });
     });
