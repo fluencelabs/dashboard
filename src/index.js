@@ -20,7 +20,7 @@ import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
 import Multiaddr from 'multiaddr';
-import { stage, krasnodar } from '@fluencelabs/fluence-network-environment';
+import { stage, krasnodar, testNet } from '@fluencelabs/fluence-network-environment';
 import { Fluence, KeyPair, setLogLevel } from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
@@ -30,7 +30,7 @@ import { askAllAndSend } from './_aqua/app';
 const defaultNetworkName = 'krasnodar';
 
 const defaultEnv = {
-    relays: krasnodar,
+    relays: [...krasnodar, ...testNet, ...stage],
     relayIdx: 3,
     logLevel: 'error',
 };
