@@ -31,7 +31,7 @@ const defaultNetworkName = 'krasnodar';
 
 const defaultEnv = {
     relays: [...krasnodar, ...testNet, ...stage],
-    relayIdx: 3,
+    relayIdx: 2,
     logLevel: 'error',
 };
 
