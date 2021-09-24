@@ -4,13 +4,13 @@ alias PeerInfoCb: PeerId, Info, []Service, []Blueprint, []Module -> ()
 alias ServiceInterfaceCb: PeerId, string, Interface -> ()
 
 func collectServiceInterfaces(peer: PeerId, services: []Service, collectServiceInterface: ServiceInterfaceCb):
-	for srv <- services par:
+	for srv <- services:
 		on peer:
 			iface <- Srv.get_interface(srv.id)
 			collectServiceInterface(peer, srv.id, iface)
 
 func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
-	on peer:
+	on peer via HOST_PEER_ID:
 		ident <- Peer.identify()
 		blueprints <- Dist.list_blueprints()
 		modules <- Dist.list_modules()

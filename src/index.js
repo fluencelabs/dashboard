@@ -20,18 +20,18 @@ import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
 import Multiaddr from 'multiaddr';
-import { stage, krasnodar } from '@fluencelabs/fluence-network-environment';
-import { FluencePeer, KeyPair, setLogLevel } from '@fluencelabs/fluence';
+import { stage, krasnodar, testNet } from '@fluencelabs/fluence-network-environment';
+import { Fluence, KeyPair, setLogLevel } from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { interfaceInfo, peerInfo } from './types';
-import { getAll } from './_aqua/app';
+import { askAllAndSend } from './_aqua/app';
 
 const defaultNetworkName = 'krasnodar';
 
 const defaultEnv = {
-    relays: krasnodar,
-    relayIdx: 3,
+    relays: [...krasnodar, ...testNet, ...stage],
+    relayIdx: 2,
     logLevel: 'error',
 };
 
@@ -115,8 +115,8 @@ function genFlags(peerId, relays, relayIdx) {
     const { relays, relayIdx, logLevel } = await initEnvironment();
     setLogLevel(logLevel);
     const keyPair = await KeyPair.randomEd25519();
-    await FluencePeer.default.init({ connectTo: relays[relayIdx].multiaddr });
-    const pid = FluencePeer.default.connectionInfo.selfPeerId;
+    await Fluence.start({ connectTo: relays[relayIdx].multiaddr });
+    const pid = Fluence.getStatus().peerId;
     const flags = genFlags(pid, relays, relayIdx);
     console.log(`Own peer id: ${pid}`);
 
@@ -162,9 +162,11 @@ function genFlags(peerId, relays, relayIdx) {
     }
 
     app.ports.getAll.subscribe(async (data) => {
-        await getAll(data.relayPeerId, data.knownPeers, collectPeerInfo, collectServiceInterface, {
-            ttl: 1000000,
-        });
+        for (let peer of data.knownPeers) {
+            await askAllAndSend(peer, collectPeerInfo, collectServiceInterface, {
+                ttl: 120000,
+            });
+        }
     });
 })();
 
