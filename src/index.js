@@ -21,7 +21,7 @@ import './main.css';
 import log from 'loglevel';
 import Multiaddr from 'multiaddr';
 import { stage, krasnodar } from '@fluencelabs/fluence-network-environment';
-import { FluencePeer, KeyPair, setLogLevel } from '@fluencelabs/fluence';
+import { Fluence, KeyPair, setLogLevel } from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { interfaceInfo, peerInfo } from './types';
@@ -115,8 +115,8 @@ function genFlags(peerId, relays, relayIdx) {
     const { relays, relayIdx, logLevel } = await initEnvironment();
     setLogLevel(logLevel);
     const keyPair = await KeyPair.randomEd25519();
-    await FluencePeer.default.init({ connectTo: relays[relayIdx].multiaddr });
-    const pid = FluencePeer.default.connectionInfo.selfPeerId;
+    await Fluence.start({ connectTo: relays[relayIdx].multiaddr });
+    const pid = Fluence.getStatus().peerId;
     const flags = genFlags(pid, relays, relayIdx);
     console.log(`Own peer id: ${pid}`);
 
@@ -129,7 +129,7 @@ function genFlags(peerId, relays, relayIdx) {
 
     // alias ServiceInterfaceCb: PeerId, string, Interface -> ()
     function collectServiceInterface(peer_id, service_id, iface) {
-        // console.count(`service interface from ${peer_id}`);
+        console.count(`service interface from ${peer_id}`);
         try {
             const eventRaw = {
                 peer_id,
@@ -145,7 +145,7 @@ function genFlags(peerId, relays, relayIdx) {
 
     // alias PeerInfoCb: PeerId, Info, []Service, []Blueprint, []Module -> ()
     function collectPeerInfo(peerId, identify, services, blueprints, modules, interfaces) {
-        // console.log('peer info from %s, %s services', peerId, services.length);
+        console.log('peer info from %s, %s services', peerId, services.length);
         try {
             const eventRaw = {
                 peerId,
@@ -163,7 +163,7 @@ function genFlags(peerId, relays, relayIdx) {
 
     app.ports.getAll.subscribe(async (data) => {
         for (let peer of data.knownPeers) {
-            await askAllAndSend(client, peer, collectPeerInfo, collectServiceInterface, {
+            await askAllAndSend(peer, collectPeerInfo, collectServiceInterface, {
                 ttl: 120000,
             });
         }
