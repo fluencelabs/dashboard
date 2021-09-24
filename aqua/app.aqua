@@ -10,7 +10,7 @@ func collectServiceInterfaces(peer: PeerId, services: []Service, collectServiceI
 			collectServiceInterface(peer, srv.id, iface)
 
 func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
-	on peer:
+	on peer via HOST_PEER_ID:
 		ident <- Peer.identify()
 		blueprints <- Dist.list_blueprints()
 		modules <- Dist.list_modules()
@@ -21,10 +21,10 @@ func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInte
 
 func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
 	on relayPeerId:
-		neighbors <- Kademlia.neighborhood(clientId, false)
+		neighbors <- Kademlia.neighborhood(clientId, nil, nil)
 		for n <- neighbors par:
 			on n:
-				neighbors2 <- Kademlia.neighborhood(clientId, false)
+				neighbors2 <- Kademlia.neighborhood(clientId, nil, nil)
 				for n2 <- neighbors2 par:
 					askAllAndSend(n2, collectPeerInfo, collectServiceInterface)
 

@@ -32,7 +32,7 @@ import {
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { interfaceInfo, peerInfo } from './types';
-import { getAll } from './_aqua/app';
+import { askAllAndSend } from './_aqua/app';
 
 const defaultNetworkName = 'krasnodar';
 
@@ -204,9 +204,11 @@ function genFlags(peerId, relays, relayIdx) {
     }
 
     app.ports.getAll.subscribe(async (data) => {
-        await getAll(client, data.relayPeerId, data.knownPeers, collectPeerInfo, collectServiceInterface, {
-            ttl: 1000000,
-        });
+        for (let peer of data.knownPeers) {
+            await askAllAndSend(client, peer, collectPeerInfo, collectServiceInterface, {
+                ttl: 120000,
+            });
+        }
     });
 })();
 
