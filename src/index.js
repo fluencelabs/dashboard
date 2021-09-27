@@ -25,12 +25,12 @@ import { Fluence, KeyPair, setLogLevel } from '@fluencelabs/fluence';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { interfaceInfo, peerInfo } from './types';
-import { askAllAndSend } from './_aqua/app';
+import { askAllAndSend, getAll } from './_aqua/app';
 
-const defaultNetworkName = 'krasnodar';
+const defaultNetworkName = 'testNet + krasnodar';
 
 const defaultEnv = {
-    relays: [...krasnodar, ...testNet, ...stage],
+    relays: [...testNet, ...krasnodar, ...stage],
     relayIdx: 2,
     logLevel: 'error',
 };
@@ -162,11 +162,13 @@ function genFlags(peerId, relays, relayIdx) {
     }
 
     app.ports.getAll.subscribe(async (data) => {
-        for (let peer of data.knownPeers) {
-            await askAllAndSend(peer, collectPeerInfo, collectServiceInterface, {
-                ttl: 120000,
-            });
-        }
+        // for (let peer of data.knownPeers) {
+        //     await askAllAndSend(peer, collectPeerInfo, collectServiceInterface, {
+        //         ttl: 120000,
+        //     });
+        // }
+
+        await getAll(data.knownPeers, collectPeerInfo, collectServiceInterface, { ttl: 120000 });
     });
 })();
 
