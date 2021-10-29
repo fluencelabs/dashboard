@@ -30,8 +30,9 @@ import { askAllAndSend, getAll } from './_aqua/app';
 const defaultNetworkName = 'testNet + krasnodar';
 
 const defaultEnv = {
-    relays: [...testNet, ...krasnodar, ...stage],
-    relayIdx: 2,
+    //relays: [...testNet, ...krasnodar, ...stage],
+    relays: [krasnodar[0]],
+    relayIdx: 0,
     logLevel: 'error',
 };
 
@@ -115,7 +116,8 @@ function genFlags(peerId, relays, relayIdx) {
     const { relays, relayIdx, logLevel } = await initEnvironment();
     setLogLevel(logLevel);
     const keyPair = await KeyPair.randomEd25519();
-    await Fluence.start({ connectTo: relays[relayIdx].multiaddr });
+    await Fluence.start({ connectTo: relays[relayIdx].multiaddr, defaultTtlMs: 200000 });
+    // await Fluence.start({ connectTo: relays[relayIdx].multiaddr });
     const pid = Fluence.getStatus().peerId;
     const flags = genFlags(pid, relays, relayIdx);
     console.log(`Own peer id: ${pid}`);
@@ -128,16 +130,17 @@ function genFlags(peerId, relays, relayIdx) {
     });
 
     // alias ServiceInterfaceCb: PeerId, string, Interface -> ()
-    function collectServiceInterface(peer_id, service_id, iface) {
+    function collectServiceInterface(peer_id, ifaces) {
         // console.count(`service interface from ${peer_id}`);
         try {
-            const eventRaw = {
-                peer_id,
-                service_id,
-                interface: iface,
-            };
-
-            app.ports.collectServiceInterface.send(eventRaw);
+            for (var iface of ifaces) {
+                const eventRaw = {
+                    peer_id,
+                    service_id: iface[1],
+                    interface: iface[0],
+                };
+                app.ports.collectServiceInterface.send(eventRaw);
+            }
         } catch (err) {
             log.error('Elm eventreceiver failed: ', err);
         }
@@ -168,7 +171,8 @@ function genFlags(peerId, relays, relayIdx) {
         //     });
         // }
 
-        await getAll(data.knownPeers, collectPeerInfo, collectServiceInterface, { ttl: 120000 });
+        console.log('called getAll');
+        await getAll(Fluence.getPeer(), data.knownPeers, collectPeerInfo, collectServiceInterface, console.log);
     });
 })();
 
