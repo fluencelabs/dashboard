@@ -25,8 +25,8 @@ func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInte
 		co log("b4 collectPeerInfo")
 		co collectPeerInfo(peer, ident, services, blueprints, modules)
 		co log("b4 collectServiceInterfaces")
-		-- collectServiceInterfaces(peer, services, collectServiceInterface, log)
-		-- co log("after collectServiceInterfaces")
+		collectServiceInterfaces(peer, services, collectServiceInterface, log)
+		co log("after collectServiceInterfaces")
 
 
 func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb, log: Log):
@@ -39,6 +39,7 @@ func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId, collectPe
 					askAllAndSend(n2, collectPeerInfo, collectServiceInterface, log)
 
 func getAll(knownPeers: []PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb, log: Log):
+	co log("starting")
 	on HOST_PEER_ID:
 		-- co askAllAndSend(relayPeerId, collectPeerInfo, collectServiceInterface)
 		
