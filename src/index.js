@@ -31,8 +31,8 @@ const defaultNetworkName = 'testNet + krasnodar';
 
 const defaultEnv = {
     //relays: [...testNet, ...krasnodar, ...stage],
-    relays: [stage[0]],
-    relayIdx: 0,
+    relays: [...krasnodar],
+    relayIdx: 2,
     logLevel: 'trace',
 };
 
@@ -114,7 +114,7 @@ function genFlags(peerId, relays, relayIdx) {
 
 (async () => {
     const { relays, relayIdx, logLevel } = await initEnvironment();
-    setLogLevel('trace');
+    setLogLevel(logLevel);
     const keyPair = await KeyPair.randomEd25519();
     await Fluence.start({ connectTo: relays[relayIdx].multiaddr, defaultTtlMs: 200000 });
     // await Fluence.start({ connectTo: relays[relayIdx].multiaddr });
@@ -133,13 +133,12 @@ function genFlags(peerId, relays, relayIdx) {
     function collectServiceInterface(peer_id, ifaces) {
         // console.count(`service interface from ${peer_id}`);
         try {
-            for (var iface of ifaces) {
+            for (let srvIdAndInterfaceTuple of ifaces) {
                 const eventRaw = {
                     peer_id,
-                    service_id: iface[1],
-                    interface: iface[0],
+                    service_id: srvIdAndInterfaceTuple[0],
+                    interface: srvIdAndInterfaceTuple[1],
                 };
-                console.log(iface);
                 app.ports.collectServiceInterface.send(eventRaw);
             }
         } catch (err) {
@@ -149,7 +148,7 @@ function genFlags(peerId, relays, relayIdx) {
 
     // alias PeerInfoCb: PeerId, Info, []Service, []Blueprint, []Module -> ()
     function collectPeerInfo(peerId, identify, services, blueprints, modules, interfaces) {
-        console.log('peer info from %s, %s services', peerId, services.length);
+        // console.log('peer info from %s, %s services', peerId, services.length);
         try {
             const eventRaw = {
                 peerId,

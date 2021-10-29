@@ -2,18 +2,18 @@ import "@fluencelabs/aqua-lib/builtin.aqua"
 
 alias FakeTuple: u64
 alias PeerInfoCb: PeerId, Info, []Service, []Blueprint, []Module -> ()
-alias ServiceInterfaceCb: PeerId, []FakeTuple -> ()
+alias ServiceInterfaceCb: PeerId, *FakeTuple -> ()
 alias Log: string -> ()
 
 service MyOp("op"):
-	array(i: Interface, s: string) -> FakeTuple
+	array(s: string, i: Interface) -> FakeTuple
 
 func collectServiceInterfaces(peer: PeerId, services: []Service, collectServiceInterface: ServiceInterfaceCb, log: Log):
 	ifaces: *FakeTuple
 	on peer:
 		for srv <- services:
 			iface <- Srv.get_interface(srv.id)
-			ifaces <- MyOp.array(iface, srv.id)
+			ifaces <- MyOp.array(srv.id, iface)
 	collectServiceInterface(peer, ifaces)
 
 func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb, log: Log):
@@ -22,12 +22,8 @@ func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInte
 		blueprints <- Dist.list_blueprints()
 		modules <- Dist.list_modules()
 		services <- Srv.list()
-		co log("b4 collectPeerInfo")
 		co collectPeerInfo(peer, ident, services, blueprints, modules)
-		co log("b4 collectServiceInterfaces")
 		collectServiceInterfaces(peer, services, collectServiceInterface, log)
-		co log("after collectServiceInterfaces")
-
 
 func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb, log: Log):
 	on relayPeerId:
@@ -39,7 +35,6 @@ func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId, collectPe
 					askAllAndSend(n2, collectPeerInfo, collectServiceInterface, log)
 
 func getAll(knownPeers: []PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb, log: Log):
-	co log("starting")
 	on HOST_PEER_ID:
 		-- co askAllAndSend(relayPeerId, collectPeerInfo, collectServiceInterface)
 		

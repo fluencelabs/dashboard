@@ -16,7 +16,7 @@ import {
 
 // Services
 export interface MyOpDef {
-    array: (i: { function_signatures: { arguments: string[][]; name: string; output_types: string[]; }[]; record_types: { fields: string[][]; id: number; name: string; }[]; }, s: string, callParams: CallParams<'i' | 's'>) => number | Promise<number>;
+    array: (s: string, i: { function_signatures: { arguments: string[][]; name: string; output_types: string[]; }[]; record_types: { fields: string[][]; id: number; name: string; }[]; }, callParams: CallParams<'s' | 'i'>) => number | Promise<number>;
 }
 export function registerMyOp(service: MyOpDef): void;
 export function registerMyOp(serviceId: string, service: MyOpDef): void;
