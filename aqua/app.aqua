@@ -23,7 +23,7 @@ func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInte
 		modules <- Dist.list_modules()
 		services <- Srv.list()
 		co collectPeerInfo(peer, ident, services, blueprints, modules)
-		collectServiceInterfaces(peer, services, collectServiceInterface, log)
+		co collectServiceInterfaces(peer, services, collectServiceInterface, log)
 
 func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb, log: Log):
 	on relayPeerId:

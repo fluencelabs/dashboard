@@ -192,47 +192,50 @@ export function askAllAndSend(...args) {
                          (seq
                           (seq
                            (seq
-                            (seq
-                             (seq
-                              (call peer ("peer" "identify") [] ident)
-                              (call peer ("dist" "list_blueprints") [] blueprints)
-                             )
-                             (call peer ("dist" "list_modules") [] modules)
-                            )
-                            (call peer ("srv" "list") [] services)
+                            (call peer ("peer" "identify") [] ident)
+                            (call peer ("dist" "list_blueprints") [] blueprints)
                            )
-                           (par
+                           (call peer ("dist" "list_modules") [] modules)
+                          )
+                          (call peer ("srv" "list") [] services)
+                         )
+                         (par
+                          (seq
+                           (call -relay- ("op" "noop") [])
+                           (xor
+                            (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [peer ident services blueprints modules])
+                            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                           )
+                          )
+                          (null)
+                         )
+                        )
+                        (par
+                         (seq
+                          (seq
+                           (xor
+                            (fold services srv
+                             (seq
+                              (seq
+                               (call peer ("srv" "get_interface") [srv.$.id!] iface)
+                               (call peer ("op" "array") [srv.$.id! iface] $ifaces)
+                              )
+                              (next srv)
+                             )
+                            )
                             (seq
                              (call -relay- ("op" "noop") [])
-                             (xor
-                              (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [peer ident services blueprints modules])
-                              (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                             )
+                             (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                             )
-                            (null)
                            )
+                           (call -relay- ("op" "noop") [])
                           )
                           (xor
-                           (fold services srv
-                            (seq
-                             (seq
-                              (call peer ("srv" "get_interface") [srv.$.id!] iface)
-                              (call peer ("op" "array") [srv.$.id! iface] $ifaces)
-                             )
-                             (next srv)
-                            )
-                           )
-                           (seq
-                            (call -relay- ("op" "noop") [])
-                            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
-                           )
+                           (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [peer $ifaces])
+                           (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                           )
                          )
-                         (call -relay- ("op" "noop") [])
-                        )
-                        (xor
-                         (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [peer $ifaces])
-                         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+                         (null)
                         )
                        )
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
@@ -409,47 +412,50 @@ export function findAndAskNeighboursSchema(...args) {
                                      (seq
                                       (seq
                                        (seq
-                                        (seq
-                                         (seq
-                                          (call n2 ("peer" "identify") [] ident)
-                                          (call n2 ("dist" "list_blueprints") [] blueprints)
-                                         )
-                                         (call n2 ("dist" "list_modules") [] modules)
-                                        )
-                                        (call n2 ("srv" "list") [] services)
+                                        (call n2 ("peer" "identify") [] ident)
+                                        (call n2 ("dist" "list_blueprints") [] blueprints)
                                        )
-                                       (par
+                                       (call n2 ("dist" "list_modules") [] modules)
+                                      )
+                                      (call n2 ("srv" "list") [] services)
+                                     )
+                                     (par
+                                      (seq
+                                       (call -relay- ("op" "noop") [])
+                                       (xor
+                                        (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [n2 ident services blueprints modules])
+                                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                                       )
+                                      )
+                                      (null)
+                                     )
+                                    )
+                                    (par
+                                     (seq
+                                      (seq
+                                       (xor
+                                        (fold services srv
+                                         (seq
+                                          (seq
+                                           (call n2 ("srv" "get_interface") [srv.$.id!] iface)
+                                           (call n2 ("op" "array") [srv.$.id! iface] $ifaces)
+                                          )
+                                          (next srv)
+                                         )
+                                        )
                                         (seq
                                          (call -relay- ("op" "noop") [])
-                                         (xor
-                                          (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [n2 ident services blueprints modules])
-                                          (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                                         )
+                                         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                                         )
-                                        (null)
                                        )
+                                       (call -relay- ("op" "noop") [])
                                       )
                                       (xor
-                                       (fold services srv
-                                        (seq
-                                         (seq
-                                          (call n2 ("srv" "get_interface") [srv.$.id!] iface)
-                                          (call n2 ("op" "array") [srv.$.id! iface] $ifaces)
-                                         )
-                                         (next srv)
-                                        )
-                                       )
-                                       (seq
-                                        (call -relay- ("op" "noop") [])
-                                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
-                                       )
+                                       (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [n2 $ifaces])
+                                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                                       )
                                      )
-                                     (call -relay- ("op" "noop") [])
-                                    )
-                                    (xor
-                                     (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [n2 $ifaces])
-                                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+                                     (null)
                                     )
                                    )
                                    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
@@ -624,47 +630,50 @@ export function getAll(...args) {
                               (seq
                                (seq
                                 (seq
-                                 (seq
-                                  (seq
-                                   (call peer ("peer" "identify") [] ident)
-                                   (call peer ("dist" "list_blueprints") [] blueprints)
-                                  )
-                                  (call peer ("dist" "list_modules") [] modules)
-                                 )
-                                 (call peer ("srv" "list") [] services)
+                                 (call peer ("peer" "identify") [] ident)
+                                 (call peer ("dist" "list_blueprints") [] blueprints)
                                 )
-                                (par
+                                (call peer ("dist" "list_modules") [] modules)
+                               )
+                               (call peer ("srv" "list") [] services)
+                              )
+                              (par
+                               (seq
+                                (call -relay- ("op" "noop") [])
+                                (xor
+                                 (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [peer ident services blueprints modules])
+                                 (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                                )
+                               )
+                               (null)
+                              )
+                             )
+                             (par
+                              (seq
+                               (seq
+                                (xor
+                                 (fold services srv
+                                  (seq
+                                   (seq
+                                    (call peer ("srv" "get_interface") [srv.$.id!] iface)
+                                    (call peer ("op" "array") [srv.$.id! iface] $ifaces)
+                                   )
+                                   (next srv)
+                                  )
+                                 )
                                  (seq
                                   (call -relay- ("op" "noop") [])
-                                  (xor
-                                   (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [peer ident services blueprints modules])
-                                   (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                                  )
+                                  (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
                                  )
-                                 (null)
                                 )
+                                (call -relay- ("op" "noop") [])
                                )
                                (xor
-                                (fold services srv
-                                 (seq
-                                  (seq
-                                   (call peer ("srv" "get_interface") [srv.$.id!] iface)
-                                   (call peer ("op" "array") [srv.$.id! iface] $ifaces)
-                                  )
-                                  (next srv)
-                                 )
-                                )
-                                (seq
-                                 (call -relay- ("op" "noop") [])
-                                 (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
-                                )
+                                (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [peer $ifaces])
+                                (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
                                )
                               )
-                              (call -relay- ("op" "noop") [])
-                             )
-                             (xor
-                              (call %init_peer_id% ("callbackSrv" "collectServiceInterface") [peer $ifaces])
-                              (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+                              (null)
                              )
                             )
                             (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
