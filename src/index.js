@@ -26,12 +26,14 @@ import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { interfaceInfo, peerInfo } from './types';
 import { askAllAndSend, getAll } from './_aqua/app';
+import { BackgroundWorker } from '@fluencelabs/avm';
 
 const defaultNetworkName = 'testNet + krasnodar';
 
 const defaultEnv = {
-    relays: [...testNet, ...krasnodar, ...stage],
-    relayIdx: 2,
+    // relays: [...testNet, ...krasnodar, ...stage],
+    relays: [krasnodar[3]],
+    relayIdx: 0,
     logLevel: 'error',
 };
 
@@ -113,9 +115,14 @@ function genFlags(peerId, relays, relayIdx) {
 
 (async () => {
     const { relays, relayIdx, logLevel } = await initEnvironment();
-    setLogLevel(logLevel);
+    // setLogLevel(logLevel);
+    setLogLevel('error');
     const keyPair = await KeyPair.randomEd25519();
-    await Fluence.start({ connectTo: relays[relayIdx].multiaddr });
+    await Fluence.start({
+        connectTo: relays[relayIdx].multiaddr,
+        defaultTtlMs: 500000,
+        avmWorker: new BackgroundWorker(),
+    });
     const pid = Fluence.getStatus().peerId;
     const flags = genFlags(pid, relays, relayIdx);
     console.log(`Own peer id: ${pid}`);
@@ -168,7 +175,7 @@ function genFlags(peerId, relays, relayIdx) {
         //     });
         // }
 
-        await getAll(data.knownPeers, collectPeerInfo, collectServiceInterface, { ttl: 120000 });
+        await getAll(data.knownPeers, collectPeerInfo, collectServiceInterface, { ttl: 500000 });
     });
 })();
 
