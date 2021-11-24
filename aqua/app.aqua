@@ -5,37 +5,59 @@ alias ServiceInterfaceCb: PeerId, string, Interface -> ()
 
 func collectServiceInterfaces(peer: PeerId, services: []Service, collectServiceInterface: ServiceInterfaceCb):
 	for srv <- services par:
-		on peer:
-			iface <- Srv.get_interface(srv.id)
-			collectServiceInterface(peer, srv.id, iface)
+		iface <- Srv.get_interface(srv.id)
+		collectServiceInterface(peer, srv.id, iface)
 
 func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
-	on peer via HOST_PEER_ID:
-		ident <- Peer.identify()
-		blueprints <- Dist.list_blueprints()
-		modules <- Dist.list_modules()
-		services <- Srv.list()
-		collectPeerInfo(peer, ident, services, blueprints, modules)
-		collectServiceInterfaces(peer, services, collectServiceInterface)
+	ident <- Peer.identify()
+	blueprints <- Dist.list_blueprints()
+	modules <- Dist.list_modules()
+	services <- Srv.list()
+	collectPeerInfo(peer, ident, services, blueprints, modules)
+	-- collectServiceInterfaces(peer, services, collectServiceInterface)
 
 
-func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
-	on relayPeerId:
+func findAndAskNeighboursSchema(
+	clientId: PeerId, 
+	collectPeerInfo: PeerInfoCb, 
+	collectServiceInterface: ServiceInterfaceCb,
+	logNeighs: []string -> (),
+	logFail: string, string -> ()
+):
+	on HOST_PEER_ID:
 		neighbors <- Kademlia.neighborhood(clientId, nil, nil)
+		-- co logNeighs(neighbors)
 		for n <- neighbors par:
 			on n:
-				neighbors2 <- Kademlia.neighborhood(clientId, nil, nil)
+				neighbors2 <- Kademlia.neighborhood(n, nil, nil)
+				-- co logNeighs(neighbors2)
 				for n2 <- neighbors2 par:
-					askAllAndSend(n2, collectPeerInfo, collectServiceInterface)
+					connected <- Peer.connect(n2, nil)
+					if connected:
+						on n2:
+							Peer.identify()
+							co logFail("success", n2)
+					else:
+						co logFail("fail", n2)
+					-- par on n:
+					-- 	Peer.timeout(5000, "timedout")
+					-- 	co logFail(n2)
+						-- askAllAndSend(n2, collectPeerInfo, collectServiceInterface)
 
-func getAll(knownPeers: []PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
+func getAll(
+	knownPeers: []PeerId, 
+	collectPeerInfo: PeerInfoCb, 
+	collectServiceInterface: ServiceInterfaceCb,
+	logNeighs: []string -> (),
+	logFail: string, string -> ()
+):
 	on HOST_PEER_ID:
 		-- co askAllAndSend(relayPeerId, collectPeerInfo, collectServiceInterface)
 		
 		-- in order to temporarily reduce the number of particles sent to client 
 		-- we gather data from the known peers only. 
 		-- Known peers are explicitly represent the whole network atm
-		for peer <- knownPeers par:
-			askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
+		-- for peer <- knownPeers par:
+		-- 	askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
 
-		-- co findAndAskNeighboursSchema(relayPeerId, %init_peer_id%, collectPeerInfo, collectServiceInterface)
+		co findAndAskNeighboursSchema(%init_peer_id%, collectPeerInfo, collectServiceInterface, logNeighs, logFail)
