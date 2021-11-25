@@ -36,9 +36,9 @@ func findAndAskNeighboursSchema(
 					if connected:
 						on n2:
 							Peer.identify()
-							co logFail("success", n2)
+							logFail("success", n2)
 					else:
-						co logFail("fail", n2)
+						logFail("fail", n2)
 					-- par on n:
 					-- 	Peer.timeout(5000, "timedout")
 					-- 	co logFail(n2)

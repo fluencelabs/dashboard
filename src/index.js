@@ -32,7 +32,7 @@ const defaultNetworkName = 'testNet + krasnodar';
 const defaultEnv = {
     relays: [...testNet, ...krasnodar, ...stage],
     relayIdx: 2,
-    logLevel: 'error',
+    logLevel: 'debug',
 };
 
 async function loadScript(script) {
@@ -113,7 +113,7 @@ function genFlags(peerId, relays, relayIdx) {
 
 (async () => {
     const { relays, relayIdx, logLevel } = await initEnvironment();
-    setLogLevel(logLevel);
+    setLogLevel('debug');
     await Fluence.start({ connectTo: relays[relayIdx].multiaddr });
     const pid = Fluence.getStatus().peerId;
     const flags = genFlags(pid, relays, relayIdx);
