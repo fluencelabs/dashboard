@@ -175,7 +175,9 @@ function genFlags(peerId, relays, relayIdx) {
         //     });
         // }
 
-        await getAll(data.knownPeers, collectPeerInfo, collectServiceInterface, { ttl: 500000 });
+        await getAll(Fluence.getStatus().relayPeerId, data.knownPeers, collectPeerInfo, collectServiceInterface, {
+            ttl: 500000,
+        });
     });
 })();
 

@@ -28,7 +28,7 @@ func findAndAskNeighboursSchema(relayPeerId: PeerId, clientId: PeerId, collectPe
 				for n2 <- neighbors2 par:
 					askAllAndSend(n2, collectPeerInfo, collectServiceInterface)
 
-func getAll(knownPeers: []PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
+func getAll(relayPeerId: PeerId, knownPeers: []PeerId, collectPeerInfo: PeerInfoCb, collectServiceInterface: ServiceInterfaceCb):
 	on HOST_PEER_ID:
 		-- co askAllAndSend(relayPeerId, collectPeerInfo, collectServiceInterface)
 		
@@ -38,4 +38,4 @@ func getAll(knownPeers: []PeerId, collectPeerInfo: PeerInfoCb, collectServiceInt
 		for peer <- knownPeers par:
 			askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
 
-		-- co findAndAskNeighboursSchema(relayPeerId, %init_peer_id%, collectPeerInfo, collectServiceInterface)
+		co findAndAskNeighboursSchema(relayPeerId, %init_peer_id%, collectPeerInfo, collectServiceInterface)
