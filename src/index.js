@@ -26,7 +26,7 @@ import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { interfaceInfo, peerInfo } from './types';
 import { askAllAndSend, getAll } from './_aqua/app';
-import { BackgroundWorker } from '@fluencelabs/avm';
+import { BackgroundWorker } from '@fluencelabs/avm-worker-web';
 
 const defaultNetworkName = 'testNet + krasnodar';
 
