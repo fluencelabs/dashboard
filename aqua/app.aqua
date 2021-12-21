@@ -34,15 +34,19 @@ func findAndAskNeighboursSchema(
 				for n2 <- neighbors2 par:
 					connected <- Peer.connect(n2, nil)
 					if connected:
-						on n2:
+						status: *string
+						par on n2:
+							-- askAllAndSend(n2, collectPeerInfo, collectServiceInterface)
 							Peer.identify()
+							status <<- "done"
+						status <- Peer.timeout(1000, "timedout")
+						if status! == "done":
 							logFail("success", n2)
+						else:
+							logFail("timed out", n2)
 					else:
-						logFail("fail", n2)
-					-- par on n:
-					-- 	Peer.timeout(5000, "timedout")
-					-- 	co logFail(n2)
-						-- askAllAndSend(n2, collectPeerInfo, collectServiceInterface)
+							logFail("failed to connect", n2)
+
 
 func getAll(
 	knownPeers: []PeerId, 
