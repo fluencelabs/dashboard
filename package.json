@@ -31,7 +31,7 @@
     },
     "homepage": "https://github.com/fluencelabs/fluence-admin#readme",
     "dependencies": {
-        "@fluencelabs/fluence": "0.15.4",
+        "@fluencelabs/fluence": "0.16.0",
         "@fluencelabs/fluence-network-environment": "1.0.13",
         "css-spinners": "^1.0.1",
         "tachyons": "^4.12.0",

@@ -18,6 +18,7 @@ func askAllAndSend(peer: PeerId, collectPeerInfo: PeerInfoCb, collectServiceInte
 
 
 func findAndAskNeighboursSchema(
+	knownPeers: []PeerId,
 	clientId: PeerId, 
 	collectPeerInfo: PeerInfoCb, 
 	collectServiceInterface: ServiceInterfaceCb,
@@ -61,7 +62,8 @@ func getAll(
 		-- in order to temporarily reduce the number of particles sent to client 
 		-- we gather data from the known peers only. 
 		-- Known peers are explicitly represent the whole network atm
-		-- for peer <- knownPeers par:
-		-- 	askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
+		for peer <- knownPeers par:
+			on peer:
+				askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
 
-		co findAndAskNeighboursSchema(%init_peer_id%, collectPeerInfo, collectServiceInterface, logNeighs, logFail)
+		-- co findAndAskNeighboursSchema(%init_peer_id%, collectPeerInfo, collectServiceInterface, logNeighs, logFail)

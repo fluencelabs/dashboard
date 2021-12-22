@@ -55,6 +55,7 @@ export function askAllAndSend(
  
 
 export function findAndAskNeighboursSchema(
+    knownPeers: string[],
     clientId: string,
     collectPeerInfo: (arg0: string, arg1: { external_addresses: string[]; }, arg2: { blueprint_id: string; id: string; owner_id: string; }[], arg3: { dependencies: string[]; id: string; name: string; }[], arg4: { config: { name: string; }; hash: string; name: string; }[], callParams: CallParams<'arg0' | 'arg1' | 'arg2' | 'arg3' | 'arg4'>) => void | Promise<void>,
     collectServiceInterface: (arg0: string, arg1: string, arg2: { function_signatures: { arguments: string[][]; name: string; output_types: string[]; }[]; record_types: { fields: string[][]; id: number; name: string; }[]; }, callParams: CallParams<'arg0' | 'arg1' | 'arg2'>) => void | Promise<void>,
@@ -65,6 +66,7 @@ export function findAndAskNeighboursSchema(
 
 export function findAndAskNeighboursSchema(
     peer: FluencePeer,
+    knownPeers: string[],
     clientId: string,
     collectPeerInfo: (arg0: string, arg1: { external_addresses: string[]; }, arg2: { blueprint_id: string; id: string; owner_id: string; }[], arg3: { dependencies: string[]; id: string; name: string; }[], arg4: { config: { name: string; }; hash: string; name: string; }[], callParams: CallParams<'arg0' | 'arg1' | 'arg2' | 'arg3' | 'arg4'>) => void | Promise<void>,
     collectServiceInterface: (arg0: string, arg1: string, arg2: { function_signatures: { arguments: string[][]; name: string; output_types: string[]; }[]; record_types: { fields: string[][]; id: number; name: string; }[]; }, callParams: CallParams<'arg0' | 'arg1' | 'arg2'>) => void | Promise<void>,
