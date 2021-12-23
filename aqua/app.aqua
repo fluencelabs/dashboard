@@ -26,13 +26,13 @@ func findAndAskNeighboursSchema(
 	logFail: string, string -> ()
 ):
 	on HOST_PEER_ID:
-		neighbors <- Kademlia.neighborhood(clientId, nil, nil)
+		-- neighbors <- Kademlia.neighborhood(clientId, nil, nil)
 		-- co logNeighs(neighbors)
-		for n <- neighbors par:
+		for n <- knownPeers par:
 			on n:
-				neighbors2 <- Kademlia.neighborhood(n, nil, nil)
+				-- neighbors2 <- Kademlia.neighborhood(n, nil, nil)
 				-- co logNeighs(neighbors2)
-				for n2 <- neighbors2 par:
+				for n2 <- knownPeers par:
 					connected <- Peer.connect(n2, nil)
 					if connected:
 						status: *string
@@ -62,8 +62,8 @@ func getAll(
 		-- in order to temporarily reduce the number of particles sent to client 
 		-- we gather data from the known peers only. 
 		-- Known peers are explicitly represent the whole network atm
-		for peer <- knownPeers par:
-			on peer:
-				askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
+		-- for peer <- knownPeers par:
+		-- 	on peer:
+		-- 		askAllAndSend(peer, collectPeerInfo, collectServiceInterface)
 
-		-- co findAndAskNeighboursSchema(%init_peer_id%, collectPeerInfo, collectServiceInterface, logNeighs, logFail)
+		co findAndAskNeighboursSchema(knownPeers, %init_peer_id%, collectPeerInfo, collectServiceInterface, logNeighs, logFail)

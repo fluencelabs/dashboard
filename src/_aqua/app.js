@@ -262,88 +262,94 @@ export function findAndAskNeighboursSchema(...args) {
                        (call %init_peer_id% ("getDataSrv" "clientId") [] clientId)
                       )
                       (xor
-                       (seq
-                        (call -relay- ("kad" "neighborhood") [clientId [] []] neighbors)
-                        (par
-                         (fold neighbors n
-                          (par
+                       (par
+                        (fold knownPeers n
+                         (par
+                          (seq
+                           (call -relay- ("op" "noop") [])
                            (xor
-                            (seq
-                             (call n ("kad" "neighborhood") [n [] []] neighbors2)
-                             (par
-                              (fold neighbors2 n2
+                            (par
+                             (seq
+                              (call -relay- ("op" "noop") [])
+                              (fold knownPeers n2
                                (par
-                                (new $status
-                                 (seq
-                                  (call n ("peer" "connect") [n2 []] connected)
-                                  (xor
-                                   (match connected true
-                                    (xor
-                                     (seq
+                                (seq
+                                 (call -relay- ("op" "noop") [])
+                                 (new $status
+                                  (seq
+                                   (call n ("peer" "connect") [n2 []] connected)
+                                   (xor
+                                    (match connected true
+                                     (xor
                                       (seq
-                                       (par
-                                        (seq
-                                         (xor
-                                          (seq
-                                           (call n2 ("peer" "identify") [])
-                                           (ap "done" $status)
-                                          )
-                                          (seq
-                                           (seq
-                                            (call -relay- ("op" "noop") [])
-                                            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                                           )
-                                           (call -relay- ("op" "noop") [])
-                                          )
-                                         )
-                                         (call n ("op" "noop") [])
-                                        )
-                                        (null)
-                                       )
-                                       (call n ("peer" "timeout") [1000 "timedout"] $status)
-                                      )
-                                      (xor
-                                       (match $status.$.[0]! "done"
-                                        (xor
+                                       (seq
+                                        (par
                                          (seq
-                                          (call -relay- ("op" "noop") [])
                                           (xor
-                                           (call %init_peer_id% ("callbackSrv" "logFail") ["success" n2])
-                                           (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                                           (seq
+                                            (call n2 ("peer" "identify") [])
+                                            (ap "done" $status)
+                                           )
+                                           (seq
+                                            (seq
+                                             (call -relay- ("op" "noop") [])
+                                             (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                                            )
+                                            (call -relay- ("op" "noop") [])
+                                           )
                                           )
+                                          (call n ("op" "noop") [])
                                          )
-                                         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+                                         (null)
                                         )
+                                        (call n ("peer" "timeout") [1000 "timedout"] $status)
                                        )
                                        (xor
-                                        (call %init_peer_id% ("callbackSrv" "logFail") ["timed out" n2])
-                                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
+                                        (match $status.$.[0]! "done"
+                                         (xor
+                                          (seq
+                                           (call -relay- ("op" "noop") [])
+                                           (xor
+                                            (call %init_peer_id% ("callbackSrv" "logFail") ["success" n2])
+                                            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                                           )
+                                          )
+                                          (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+                                         )
+                                        )
+                                        (xor
+                                         (call %init_peer_id% ("callbackSrv" "logFail") ["timed out" n2])
+                                         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
+                                        )
                                        )
                                       )
+                                      (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 5])
                                      )
-                                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 5])
                                     )
-                                   )
-                                   (xor
-                                    (call %init_peer_id% ("callbackSrv" "logFail") ["failed to connect" n2])
-                                    (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 6])
+                                    (xor
+                                     (call %init_peer_id% ("callbackSrv" "logFail") ["failed to connect" n2])
+                                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 6])
+                                    )
                                    )
                                   )
                                  )
                                 )
-                                (next n2)
+                                (seq
+                                 (call -relay- ("op" "noop") [])
+                                 (next n2)
+                                )
                                )
                               )
-                              (null)
                              )
+                             (null)
                             )
                             (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 7])
                            )
-                           (next n)
                           )
+                          (next n)
                          )
-                         (null)
                         )
+                        (null)
                        )
                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 8])
                       )
@@ -516,54 +522,104 @@ export function getAll(...args) {
                       )
                       (xor
                        (par
-                        (fold knownPeers peer
+                        (xor
                          (par
-                          (seq
-                           (call -relay- ("op" "noop") [])
-                           (xor
+                          (fold knownPeers n
+                           (par
                             (seq
-                             (seq
-                              (seq
-                               (seq
-                                (seq
-                                 (seq
-                                  (seq
-                                   (par
-                                    (xor
-                                     (call %init_peer_id% ("callbackSrv" "logFail") [peer "on"])
-                                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
-                                    )
-                                    (null)
-                                   )
-                                   (call -relay- ("op" "noop") [])
-                                  )
-                                  (call peer ("peer" "identify") [] ident)
-                                 )
-                                 (call peer ("dist" "list_blueprints") [] blueprints)
-                                )
-                                (call peer ("dist" "list_modules") [] modules)
-                               )
-                               (call peer ("srv" "list") [] services)
-                              )
-                              (call -relay- ("op" "noop") [])
-                             )
+                             (call -relay- ("op" "noop") [])
                              (xor
-                              (call %init_peer_id% ("callbackSrv" "collectPeerInfo") [peer ident services blueprints modules])
-                              (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                              (par
+                               (seq
+                                (call -relay- ("op" "noop") [])
+                                (fold knownPeers n2
+                                 (par
+                                  (seq
+                                   (call -relay- ("op" "noop") [])
+                                   (new $status
+                                    (seq
+                                     (call n ("peer" "connect") [n2 []] connected)
+                                     (xor
+                                      (match connected true
+                                       (xor
+                                        (seq
+                                         (seq
+                                          (par
+                                           (seq
+                                            (xor
+                                             (seq
+                                              (call n2 ("peer" "identify") [])
+                                              (ap "done" $status)
+                                             )
+                                             (seq
+                                              (seq
+                                               (call -relay- ("op" "noop") [])
+                                               (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 1])
+                                              )
+                                              (call -relay- ("op" "noop") [])
+                                             )
+                                            )
+                                            (call n ("op" "noop") [])
+                                           )
+                                           (null)
+                                          )
+                                          (call n ("peer" "timeout") [1000 "timedout"] $status)
+                                         )
+                                         (xor
+                                          (match $status.$.[0]! "done"
+                                           (xor
+                                            (seq
+                                             (call -relay- ("op" "noop") [])
+                                             (xor
+                                              (call %init_peer_id% ("callbackSrv" "logFail") ["success" n2])
+                                              (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 2])
+                                             )
+                                            )
+                                            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+                                           )
+                                          )
+                                          (xor
+                                           (call %init_peer_id% ("callbackSrv" "logFail") ["timed out" n2])
+                                           (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
+                                          )
+                                         )
+                                        )
+                                        (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 5])
+                                       )
+                                      )
+                                      (xor
+                                       (call %init_peer_id% ("callbackSrv" "logFail") ["failed to connect" n2])
+                                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 6])
+                                      )
+                                     )
+                                    )
+                                   )
+                                  )
+                                  (seq
+                                   (call -relay- ("op" "noop") [])
+                                   (next n2)
+                                  )
+                                 )
+                                )
+                               )
+                               (null)
+                              )
+                              (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 7])
                              )
                             )
-                            (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 3])
+                            (next n)
                            )
                           )
-                          (next peer)
+                          (null)
                          )
+                         (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 8])
                         )
                         (null)
                        )
-                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 4])
+                       (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 9])
                       )
                      )
-                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 5])
+                     (call %init_peer_id% ("errorHandlingSrv" "error") [%last_error% 10])
                     )
     `
     return callFunction(
