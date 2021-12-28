@@ -129,7 +129,7 @@ if (MODE === 'development') {
         devServer: {
             inline: true,
             stats: 'errors-only',
-            contentBase: path.join(__dirname, 'src/assets'),
+            contentBase: path.join(__dirname, 'public'),
             historyApiFallback: true,
             // feel free to delete this section if you don't need anything like this
             before(app) {
@@ -168,6 +168,16 @@ if (MODE === 'production') {
                 // Options similar to the same options in webpackOptions.output
                 // both options are optional
                 filename: '[name]-[hash].css',
+            }),
+            new CopyWebpackPlugin({
+                patterns: [
+                    {
+                        from: './public/avm.wasm',
+                    },
+                    {
+                        from: './public/runnerScript.web.js',
+                    },
+                ],
             }),
         ],
         module: {
