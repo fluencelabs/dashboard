@@ -169,6 +169,16 @@ if (MODE === 'production') {
                 // both options are optional
                 filename: '[name]-[hash].css',
             }),
+            new CopyWebpackPlugin({
+                patterns: [
+                    {
+                        from: './public/avm.wasm',
+                    },
+                    {
+                        from: './public/runnerScript.web.js',
+                    },
+                ],
+            }),
         ],
         module: {
             rules: [
