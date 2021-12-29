@@ -32,7 +32,7 @@
     },
     "homepage": "https://github.com/fluencelabs/fluence-admin#readme",
     "dependencies": {
-        "@fluencelabs/fluence": "0.17.0",
+        "@fluencelabs/fluence": "0.17.1",
         "@fluencelabs/fluence-network-environment": "1.0.10",
         "css-spinners": "^1.0.1",
         "tachyons": "^4.12.0",
