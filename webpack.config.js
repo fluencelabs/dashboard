@@ -119,7 +119,7 @@ if (MODE === 'development') {
                                 // add Elm's debug overlay to output
                                 debug: withDebug,
                                 //
-                                forceWatch: true,
+                                // forceWatch: true,
                             },
                         },
                     ],
