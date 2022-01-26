@@ -31,7 +31,7 @@ const defaultNetworkName = 'testNet + krasnodar';
 
 const defaultEnv = {
     relays: [...testNet, ...krasnodar, ...stage],
-    relayIdx: 2,
+    relayIdx: 10,
     logLevel: 'error',
 };
 
@@ -146,9 +146,10 @@ function genFlags(peerId, relays, relayIdx) {
     // alias PeerInfoCb: PeerId, Info, []Service, []Blueprint, []Module -> ()
     function collectPeerInfo(peerId, identify, services, blueprints, modules, interfaces) {
         // console.log('peer info from %s, %s services', peerId, services.length);
-        try {
+        try {            
             const eventRaw = {
-                peerId,
+                // HACK: show AIR interpreter version in the NODE ID field
+                peerId: peerId + ' (' + identify.air_version + ')',
                 identify,
                 services,
                 blueprints,
