@@ -29,9 +29,11 @@ import { askAllAndSend, getAll } from './_aqua/app';
 
 const defaultNetworkName = 'testNet + krasnodar';
 
+const relays = [...krasnodar, ...stage];
+
 const defaultEnv = {
-    relays: [...testNet, ...krasnodar, ...stage],
-    relayIdx: 10,
+    relays,
+    relayIdx: Math.floor(Math.random() * relays.length),
     logLevel: 'error',
 };
 
