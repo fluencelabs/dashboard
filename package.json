@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "postinstall": "copy-avm-public public",
+        "postinstall": "copy-marine public",
         "test": "elm-test",
         "start": "npm run dev",
         "dev": "webpack-dev-server --hot --colors --port 3000",
