@@ -38,6 +38,8 @@ jobs:
               env:
                   CI: true
 
+            - run: ls -alh dist/
+
             ### Prepare docker & login to Dockerhub
             - name: Set up QEMU
               uses: docker/setup-qemu-action@v1
