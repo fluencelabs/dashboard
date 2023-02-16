@@ -20,16 +20,16 @@ import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
 import Multiaddr from 'multiaddr';
-import { stage, krasnodar, testNet } from '@fluencelabs/fluence-network-environment';
-import { Fluence, KeyPair, setLogLevel } from '@fluencelabs/fluence';
+import { stage, kras, testNet } from '@fluencelabs/fluence-network-environment';
+import { Fluence } from '@fluencelabs/js-client.api';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { interfaceInfo, peerInfo } from './types';
 import { askAllAndSend, getAll } from './_aqua/app';
 
-const defaultNetworkName = 'testNet + krasnodar';
+const defaultNetworkName = 'testNet + kras';
 
-const relays = [...krasnodar, ...stage];
+const relays = [...kras, ...stage];
 
 const defaultEnv = {
     relays,
@@ -115,9 +115,9 @@ function genFlags(peerId, relays, relayIdx) {
 
 (async () => {
     const { relays, relayIdx, logLevel } = await initEnvironment();
-    setLogLevel(logLevel);
-    const keyPair = await KeyPair.randomEd25519();
-    await Fluence.start({ connectTo: relays[relayIdx].multiaddr });
+    log.setLevel(logLevel);
+    // it will use random key pair by default
+    await Fluence.connect(relays[relayIdx].multiaddr);
     const pid = Fluence.getStatus().peerId;
     const flags = genFlags(pid, relays, relayIdx);
     console.log(`Own peer id: ${pid}`);
@@ -176,7 +176,7 @@ function genFlags(peerId, relays, relayIdx) {
 
             let N = 10;
             let sorted = [...servicesPerHost.entries()].sort((a, b) => b[1].size - a[1].size);
-            console.log(`top ${N} nodes by hosted services:`)
+            console.log(`top ${N} nodes by hosted services:`);
             let slice = sorted.slice(0, 10);
             for (let entry of slice) {
                 console.log(`\t node ${entry[0]} has ${entry[1].size} services`);
@@ -186,19 +186,19 @@ function genFlags(peerId, relays, relayIdx) {
             let byAirVersion = new Map();
             for (let info of window.collectedData.peerInfos.values()) {
                 let byNodeCount = byNodeVersion.get(info.node_version) || 0;
-                byNodeVersion.set(info.node_version, byNodeCount + 1)
+                byNodeVersion.set(info.node_version, byNodeCount + 1);
                 let byAirCount = byAirVersion.get(info.air_version) || 0;
-                byAirVersion.set(info.air_version, byAirCount + 1)
+                byAirVersion.set(info.air_version, byAirCount + 1);
             }
 
-            console.log("Nodes version distribution:");
+            console.log('Nodes version distribution:');
             for (let entry of byNodeVersion.entries()) {
                 let version = entry[0];
                 let count = entry[1];
                 console.log(`\t${version}: ${count} nodes`);
             }
 
-            console.log("AIR intepreter versions distribution:");
+            console.log('AIR intepreter versions distribution:');
             for (let entry of byAirVersion.entries()) {
                 let version = entry[0];
                 let count = entry[1];
@@ -233,11 +233,12 @@ function genFlags(peerId, relays, relayIdx) {
                     window.collectedData.moduleNames.add(module.name);
                 }
 
-                let perCreator = window.collectedData.creators.has(service.owner_id) ? window.collectedData.creators.get(service.owner_id) : new Set();
+                let perCreator = window.collectedData.creators.has(service.owner_id)
+                    ? window.collectedData.creators.get(service.owner_id)
+                    : new Set();
                 perCreator.add(service.id);
                 window.collectedData.creators.set(service.owner_id, perCreator);
             }
-
         }
     }
 
