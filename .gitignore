@@ -7,5 +7,4 @@ bundle
 
 .storybook/explorer.js
 
-public/*.wasm
-public/runnerScript.*
+src/_aqua
