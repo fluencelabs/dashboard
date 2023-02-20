@@ -6,7 +6,7 @@
     "scripts": {
         "test": "elm-test",
         "start": "npm run dev",
-        "dev": "webpack-dev-server --hot --colors --port 3000",
+        "dev": "npm run compile-aqua && webpack-dev-server --hot --colors --port 3000",
         "build": "npm run compile-aqua && webpack",
         "prod": "npm run compile-aqua && webpack -p --mode production",
         "analyse": "elm-analyse -s -p 3001 -o",
