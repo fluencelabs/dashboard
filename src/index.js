@@ -118,7 +118,8 @@ function genFlags(peerId, relays, relayIdx) {
     log.setLevel(logLevel);
     // it will use random key pair by default
     await Fluence.connect(relays[relayIdx].multiaddr);
-    const pid = Fluence.getStatus().peerId;
+    const client = await Fluence.getClient();
+    const pid = client.getPeerId();
     const flags = genFlags(pid, relays, relayIdx);
     console.log(`Own peer id: ${pid}`);
 
