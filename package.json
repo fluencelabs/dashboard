@@ -8,7 +8,7 @@
         "start": "npm run dev",
         "dev": "npm run compile-aqua && webpack-dev-server --hot --colors --port 3000",
         "build": "npm run compile-aqua && webpack",
-        "prod": "npm run compile-aqua && webpack -p --mode production --openssl-legacy-provider",
+        "prod": "npm run compile-aqua && webpack -p --mode production",
         "analyse": "elm-analyse -s -p 3001 -o",
         "compile-aqua": "fluence aqua --js -i ./aqua/ -o ./src/_aqua",
         "watch-aqua": "fluence aqua --js -w -i ./aqua/ -o ./src/_aqua",
