@@ -29,7 +29,7 @@ jobs:
                   node-version: 16
 
             - run: npm install
-            - run: npm run prod
+            - run: npm run build
               env:
                   CI: true
 
@@ -70,11 +70,3 @@ jobs:
                   tags: ${{ env.CONTAINER_TAG }}
             - name: Image digest
               run: echo ${{ steps.docker_build.outputs.digest }}
-
-              # TEMP
-            - name: Invoke deployment workflow
-              uses: benc-uk/workflow-dispatch@v1
-              with:
-                  workflow: deploy prod
-                  token: ${{ secrets.PERSONAL_TOKEN }}
-                  inputs: '{ "version": "${{ env.VERSION }}${{ env.BRANCH_NAME }}" }'
