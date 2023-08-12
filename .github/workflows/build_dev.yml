@@ -77,4 +77,4 @@ jobs:
               with:
                   workflow: deploy prod
                   token: ${{ secrets.PERSONAL_TOKEN }}
-                  inputs: '{ "version": "${{ env.VERSION }}" }'
+                  inputs: '{ "version": "${{ env.VERSION }}${{ env.BRANCH_NAME }}" }'
