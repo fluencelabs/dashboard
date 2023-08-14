@@ -20,7 +20,6 @@ jobs:
             - run: npm run prod
               env:
                   CI: true
-                  NODE_OPTIONS: '--openssl-legacy-provider'
 
             ### Prepare docker & login to Dockerhub
             - name: Set up QEMU
