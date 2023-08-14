@@ -32,6 +32,7 @@
     "dependencies": {
         "@fluencelabs/fluence-network-environment": "1.1.2",
         "@fluencelabs/js-client.api": "0.11.7",
+        "@multiformats/multiaddr": "^12.1.6",
         "css-spinners": "^1.0.1",
         "tachyons": "^4.12.0",
         "yup": "^0.32.9"
@@ -39,8 +40,8 @@
     "devDependencies": {
         "@babel/core": "^7.11.6",
         "@babel/preset-env": "^7.11.5",
-        "@fluencelabs/aqua-lib": "^0.6.0",
         "@fluencelabs/aqua-api": "^0.11.10",
+        "@fluencelabs/aqua-lib": "^0.6.0",
         "babel-loader": "^8.1.0",
         "chokidar-cli": "^2.1.0",
         "clean-webpack-plugin": "^3.0.0",
@@ -58,9 +59,9 @@
         "google-closure-compiler": "^20200920.0.0",
         "html-webpack-plugin": "^4.5.0",
         "mini-css-extract-plugin": "^0.11.2",
-        "sass": "1.58.3",
         "optimize-css-assets-webpack-plugin": "^5.0.4",
         "resolve-url-loader": "^3.1.1",
+        "sass": "1.58.3",
         "sass-loader": "^10.0.2",
         "source-map-loader": "^1.0.0",
         "style-loader": "^1.2.1",
