@@ -32,8 +32,8 @@
     "dependencies": {
         "@fluencelabs/fluence-network-environment": "1.1.2",
         "@fluencelabs/js-client.api": "0.11.7",
-        "@multiformats/multiaddr": "^12.1.6",
         "css-spinners": "^1.0.1",
+        "multiaddr": "^10.0.1",
         "tachyons": "^4.12.0",
         "yup": "^0.32.9"
     },

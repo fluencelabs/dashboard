@@ -19,7 +19,7 @@ import 'css-spinners/dist/all.min.css';
 import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
-import { multiaddr } from '@multiformats/multiaddr';
+import Multiaddr from 'multiaddr';
 import { stage, kras, testNet } from '@fluencelabs/fluence-network-environment';
 import { Fluence } from '@fluencelabs/js-client.api';
 import { Elm } from './Main.elm';
@@ -54,7 +54,7 @@ async function loadScript(script) {
 
 function isMultiaddr(unknown) {
     try {
-        multiaddr(unknown);
+        Multiaddr(unknown);
         return true;
     } catch (error) {
         return false;
