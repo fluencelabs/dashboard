@@ -226,8 +226,7 @@ function genFlags(peerId, relays, relayIdx) {
                 window.collectedData.serviceBlueprints.add(service.blueprint_id);
 
                 let blueprint = window.collectedData.blueprints.get(service.blueprint_id);
-                for (let prefixedHash of blueprint.dependencies) {
-                    let moduleHash = prefixedHash.split(':')[1];
+                for (let moduleHash of blueprint.dependencies) {
                     window.collectedData.serviceModules.add(moduleHash);
 
                     let module = window.collectedData.modules.get(moduleHash);
