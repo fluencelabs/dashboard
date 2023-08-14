@@ -10,8 +10,7 @@
         "build": "npm run compile-aqua && webpack",
         "prod": "npm run compile-aqua && webpack -p --mode production",
         "analyse": "elm-analyse -s -p 3001 -o",
-        "compile-aqua": "fluence aqua --js -i ./aqua/ -o ./src/_aqua",
-        "watch-aqua": "fluence aqua --js -w -i ./aqua/ -o ./src/_aqua",
+        "compile-aqua": "node ./compile-aqua.mjs",
         "uie": "elm-live src_storybook/Explorer.elm --open --dir=.storybook --start-page=index.html -- --output=.storybook/explorer.js --debug"
     },
     "nodemonConfig": {
@@ -31,8 +30,8 @@
     },
     "homepage": "https://github.com/fluencelabs/fluence-admin#readme",
     "dependencies": {
+        "@fluencelabs/fluence-network-environment": "1.1.2",
         "@fluencelabs/js-client.api": "0.11.7",
-        "@fluencelabs/fluence-network-environment": "1.0.14",
         "css-spinners": "^1.0.1",
         "tachyons": "^4.12.0",
         "yup": "^0.32.9"
@@ -40,9 +39,8 @@
     "devDependencies": {
         "@babel/core": "^7.11.6",
         "@babel/preset-env": "^7.11.5",
-        "@fluencelabs/cli": "0.5.4",
-        "@fluencelabs/aqua-lib": "0.3.3",
-        "@types/yup": "^0.29.11",
+        "@fluencelabs/aqua-lib": "^0.6.0",
+        "@fluencelabs/aqua-api": "^0.11.10",
         "babel-loader": "^8.1.0",
         "chokidar-cli": "^2.1.0",
         "clean-webpack-plugin": "^3.0.0",
