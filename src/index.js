@@ -20,16 +20,16 @@ import './main.css';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import log from 'loglevel';
 import Multiaddr from 'multiaddr';
-import { stage, kras, testNet } from '@fluencelabs/fluence-network-environment';
+import { kras } from '@fluencelabs/fluence-network-environment';
 import { Fluence } from '@fluencelabs/js-client.api';
 import { Elm } from './Main.elm';
 import * as serviceWorker from './serviceWorker';
 import { interfaceInfo, peerInfo } from './types';
 import { askAllAndSend, getAll } from './_aqua/app';
 
-const defaultNetworkName = 'testNet + kras';
+const defaultNetworkName = 'kras';
 
-const relays = [...kras, ...stage];
+const relays = [...kras];
 
 const defaultEnv = {
     relays,
@@ -65,7 +65,7 @@ async function initEnvironment() {
     try {
         const script = document.getElementById('env');
         if (!script) {
-            console.log("Couldn't load environment, falling back to default (${defaultNetworkName})");
+            console.log(`Couldn't load environment, falling back to default (${defaultNetworkName})`);
             return defaultEnv;
         }
 
@@ -226,8 +226,7 @@ function genFlags(peerId, relays, relayIdx) {
                 window.collectedData.serviceBlueprints.add(service.blueprint_id);
 
                 let blueprint = window.collectedData.blueprints.get(service.blueprint_id);
-                for (let prefixedHash of blueprint.dependencies) {
-                    let moduleHash = prefixedHash.split(':')[1];
+                for (let moduleHash of blueprint.dependencies) {
                     window.collectedData.serviceModules.add(moduleHash);
 
                     let module = window.collectedData.modules.get(moduleHash);
