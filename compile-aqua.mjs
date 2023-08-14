@@ -1,8 +1,36 @@
 // @ts-check
 
 import { join } from 'path';
-import { compileFromPath } from './node_modules/@fluencelabs/aqua-api/index.js';
+import { AquaConfig, Aqua, Path } from './node_modules/@fluencelabs/aqua-api/aqua-api.js';
 import { mkdir, writeFile } from 'fs/promises';
+
+function getConfig({
+    constants = [],
+    logLevel = 'info',
+    noRelay = false,
+    noXor = false,
+    targetType = 'air',
+    tracing = false,
+}) {
+    return new AquaConfig(
+        logLevel,
+        constants,
+        noXor,
+        noRelay,
+        {
+            ts: 'typescript',
+            js: 'javascript',
+            air: 'air',
+        }[targetType],
+        tracing,
+    );
+}
+
+function compileFromPath({ filePath, ...commonArgs }) {
+    const config = getConfig(commonArgs);
+    const { imports = [] } = commonArgs;
+    return Aqua.compile(new Path(filePath), imports, config);
+}
 
 const { generatedSources } = await compileFromPath({
     targetType: 'js',
