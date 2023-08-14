@@ -52,9 +52,9 @@ async function loadScript(script) {
     });
 }
 
-function isMultiaddr(unknown) {
+function isMultiaddr(multiaddr) {
     try {
-        Multiaddr(unknown);
+        Multiaddr(multiaddr);
         return true;
     } catch (error) {
         return false;
