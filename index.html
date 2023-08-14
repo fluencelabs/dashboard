@@ -1,35 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <link rel="favicon" type="image/ico" href="images/favicon.ico" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;400;500&display=swap"
+            rel="stylesheet"
+        />
 
-<head>
-  <link rel="favicon" type="image/ico" href="images/favicon.ico" />
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@200;400;500&display=swap" rel="stylesheet">
-
-  <meta charset="utf-8">
-  <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="theme-color" content="#000000">
-  <!--
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="theme-color" content="#000000" />
+        <!--
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
-  <script src='https://cdn.jsdelivr.net/npm/@fluencelabs/js-client.web.standalone@0.13.3/dist/js-client.min.js'
-    async></script>
-  <title>Fluence Network Dashboard</title>
-</head>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@fluencelabs/js-client.web.standalone@0.14.0/dist/js-client.min.js"
+            async
+        ></script>
+        <title>Fluence Network Dashboard</title>
+    </head>
 
-<body>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6ZTQKE1D4L"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-    gtag('config', 'G-6ZTQKE1D4L');
-  </script>
-  <script id="env" type="application/json" src="/env/env.json"></script>
-  <div id="root"></div>
-</body>
-
+    <body>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-6ZTQKE1D4L"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'G-6ZTQKE1D4L');
+        </script>
+        <script id="env" type="application/json" src="/env/env.json"></script>
+        <div id="root"></div>
+    </body>
 </html>
